@@ -1,11 +1,11 @@
 module vsql
 
-const (
+pub const (
 	version = '0.0.1'
 )
 
 pub type Stmt = AlterTable | CreateDatabase | Delete | DropTable | Insert | RenameTable | Select |
-  Truncate | Update
+	Truncate | Update
 
 // select statement
 pub struct Select {
@@ -46,7 +46,7 @@ pub mut:
 // where statement
 pub struct Where {
 pub mut:
-	typ         string // where,where_in,where_null,where_exists,where_between,  where_raw
+	typ         string // where,where_in,where_null,where_exists,where_between,where_raw
 	operator    string // '',and,or,not,or_not
 	condition   string
 	column_name string

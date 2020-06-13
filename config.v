@@ -3,7 +3,7 @@ module vsql
 // config of connection
 pub struct Config {
 pub:
-	client    string // mysql,pg,sqlite
+	client    string // mysql,pg,sqlite,mysql
 	host      string
 	port      int
 	user      string

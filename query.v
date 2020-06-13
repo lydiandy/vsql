@@ -1,6 +1,6 @@
 module vsql
 
-type CallbackFn = fn ()
+pub type CallbackFn = fn ()
 
 // query
 // status:done

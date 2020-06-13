@@ -2,6 +2,7 @@ module vsql
 
 import strings
 
+
 pub fn gen(stmt Stmt) string {
 	mut sql := strings.new_builder(200)
 	match stmt {

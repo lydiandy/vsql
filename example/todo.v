@@ -19,13 +19,11 @@ import vsql
 fn main() {
 	config := vsql.Config{
 		client: 'pg'
-		connection: {
-			host: 'localhost'
-			port: 5432
-			person: 'postgres'
-			password: ''
-			database: 'dev_db'
-		}
+		host: 'localhost'
+		port: 5432	
+		user: 'postgres'
+		password: ''
+		database: 'dev_db'
 		pool: {min:2,max:10}
 		timeout: 60000
 		debug: true
@@ -34,11 +32,6 @@ fn main() {
 		panic('connect wrong')
 	}
 
-	//timeout,only mysql pg
-	res:=db.select_('*').from('person').timeout(1000)
-	res:=db.table('person').select_('').timeout(1000)
-	res:=db.select_().from('person').timeout(1000) //select_ args can be empty or string or others
-	res:=db.table('person').select_().timeout(1000) //select_ args can be empty or string or others
 	//select_
 	res:=db.table('person as u').select_('id,name,age').where('id',3).end() //must need end?
 	res:=db.table('person').select_('id,name as name2,age as age2').where('id',3).end() //must need end?
