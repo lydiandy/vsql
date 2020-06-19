@@ -2,11 +2,12 @@ module vsql
 // output for debug
 //generate to object struct
 pub fn (db &DB) to_obj() &DB {
-	match db.stmt {
-		Select { println(it) }
-		Insert { println(it) }
-		Update { println(it) }
-		Delete { println(it) }
+	stmt:=db.stmt
+	match stmt {
+		Select { println(stmt) }
+		Insert { println(stmt) }
+		Update { println(stmt) }
+		Delete { println(stmt) }
 		else { println('unknown struct') }
 	}
 	println('')

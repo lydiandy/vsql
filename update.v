@@ -25,17 +25,18 @@ pub fn (mut db DB) into(name string) &DB {
 
 // status:done
 pub fn (mut db DB) returning(column string, other_columns ...string) &DB {
-	match db.stmt {
+	stmt:=db.stmt
+	match stmt {
 		Insert {
-			it.returning << column
+			stmt.returning << column
 			for c in other_columns {
-				it.returning << c
+				stmt.returning << c
 			}
 		}
 		Update {
-			it.returning << column
+			stmt.returning << column
 			for c in other_columns {
-				it.returning << c
+				stmt.returning << c
 			}
 		}
 		else {}

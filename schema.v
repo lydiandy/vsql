@@ -73,7 +73,7 @@ pub fn (mut db DB) drop_table_if_exists(name string) {
 // just pg is ok
 pub fn (mut db DB) has_table(name string) bool {
 	mut sql := ''
-	match (db.config.client) {
+	match db.config.client {
 		'pg' {
 			sql = "select count(*) from information_schema.tables where table_schema=\'public\' and  table_name =\'$name\'"
 		}
@@ -99,7 +99,7 @@ pub fn (mut db DB) has_table(name string) bool {
 // ERROR:  syntax error at or near "and column_name"
 pub fn (mut db DB) has_column(table_name, column_name string) bool {
 	mut sql := ''
-	match (db.config.client) {
+	match db.config.client {
 		'pg' {
 			sql = "select count(*) from information_schema.columns where table_schema=\'public\' and table_name =\'$table_name\' and column_name=\'$column_name\'"
 		}

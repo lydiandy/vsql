@@ -8,10 +8,10 @@ pub fn gen(stmt Stmt) string {
 	match stmt {
 		Select {
 			sql.write('select  ')
-			if it.is_distinct {
+			if stmt.is_distinct {
 				sql.write('distinct ')
 			}
-			for f in it.aggregate_fn {
+			for f in stmt.aggregate_fn {
 				sql.write('${f.name}(')
 				if f.is_distinct {
 					sql.write('distinct ')
@@ -22,13 +22,13 @@ pub fn gen(stmt Stmt) string {
 					sql.write('$f.column_alias,')
 				}
 			}
-			if it.aggregate_fn.len > 0 {
+			if stmt.aggregate_fn.len > 0 {
 				sql.go_back(1)
 			}
-			if it.columns.len == 0 && it.aggregate_fn.len == 0 {
+			if stmt.columns.len == 0 && stmt.aggregate_fn.len == 0 {
 				sql.write('* ')
 			} else {
-				for column in it.columns {
+				for column in stmt.columns {
 					sql.write('$column.name ')
 					if column.alias != '' {
 						sql.write('as ')
@@ -40,18 +40,18 @@ pub fn gen(stmt Stmt) string {
 				sql.go_back(1)
 			}
 			sql.write('from ')
-			sql.write('$it.table_name ')
-			if it.table_alias != '' {
-				sql.write('as $it.table_alias ')
+			sql.write('$stmt.table_name ')
+			if stmt.table_alias != '' {
+				sql.write('as $stmt.table_alias ')
 			}
 			// where statement
-			write_where(&it.where, &sql)
+			write_where(&stmt.where, &sql)
 			// join statement
-			if it.join_raw != '' {
-				sql.write('$it.join_raw')
+			if stmt.join_raw != '' {
+				sql.write('$stmt.join_raw')
 			} else {
-				if it.join.len > 0 {
-					for j in it.join {
+				if stmt.join.len > 0 {
+					for j in stmt.join {
 						sql.write('$j.typ ')
 						sql.write('$j.table_name ')
 						if j.table_alias != '' {
@@ -64,67 +64,67 @@ pub fn gen(stmt Stmt) string {
 				}
 			}
 			// limit
-			if it.first {
+			if stmt.first {
 				sql.write('limit 1 ')
 			}
-			if it.limit > 0 {
-				sql.write('limit $it.limit ')
+			if stmt.limit > 0 {
+				sql.write('limit $stmt.limit ')
 			}
-			if it.offset > 0 {
-				sql.write('offset $it.offset ')
+			if stmt.offset > 0 {
+				sql.write('offset $stmt.offset ')
 			}
 			// order by statement
-			if it.order_by_raw != '' {
+			if stmt.order_by_raw != '' {
 				sql.write('order by ')
-				sql.write('$it.order_by_raw ')
-			} else if it.order_by.len > 0 {
+				sql.write('$stmt.order_by_raw ')
+			} else if stmt.order_by.len > 0 {
 				sql.write('order by ')
-				for order_obj in it.order_by {
+				for order_obj in stmt.order_by {
 					sql.write('$order_obj.column $order_obj.order,')
 				}
 				sql.go_back(1)
 			}
 			// group by statement
-			if it.group_by_raw != '' {
+			if stmt.group_by_raw != '' {
 				sql.write('group by ')
-				sql.write('$it.group_by_raw ')
-			} else if it.group_by.len > 0 {
+				sql.write('$stmt.group_by_raw ')
+			} else if stmt.group_by.len > 0 {
 				sql.write('group by ')
-				for col in it.group_by {
+				for col in stmt.group_by {
 					sql.write('$col,')
 				}
 				sql.go_back(1)
 				sql.write(' ')
 			}
 			// having
-			if it.having != '' {
-				sql.write('having $it.having ')
+			if stmt.having != '' {
+				sql.write('having $stmt.having ')
 			}
 			return sql.str()
 		}
 		Insert {
 			sql.write('insert into ')
-			sql.write('$it.table_name ')
+			sql.write('$stmt.table_name ')
 			// write data
 			sql.write('(')
-			for key in it.keys {
+			for key in stmt.keys {
 				sql.write('$key,')
 			}
 			sql.go_back(1)
 			sql.write(')')
 			sql.write(' values ')
 			sql.write('(')
-			for len, val in it.vals {
+			for len, val in stmt.vals {
 				sql.write("\'$val\'")
-				if len < it.vals.len - 1 {
+				if len < stmt.vals.len - 1 {
 					sql.write(', ')
 				}
 			}
 			sql.write(') ')
 			// write returning
-			if it.returning.len != 0 {
+			if stmt.returning.len != 0 {
 				sql.write('returning ')
-				for r in it.returning {
+				for r in stmt.returning {
 					sql.write('$r,')
 				}
 				sql.go_back(1)
@@ -133,17 +133,17 @@ pub fn gen(stmt Stmt) string {
 		}
 		Update {
 			sql.write('update ')
-			sql.write('$it.table_name ')
+			sql.write('$stmt.table_name ')
 			sql.write('set ')
-			for key, val in it.data {
+			for key, val in stmt.data {
 				sql.write("$key=\'$val\',")
 			}
 			sql.go_back(1)
 			// where statement
-			write_where(&it.where, &sql)
-			if it.returning.len != 0 {
+			write_where(&stmt.where, &sql)
+			if stmt.returning.len != 0 {
 				sql.write('returning ')
-				for r in it.returning {
+				for r in stmt.returning {
 					sql.write('$r,')
 				}
 				sql.go_back(1)
@@ -152,23 +152,23 @@ pub fn gen(stmt Stmt) string {
 		}
 		Delete {
 			sql.write('delete from ')
-			sql.write('$it.table_name ')
+			sql.write('$stmt.table_name ')
 			// where statement
-			write_where(&it.where, &sql)
+			write_where(&stmt.where, &sql)
 			return sql.str()
 		}
 		CreateDatabase {
-			sql.write('create database $it.db_name')
+			sql.write('create database $stmt.db_name')
 		}
 		AlterTable {}
 		RenameTable {
-			sql.write('alter table $it.old_name rename to $it.new_name')
+			sql.write('alter table $stmt.old_name rename to $stmt.new_name')
 		}
 		DropTable {
-			sql.write('drop table $it.table_name')
+			sql.write('drop table $stmt.table_name')
 		}
 		Truncate {
-			sql.write('truncate table $it.table_name')
+			sql.write('truncate table $stmt.table_name')
 		}
 	}
 }
