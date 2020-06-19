@@ -2,7 +2,6 @@ module vsql
 
 import strings
 
-
 pub fn gen(stmt Stmt) string {
 	mut sql := strings.new_builder(200)
 	match stmt {
@@ -16,7 +15,7 @@ pub fn gen(stmt Stmt) string {
 				if f.is_distinct {
 					sql.write('distinct ')
 				}
-				sql.write('${f.column_name}) ')
+				sql.write('$f.column_name) ')
 				if f.column_alias != '' {
 					sql.write('as ')
 					sql.write('$f.column_alias,')

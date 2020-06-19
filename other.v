@@ -1,8 +1,9 @@
 module vsql
+
 // output for debug
-//generate to object struct
+// generate to object struct
 pub fn (db &DB) to_obj() &DB {
-	stmt:=db.stmt
+	stmt := db.stmt
 	match stmt {
 		Select { println(stmt) }
 		Insert { println(stmt) }
@@ -13,7 +14,8 @@ pub fn (db &DB) to_obj() &DB {
 	println('')
 	return db
 }
-//generate to sql string
+
+// generate to sql string
 pub fn (db &DB) to_sql() &DB {
 	sql := gen(db.stmt)
 	println(sql)

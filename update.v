@@ -25,7 +25,7 @@ pub fn (mut db DB) into(name string) &DB {
 
 // status:done
 pub fn (mut db DB) returning(column string, other_columns ...string) &DB {
-	stmt:=db.stmt
+	stmt := db.stmt
 	match stmt {
 		Insert {
 			stmt.returning << column

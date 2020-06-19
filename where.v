@@ -26,7 +26,7 @@ fn (mut db DB) where_typ(typ, operator, condition string) &DB {
 		operator: operator
 		condition: condition
 	}
-	stmt:=db.stmt
+	stmt := db.stmt
 	match stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
@@ -74,7 +74,7 @@ fn (mut db DB) where_in_typ(typ, operator, column string, range []string) &DB {
 		column_name: column
 		range: range
 	}
-	stmt:=db.stmt
+	stmt := db.stmt
 	match db.stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
@@ -116,7 +116,7 @@ fn (mut db DB) where_null_typ(typ, operator, column string) &DB {
 		operator: operator
 		column_name: column
 	}
-	stmt:=db.stmt
+	stmt := db.stmt
 	match db.stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
@@ -159,7 +159,7 @@ fn (mut db DB) where_between_typ(typ, operator, column string, range []string) &
 		column_name: column
 		range: range
 	}
-	stmt:=db.stmt
+	stmt := db.stmt
 	match db.stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
@@ -201,11 +201,11 @@ fn (mut db DB) where_exists_typ(typ, operator, stmt string) &DB {
 		operator: operator
 		exist_stmt: stmt
 	}
-	stmt:=db.stmt
-	match stmt {
-		Select { stmt.where << w }
-		Update { stmt.where << w }
-		Delete { stmt.where << w }
+	s := db.stmt
+	match s {
+		Select { s.where << w }
+		Update { s.where << w }
+		Delete { s.where << w }
 		else { panic('unknown where clause') }
 	}
 	return db

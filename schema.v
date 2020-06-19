@@ -3,8 +3,7 @@ module vsql
 // import database.sql
 import dialect.pg
 
-
-pub type CreateTableFn = fn (Table)
+pub type CreateTableFn = fn (arg_1 Table)
 
 // create database
 pub fn (mut db DB) create_database(name string) {
@@ -29,11 +28,9 @@ pub fn (mut db DB) create_table(table_name string, create_table_fn CreateTableFn
 pub fn (mut db DB) create_table_if_not_exists(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
 	if db.has_table(table_name) {
 		println('table $table_name is already exists')
-		
 	} else {
-		return db.create_table(table_name,create_table_fn)
+		return db.create_table(table_name, create_table_fn)
 	}
-	
 }
 
 // alter table
