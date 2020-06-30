@@ -1,7 +1,6 @@
 module vsql
 
-// output for debug
-// generate to object struct
+// generate sql to object struct for debug
 pub fn (db &DB) to_obj() &DB {
 	stmt := db.stmt
 	match stmt {
@@ -11,15 +10,13 @@ pub fn (db &DB) to_obj() &DB {
 		Delete { println(stmt) }
 		else { println('unknown struct') }
 	}
-	println('')
 	return db
 }
 
-// generate to sql string
+// generate to sql string for debug
 pub fn (db &DB) to_sql() &DB {
 	s := gen(db.stmt)
 	println(s)
-	println('')
 	return db
 }
 
