@@ -3,7 +3,7 @@ module vsql
 // import database.sql
 import dialect.pg
 
-pub type CreateTableFn = fn (arg_1 Table)
+pub type CreateTableFn = fn (table Table)
 
 // create database
 pub fn (mut db DB) create_database(name string) {
@@ -67,7 +67,7 @@ pub fn (mut db DB) drop_table_if_exists(name string) {
 
 // has
 // staut:wip
-// just pg is ok
+// only pg is ok
 pub fn (mut db DB) has_table(name string) bool {
 	mut s := ''
 	match db.config.client {
