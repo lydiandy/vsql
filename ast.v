@@ -1,11 +1,8 @@
 module vsql
 
-pub const (
-	version = '0.0.1'
-)
-
-pub type Stmt = AlterTable | CreateDatabase | Delete | DropTable | Insert | RenameTable | Select |
-	Truncate | Update
+// the sql statement sum type
+pub type Stmt = AlterTable | CreateDatabase | Delete | DropTable | Insert | RenameTable |
+	Select | Truncate | Update
 
 // select statement
 pub struct Select {

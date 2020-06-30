@@ -2,6 +2,10 @@ module vsql
 
 import dialect.pg
 
+pub const (
+	version = '0.0.1'
+)
+
 pub struct DB {
 pub:
 	config Config
