@@ -1,11 +1,16 @@
 ## vsql
 
-just like knex in node
+inspired by [knex](https://github.com/knex/knex)
+
+- just a query builder,not orm
+- easy to learn,easy to use
+- support multi-dialect(pg,mysql,sqlite,mssql),by now just pg as the first version
+- function chain call
 
 ### finished
 
 ```c
-// these sql statements already done
+// the following sql statements is already finished
 module main
 
 import vsql
