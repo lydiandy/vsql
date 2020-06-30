@@ -17,8 +17,8 @@ pub fn (db &DB) to_obj() &DB {
 
 // generate to sql string
 pub fn (db &DB) to_sql() &DB {
-	sql := gen(db.stmt)
-	println(sql)
+	s := gen(db.stmt)
+	println(s)
 	println('')
 	return db
 }

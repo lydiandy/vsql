@@ -303,31 +303,31 @@ pub fn (mut t Table) charset(name string) &Table {
 
 // generate sql of create table
 pub fn (mut t Table) gen() string {
-	mut sql := strings.new_builder(200)
-	sql.writeln('create table $t.name (')
+	mut s := strings.new_builder(200)
+	s.writeln('create table $t.name (')
 	for column in t.columns {
-		sql.write('$column.name ')
-		sql.write('$column.typ ')
+		s.write('$column.name ')
+		s.write('$column.typ ')
 		if column.default_value != '' {
-			sql.write("default \'$column.default_value\' ")
+			s.write("default \'$column.default_value\' ")
 		}
 		if column.is_increment {
-			sql.write('serial ')
+			s.write('serial ')
 		}
 		if column.is_not_null {
-			sql.write('not null ')
+			s.write('not null ')
 		}
 		if column.is_primary {
-			sql.write('primary key ')
+			s.write('primary key ')
 		}
 		if column.is_unique {
-			sql.write('unique ')
+			s.write('unique ')
 		}
 		if column.index != '' {
-			sql.write('index $column.index ')
+			s.write('index $column.index ')
 		}
 		if column.reference != '' {
-			sql.write('references $column.reference ')
+			s.write('references $column.reference ')
 		}
 		if column.is_first {
 		}
@@ -336,48 +336,48 @@ pub fn (mut t Table) gen() string {
 		if column.collate != '' {
 		}
 		if column.check != '' {
-			sql.write('check ($column.check)')
+			s.write('check ($column.check)')
 		}
-		sql.go_back(1)
-		sql.writeln(',')
+		s.go_back(1)
+		s.writeln(',')
 	}
 	if t.primarys.len == 0 && t.uniques.len == 0 && t.checks.len == 0 {
-		sql.go_back(2)
+		s.go_back(2)
 	}
-	// sql.writeln('')
+	// s.writeln('')
 	// table constraint
 	// primary key
 	if t.primarys.len > 0 {
-		sql.write('primary key (')
+		s.write('primary key (')
 		for column in t.primarys {
-			sql.write('$column,')
+			s.write('$column,')
 		}
-		sql.go_back(1)
-		sql.writeln('),')
+		s.go_back(1)
+		s.writeln('),')
 	}
 	// unique
 	if t.uniques.len > 0 {
-		sql.write('unique (')
+		s.write('unique (')
 		for column in t.uniques {
-			sql.write('$column,')
+			s.write('$column,')
 		}
-		sql.go_back(1)
-		sql.writeln('),')
+		s.go_back(1)
+		s.writeln('),')
 	}
 	// check
 	if t.checks.len > 0 {
 		for c in t.checks {
-			sql.writeln('check ($c),')
+			s.writeln('check ($c),')
 		}
-		sql.go_back(2)
+		s.go_back(2)
 	}
-	sql.writeln('')
-	sql.write(');')
-	return sql.str()
+	s.writeln('')
+	s.write(');')
+	return s.str()
 }
 
 pub fn (t &Table) to_sql() {
-	sql := t.gen()
-	println(sql)
+	s := t.gen()
+	println(s)
 	println('')
 }

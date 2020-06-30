@@ -20,8 +20,8 @@ pub fn (mut db DB) create_table(table_name string, create_table_fn CreateTableFn
 		name: table_name
 	}
 	create_table_fn(table)
-	sql := table.gen()
-	res := db.exec(sql)
+	s := table.gen()
+	res := db.exec(s)
 	return res
 }
 
@@ -69,10 +69,10 @@ pub fn (mut db DB) drop_table_if_exists(name string) {
 // staut:wip
 // just pg is ok
 pub fn (mut db DB) has_table(name string) bool {
-	mut sql := ''
+	mut s := ''
 	match db.config.client {
 		'pg' {
-			sql = "select count(*) from information_schema.tables where table_schema=\'public\' and  table_name =\'$name\'"
+			s = "select count(*) from information_schema.tables where table_schema=\'public\' and  table_name =\'$name\'"
 		}
 		'mysql' {
 			// todo
@@ -84,7 +84,7 @@ pub fn (mut db DB) has_table(name string) bool {
 			panic('unknown database client')
 		}
 	}
-	res := db.exec(sql)
+	res := db.exec(s)
 	if res[0].vals[0] == '1' {
 		return true
 	} else {
@@ -95,10 +95,10 @@ pub fn (mut db DB) has_table(name string) bool {
 // staut:wip
 // ERROR:  syntax error at or near "and column_name"
 pub fn (mut db DB) has_column(table_name, column_name string) bool {
-	mut sql := ''
+	mut s := ''
 	match db.config.client {
 		'pg' {
-			sql = "select count(*) from information_schema.columns where table_schema=\'public\' and table_name =\'$table_name\' and column_name=\'$column_name\'"
+			s = "select count(*) from information_schema.columns where table_schema=\'public\' and table_name =\'$table_name\' and column_name=\'$column_name\'"
 		}
 		'mysql' {
 			// todo
@@ -110,7 +110,7 @@ pub fn (mut db DB) has_column(table_name, column_name string) bool {
 			panic('unknown database client')
 		}
 	}
-	res := db.exec(sql)
+	res := db.exec(s)
 	println(res)
 	if res[0].vals[0] == '1' {
 		return true

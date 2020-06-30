@@ -75,7 +75,7 @@ fn (mut db DB) where_in_typ(typ, operator, column string, range []string) &DB {
 		range: range
 	}
 	stmt := db.stmt
-	match db.stmt {
+	match stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
 		Delete { stmt.where << w }
@@ -117,7 +117,7 @@ fn (mut db DB) where_null_typ(typ, operator, column string) &DB {
 		column_name: column
 	}
 	stmt := db.stmt
-	match db.stmt {
+	match stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
 		Delete { stmt.where << w }
@@ -160,7 +160,7 @@ fn (mut db DB) where_between_typ(typ, operator, column string, range []string) &
 		range: range
 	}
 	stmt := db.stmt
-	match db.stmt {
+	match stmt {
 		Select { stmt.where << w }
 		Update { stmt.where << w }
 		Delete { stmt.where << w }

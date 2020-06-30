@@ -1,4 +1,4 @@
-// these sql statements already done
+// the following sql statements is already finished
 module main
 
 import vsql
@@ -58,10 +58,14 @@ fn main() {
 	// union
 	// join
 	db.table('cat as c').select_('c.id,c.name,p.name,p.age').join('person as p', 'c.owner_id=p.id').end()
-	db.table('cat as c').select_('c.id,c.name,p.name,p.age').inner_join('person as p', 'c.owner_id=p.id').end()
-	db.table('cat as c').select_('c.id,c.name,p.name,p.age').left_join('person as p', 'c.owner_id=p.id').end()
-	db.table('cat as c').select_('c.id,c.name,p.name,p.age').right_join('person as p', 'c.owner_id=p.id').end()
-	db.table('cat as c').select_('c.id,c.name,p.name,p.age').outer_join('person as p', 'c.owner_id=p.id').end()
+	db.table('cat as c').select_('c.id,c.name,p.name,p.age').inner_join('person as p',
+		'c.owner_id=p.id').end()
+	db.table('cat as c').select_('c.id,c.name,p.name,p.age').left_join('person as p',
+		'c.owner_id=p.id').end()
+	db.table('cat as c').select_('c.id,c.name,p.name,p.age').right_join('person as p',
+		'c.owner_id=p.id').end()
+	db.table('cat as c').select_('c.id,c.name,p.name,p.age').outer_join('person as p',
+		'c.owner_id=p.id').end()
 	db.table('cat as c').select_('c.id,c.name,p.name,p.age').cross_join('person as p').end()
 	db.table('cat as c').select_('c.id,c.name,p.name,p.age').join_raw('join person as p on c.owner_id=p.id').end()
 	db.table('cat as c').select_('c.id,c.name,p.name,p.age,f.name').left_join('person as p',

@@ -3,180 +3,180 @@ module vsql
 import strings
 
 pub fn gen(stmt Stmt) string {
-	mut sql := strings.new_builder(200)
+	mut s := strings.new_builder(200)
 	match stmt {
 		Select {
-			sql.write('select  ')
+			s.write('select  ')
 			if stmt.is_distinct {
-				sql.write('distinct ')
+				s.write('distinct ')
 			}
 			for f in stmt.aggregate_fn {
-				sql.write('${f.name}(')
+				s.write('${f.name}(')
 				if f.is_distinct {
-					sql.write('distinct ')
+					s.write('distinct ')
 				}
-				sql.write('$f.column_name) ')
+				s.write('$f.column_name) ')
 				if f.column_alias != '' {
-					sql.write('as ')
-					sql.write('$f.column_alias,')
+					s.write('as ')
+					s.write('$f.column_alias,')
 				}
 			}
 			if stmt.aggregate_fn.len > 0 {
-				sql.go_back(1)
+				s.go_back(1)
 			}
 			if stmt.columns.len == 0 && stmt.aggregate_fn.len == 0 {
-				sql.write('* ')
+				s.write('* ')
 			} else {
 				for column in stmt.columns {
-					sql.write('$column.name ')
+					s.write('$column.name ')
 					if column.alias != '' {
-						sql.write('as ')
-						sql.write('$column.alias,')
+						s.write('as ')
+						s.write('$column.alias,')
 					} else {
-						sql.write(',')
+						s.write(',')
 					}
 				}
-				sql.go_back(1)
+				s.go_back(1)
 			}
-			sql.write('from ')
-			sql.write('$stmt.table_name ')
+			s.write('from ')
+			s.write('$stmt.table_name ')
 			if stmt.table_alias != '' {
-				sql.write('as $stmt.table_alias ')
+				s.write('as $stmt.table_alias ')
 			}
 			// where statement
-			write_where(&stmt.where, &sql)
+			write_where(&stmt.where, &s)
 			// join statement
 			if stmt.join_raw != '' {
-				sql.write('$stmt.join_raw')
+				s.write('$stmt.join_raw')
 			} else {
 				if stmt.join.len > 0 {
 					for j in stmt.join {
-						sql.write('$j.typ ')
-						sql.write('$j.table_name ')
+						s.write('$j.typ ')
+						s.write('$j.table_name ')
 						if j.table_alias != '' {
-							sql.write('as $j.table_alias ')
+							s.write('as $j.table_alias ')
 						}
 						if j.join_condition != '' { // cross join will be ''
-							sql.write('on $j.join_condition ')
+							s.write('on $j.join_condition ')
 						}
 					}
 				}
 			}
 			// limit
 			if stmt.first {
-				sql.write('limit 1 ')
+				s.write('limit 1 ')
 			}
 			if stmt.limit > 0 {
-				sql.write('limit $stmt.limit ')
+				s.write('limit $stmt.limit ')
 			}
 			if stmt.offset > 0 {
-				sql.write('offset $stmt.offset ')
+				s.write('offset $stmt.offset ')
 			}
 			// order by statement
 			if stmt.order_by_raw != '' {
-				sql.write('order by ')
-				sql.write('$stmt.order_by_raw ')
+				s.write('order by ')
+				s.write('$stmt.order_by_raw ')
 			} else if stmt.order_by.len > 0 {
-				sql.write('order by ')
+				s.write('order by ')
 				for order_obj in stmt.order_by {
-					sql.write('$order_obj.column $order_obj.order,')
+					s.write('$order_obj.column $order_obj.order,')
 				}
-				sql.go_back(1)
+				s.go_back(1)
 			}
 			// group by statement
 			if stmt.group_by_raw != '' {
-				sql.write('group by ')
-				sql.write('$stmt.group_by_raw ')
+				s.write('group by ')
+				s.write('$stmt.group_by_raw ')
 			} else if stmt.group_by.len > 0 {
-				sql.write('group by ')
+				s.write('group by ')
 				for col in stmt.group_by {
-					sql.write('$col,')
+					s.write('$col,')
 				}
-				sql.go_back(1)
-				sql.write(' ')
+				s.go_back(1)
+				s.write(' ')
 			}
 			// having
 			if stmt.having != '' {
-				sql.write('having $stmt.having ')
+				s.write('having $stmt.having ')
 			}
-			return sql.str()
+			return s.str()
 		}
 		Insert {
-			sql.write('insert into ')
-			sql.write('$stmt.table_name ')
+			s.write('insert into ')
+			s.write('$stmt.table_name ')
 			// write data
-			sql.write('(')
+			s.write('(')
 			for key in stmt.keys {
-				sql.write('$key,')
+				s.write('$key,')
 			}
-			sql.go_back(1)
-			sql.write(')')
-			sql.write(' values ')
-			sql.write('(')
+			s.go_back(1)
+			s.write(')')
+			s.write(' values ')
+			s.write('(')
 			for len, val in stmt.vals {
-				sql.write("\'$val\'")
+				s.write("\'$val\'")
 				if len < stmt.vals.len - 1 {
-					sql.write(', ')
+					s.write(', ')
 				}
 			}
-			sql.write(') ')
+			s.write(') ')
 			// write returning
 			if stmt.returning.len != 0 {
-				sql.write('returning ')
+				s.write('returning ')
 				for r in stmt.returning {
-					sql.write('$r,')
+					s.write('$r,')
 				}
-				sql.go_back(1)
+				s.go_back(1)
 			}
-			return sql.str()
+			return s.str()
 		}
 		Update {
-			sql.write('update ')
-			sql.write('$stmt.table_name ')
-			sql.write('set ')
+			s.write('update ')
+			s.write('$stmt.table_name ')
+			s.write('set ')
 			for key, val in stmt.data {
-				sql.write("$key=\'$val\',")
+				s.write("$key=\'$val\',")
 			}
-			sql.go_back(1)
+			s.go_back(1)
 			// where statement
-			write_where(&stmt.where, &sql)
+			write_where(&stmt.where, &s)
 			if stmt.returning.len != 0 {
-				sql.write('returning ')
+				s.write('returning ')
 				for r in stmt.returning {
-					sql.write('$r,')
+					s.write('$r,')
 				}
-				sql.go_back(1)
+				s.go_back(1)
 			}
-			return sql.str()
+			return s.str()
 		}
 		Delete {
-			sql.write('delete from ')
-			sql.write('$stmt.table_name ')
+			s.write('delete from ')
+			s.write('$stmt.table_name ')
 			// where statement
-			write_where(&stmt.where, &sql)
-			return sql.str()
+			write_where(&stmt.where, &s)
+			return s.str()
 		}
 		CreateDatabase {
-			sql.write('create database $stmt.db_name')
+			s.write('create database $stmt.db_name')
 		}
 		AlterTable {}
 		RenameTable {
-			sql.write('alter table $stmt.old_name rename to $stmt.new_name')
+			s.write('alter table $stmt.old_name rename to $stmt.new_name')
 		}
 		DropTable {
-			sql.write('drop table $stmt.table_name')
+			s.write('drop table $stmt.table_name')
 		}
 		Truncate {
-			sql.write('truncate table $stmt.table_name')
+			s.write('truncate table $stmt.table_name')
 		}
 	}
 }
 
 // write where clause for select,update,delete
-fn write_where(where &[]Where, sql &strings.Builder) {
+fn write_where(where &[]Where, s &strings.Builder) {
 	// where statement
 	if where.len > 0 {
-		sql.write('where ')
+		s.write('where ')
 		mut operator := ''
 		for pos, w in where {
 			// if where is the second where clause,operator is and
@@ -187,7 +187,7 @@ fn write_where(where &[]Where, sql &strings.Builder) {
 			}
 			match w.typ {
 				'where' {
-					sql.write('$operator ($w.condition) ')
+					s.write('$operator ($w.condition) ')
 				}
 				'where_in' {
 					mut range_str := ''
@@ -198,19 +198,19 @@ fn write_where(where &[]Where, sql &strings.Builder) {
 							range_str += '$r'
 						}
 					}
-					sql.write('$operator ($w.column_name in ($range_str)) ')
+					s.write('$operator ($w.column_name in ($range_str)) ')
 				}
 				'where_null' {
-					sql.write('$operator ($w.column_name is null) ')
+					s.write('$operator ($w.column_name is null) ')
 				}
 				'where_between' {
-					sql.write('$operator ($w.column_name between ${w.range[0]} and ${w.range[1]}) ')
+					s.write('$operator ($w.column_name between ${w.range[0]} and ${w.range[1]}) ')
 				}
 				'where_exists' {
-					sql.write('exists ($operator $w.exist_stmt) ')
+					s.write('exists ($operator $w.exist_stmt) ')
 				}
 				'where_raw' {
-					sql.write('$w.condition ')
+					s.write('$w.condition ')
 				}
 				else {}
 			}
