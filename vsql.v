@@ -10,7 +10,7 @@ pub const (
 pub struct DB {
 pub:
 	config Config
-	conn   pg.DB
+	conn   pg.DB //TODO: replace to Driver interface
 mut:
 	stmt   Stmt
 }
