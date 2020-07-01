@@ -42,19 +42,9 @@ fn main() {
 
 ```
 
-**all the sql statement can be found in test directory**
+all the sql statement can be found in test directory
 
 ### select
-
-#### select+from
-
-```sql
-res :=db.select_('*').from('person').end()
-select * from person
-
-res :=db.select_('id,name,age,income').from('person').end()
-select * from person
-```
 
 #### table+column
 
@@ -66,15 +56,147 @@ res := db.table('person').column('id,name,age').end()
 select id,name,age from person
 ```
 
+#### select+from
+
+select is key word of v,so use select_
+
+```sql
+res :=db.select_('*').from('person').end()
+select * from person
+
+res :=db.select_('id,name,age,income').from('person').end()
+select * from person
+```
+
+#### where
+
+```
+
+```
+
+#### first/offset/limit
+
+```sql
+// first
+res := db.table('person').column('').first().end()
+select * from person limit 1
+// limit
+res := db.table('person').column('').limit(3).end()
+select * from person limit 3
+// offset
+res := db.table('person').column('').offset(1).end()
+select * from person offset 1
+// offset+limit
+res := db.table('person').column('').offset(2).limit(2).end()
+elect * from person offset 2 limit 2
+```
+
+#### distinct
+
+```sql
+res := db.table('person').column('id,name,age').distinct().end()
+select distinct id,name,age from person
+```
+
+#### order by
+
+```sql
+res := db.table('person').column('*').order_by('name desc').order_by('age').end()
+select * from person order by name desc,age asc
+
+res := db.table('person').column('').order_by_raw('name desc,age asc').end()
+select * from person order by name desc,age asc
+```
+
+#### group by
+
+```
+
+```
+
+
+
+#### join
+
+```
+
+```
+
+#### aggregate function
+
+```
+
+```
+
+
+
 ### insert
+
+```sql
+
+```
 
 
 
 ### update
 
+```sql
+
+```
+
 
 
 ### delete
+
+```sql
+
+```
+
+### schema
+
+#### create table
+
+```
+
+```
+
+
+
+#### alter table
+
+```
+
+```
+
+
+
+#### drop table
+
+```
+
+```
+
+
+
+### transaction
+
+```c
+t := db.transaction()
+// t := db.tx() //the shorter fn
+t.exec("insert into person (id,name,age,income) values (33,'name33',33,0)")
+t.exec("insert into person (id,name,age,income) values (44,'name44',44,0)")
+t.exec("insert into person (id,name,age,income) values (55,'name55',55,0)")
+// t.rollback()
+t.commit()
+```
+
+### other
+
+```sql
+to_sql()
+print_sql()
+print_obj()
+```
 
 
 
@@ -97,38 +219,9 @@ import vsql.dialect.mysql
 import vsql.dialect.sqlite
 import vsql.dialect.mssql
 
-import vsql
-
-fn main() {
-	config := vsql.Config{
-		client: 'pg'
-		host: 'localhost'
-		port: 5432	
-		user: 'postgres'
-		password: ''
-		database: 'dev_db'
-		pool: {min:2,max:10}
-		timeout: 60000
-		debug: true
-	}
-	db := vsql.connect(config) or {
-		panic('connect wrong')
-	}
-
-	//select_
-	res:=db.table('person as u').select_('id,name,age').where('id',3).end() //must need end?
-	res:=db.table('person').select_('id,name as name2,age as age2').where('id',3).end() //must need end?
-	res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
-	res:=db.table('person').select_('id,name,age').where('id',1).first().end()
-	res:=db.table('person').select_('id,name,age').where('id',1).limit(10).offset(20).end()
-	res:=db.select_('*').from('person').where('id',3).end() //optional
-	res:=db.select_('id,name').from('person').where('id',3).end() //optional
-	res:=db.from('person').select_('id,name').where('id',3).end() 
-	res:=db.table('person').or_where('id',1).and_where('id','<1').end()
-	res:=db.table('t_balance').column('id,name').first().where('sourceId','33').end() 
-	res:=db.table('t_balance').first('*').where('sourceId','33').end() //todo
-	res:=db.table('person as tc').select_('name','id as personId','age as age2').where_not('tc.status',-1).order_by('tc.pinyin').end()
-	//where in select_
+	//select
+res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
+	//where in select
 	db.table('person').select_('*').where('id',1)
 	db.table('person').select_('*').where({id:1,name:'tom'})
 	db.table('person').select_('*').where('name','like','t*')
@@ -166,58 +259,10 @@ fn main() {
 	db.table('person').select_('*').where_raw('id = ?', [1])
 	db.table('person').select_('*').or_where_raw('id = ?', [1])
 
-	//where in update 
-	db.table('person').update({'name':'jack'}).where('id',1).returning('id').end()
-	//where in delete
-	db.table('person').delete().where('id',3).end()
-
-	//orderby,groupby,having
-	db.table('person').select_('age','count(age)').where('age<=30').order_by('income desc,age asc').group_by('age').having('count(*)=2')
-
 	//union
 	db.table('person').select_('id','name','age').union_(fn() {
 		db.table('person2').select_('id','name','age')
 	}).order_by('id asc')
-
-
-	//table join
-	res:= db.table('t_leader as tl')
-			.select_('tl.id','tl.phone','tl.status','tc.name as personName','tu2.name as creatorName')
-			.where('tl.id','33')
-			.left_join('person as tc','tc.id=tl.personId')
-			.right_join('person as tu','tu.id=tl.auditor')
-			.right_outer_join('person as tu2','tu2.id>tl.creator')
-			.end()
-
-	//aggregate function
-	res:=db.table('person').count('*').end()
-	res:=db.table('person').count('* as cc').end()
-	res:=db.table('person').count('distinct name as n').end()
-	// res:=db.table('person').count({age: 'a',income:'i'}).end() //todo
-	res:=db.table('person').min('age').end()
-	res:=db.table('person').where('id','>','3').min('age').end()
-	res:=db.table('person').min('age as min_age').max('age as max_age').end()
-	res:=db.table('person').sum('income').end()
-	res:=db.table('person').avg('income').end()
-	// res:=db.table('person').min('age as a','income as i').end() //todo
-	// res:=db.table('person').min({age:'a',imcome:'i'}).end() //todo
-
-	//insert
-	res:=db.table('person').insert({name:'xxx',id:123}).returning('id').end()
-	res:=db.table('person').insert([{name:'xxx',id:123},{name:'abc',id:222}]).returning('id').end()
-	res:=db.insert(data).into('person').returning('id') //optional
-
-	//update
-	res:=db.table('person').update({'name':'paris'}).where('id',personId).returning('id').end()
-	res:=db.table('person').update('name','Paris').where('id',personId).returning('id').end()
-	//update increment/decrement
-	res:=db.table('person').where('age','>','40').increment('amount',100).end()
-	res:=db.table('person').where('age','>','40').increment({amount:100,age:1}).end()
-	res:=db.table('person').where('age','>','40').decrement('amount',100).end()
-	
-	//delete
-	db.table('person').delete().where('id',3).end()
-	db.table('person').where('id',3).delete().end()
 
 	//shcema ddl
 	db.create_database('person') //optional
@@ -253,23 +298,6 @@ fn main() {
 		t.str('new_column')
 	})
 
-	db.rename_table('old','new')
-
-
-	db.has_table('name')
-	db.has_column('table','column')
-
-
-	db.table('person').create_index('form_id','asc')
-
-	db.drop_table('person')
-	db.drop_table_if_exists('person')
-
-
-	// raw
-	db.query('select_ * from person where id=?',1)
-	db.exec('delete from person where id=?',1)
-
 	//transaction
 	//way one 
 	t:=db.transaction()
@@ -286,13 +314,6 @@ fn main() {
 		db.table('person')...
 		t.rollback()
 	})
-
-
-	//other
-	db.table('person').truncate()
-	db.to_sql() 
-	db.to_str()
-
 }
 
 //model
