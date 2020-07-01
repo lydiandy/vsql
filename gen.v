@@ -52,7 +52,7 @@ pub fn gen(stmt Stmt) string {
 			write_where(&stmt.where, &s)
 			// join statement
 			if stmt.join_raw != '' {
-				s.write('$stmt.join_raw')
+				s.write('$stmt.join_raw ')
 			} else {
 				if stmt.join.len > 0 {
 					for j in stmt.join {
@@ -88,7 +88,6 @@ pub fn gen(stmt Stmt) string {
 				for o in stmt.order_by {
 					s.write('$o.column $o.order,')
 				}
-				// s.go_back(1)
 			}
 			// group by statement
 			if stmt.group_by_raw != '' {

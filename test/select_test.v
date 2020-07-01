@@ -1,26 +1,7 @@
-import vsql
+module test
 
 fn test_select() {
-	config := vsql.Config{
-		client: 'pg'
-		host: 'localhost'
-		port: 5432
-		user: 'postgres'
-		password: ''
-		database: 'test_db'
-	}
-	// connect to database with config
-	mut db := vsql.connect(config) or {
-		panic('connect error:$err')
-	}
-	// create table
-	db.exec('drop table if exists person')
-	db.exec("create table person (id integer primary key, name text default '',age integer default 0,income integer default 0);")
-	// insert data
-	db.exec("insert into person (id,name,age,income) values (1,'tom',29,1000)")
-	db.exec("insert into person (id,name,age,income) values (2,'jack',33,500)")
-	db.exec("insert into person (id,name,age,income) values (3,'mary',25,2000)")
-	db.exec("insert into person (id,name,age,income) values (4,'lisa',25,1000)")
+	db := connect_db()
 	// start to test
 	mut res := ''
 	// select+from
@@ -83,8 +64,8 @@ fn test_select() {
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'
-	res = db.table('person').count('* as cc').to_sql()
-	assert res == 'select count(*) as cc from person'
+	res = db.table('person').count('* as rows').to_sql()
+	assert res == 'select count(*) as rows from person'
 	res = db.table('person').count('distinct name as n').to_sql()
 	assert res == 'select distinct count(name) as n from person'
 	res = db.table('person').min('age').to_sql()
@@ -98,4 +79,38 @@ fn test_select() {
 	res = db.table('person').avg('income').to_sql()
 	assert res == 'select avg(income) from person'
 	// join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').join('person as p',
+		'c.owner_id=p.id').to_sql()
+	assert res == 'select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id'
+	// inner join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').inner_join('person as p',
+		'c.owner_id=p.id').to_sql()
+	assert res ==
+		'select c.id,c.name,p.name,p.age from cat as c inner join person as p on c.owner_id=p.id'
+	// left join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').left_join('person as p',
+		'c.owner_id=p.id').to_sql()
+	assert res ==
+		'select c.id,c.name,p.name,p.age from cat as c left join person as p on c.owner_id=p.id'
+	// right join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').right_join('person as p',
+		'c.owner_id=p.id').to_sql()
+	assert res ==
+		'select c.id,c.name,p.name,p.age from cat as c right join person as p on c.owner_id=p.id'
+	// outer join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').outer_join('person as p',
+		'c.owner_id=p.id').to_sql()
+	assert res ==
+		'select c.id,c.name,p.name,p.age from cat as c full outer join person as p on c.owner_id=p.id'
+	// cross join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').cross_join('person as p').to_sql()
+	assert res == 'select c.id,c.name,p.name,p.age from cat as c cross join person as p'
+	// join raw
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').join_raw('join person as p on c.owner_id=p.id').to_sql()
+	assert res == 'select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id'
+	// multi join
+	res = db.table('cat as c').column('c.id,c.name,p.name,p.age,f.name').left_join('person as p',
+		'c.owner_id=p.id').left_join('food as f', 'c.id=f.cat_id').to_sql()
+	assert res ==
+		'select c.id,c.name,p.name,p.age,f.name from cat as c left join person as p on c.owner_id=p.id left join food as f on c.id=f.cat_id'
 }

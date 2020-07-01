@@ -35,6 +35,7 @@ pub fn (db &DB) avg(column string) &DB {
 	return db
 }
 
+// status:done
 fn (db &DB) add_aggregate_fn(fn_name, column string) {
 	s := db.stmt as Select
 	s.columns = []Column{}
