@@ -7,8 +7,6 @@ fn test_select() {
 	// select+from
 	res = db.select_('*').from('person').to_sql()
 	assert res == 'select * from person'
-	res = db.select_('*').from('person').to_sql()
-	assert res == 'select * from person'
 	res = db.select_('id,name,age,income').from('person').to_sql()
 	assert res == 'select id,name,age,income from person'
 	// table+column
