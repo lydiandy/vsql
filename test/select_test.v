@@ -18,9 +18,9 @@ fn test_select() {
 	db.exec("create table person (id integer primary key, name text default '',age integer default 0,income integer default 0);")
 	// insert data
 	db.exec("insert into person (id,name,age,income) values (1,'tom',29,1000)")
-	db.exec("insert into person (id,name,age,income) values (2,'jack',33,0)")
+	db.exec("insert into person (id,name,age,income) values (2,'jack',33,500)")
 	db.exec("insert into person (id,name,age,income) values (3,'mary',25,2000)")
-	db.exec("insert into person (id,name,age,income) values (4,'lisa',25,0)")
+	db.exec("insert into person (id,name,age,income) values (4,'lisa',25,1000)")
 	// start to test
 	mut res := ''
 	// select+from
@@ -67,6 +67,15 @@ fn test_select() {
 	assert res == 'select * from person order by name desc,age asc'
 	res = db.table('person').column('').order_by_raw('name desc,age asc').to_sql()
 	assert res == 'select * from person order by name desc,age asc'
+	// group by
+	res = db.table('person').column('age,count(age)').group_by('age').to_sql()
+	assert res == 'select age,count(age) from person group by age'
+	res = db.table('person').column('age,count(age)').group_by('age').group_by('name').to_sql()
+	assert res == 'select age,count(age) from person group by age,name'
+	res = db.table('person').column('age,count(age)').group_by_raw('age,name').to_sql()
+	assert res == 'select age,count(age) from person group by age,name'
+	res = db.table('person').column('age,count(age),avg(income)').group_by('age').to_sql()
+	assert res == 'select age,count(age),avg(income) from person group by age'
 	// where
 	// aggregate function
 }
