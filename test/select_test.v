@@ -72,10 +72,13 @@ fn test_select() {
 	assert res == 'select age,count(age) from person group by age'
 	res = db.table('person').column('age,count(age)').group_by('age').group_by('name').to_sql()
 	assert res == 'select age,count(age) from person group by age,name'
-	res = db.table('person').column('age,count(age)').group_by_raw('age,name').to_sql()
-	assert res == 'select age,count(age) from person group by age,name'
+	res = db.table('person').column('age,count(age)').group_by_raw('age,income').to_sql()
+	assert res == 'select age,count(age) from person group by age,income'
 	res = db.table('person').column('age,count(age),avg(income)').group_by('age').to_sql()
 	assert res == 'select age,count(age),avg(income) from person group by age'
+	// having
+	res = db.table('person').select_('age,count(age),avg(income)').group_by('age').having('count(*)=2').to_sql()
+	assert res == 'select age,count(age),avg(income) from person group by age having count(*)=2'
 	// where
 	// aggregate function
 }
