@@ -14,6 +14,14 @@ inspired by [knex](https://github.com/knex/knex)
 
 the main idea of vsql is:  **function call chain => ast => sql**
 
+### some limit
+
+here are some limits,maybe need to find better solution,advice is welcome~
+
+- select is a key word of vlang,so have to use select_
+- in query statement,at the end of every function call chain need end() to know the end of chain and start generate sql. Is it possible to remove it?
+- v is no database interface for driver like go,not easy to support multi-dialect
+
 ### example
 
 ```c
@@ -70,8 +78,22 @@ select * from person
 
 #### where
 
-```
+```sql
+res = db.table('person').column('id,name,age').where('id=1').where_not('id=2').where_in('id',
+		['1', '3', '5']).where_between('id', ['1', '5']).where_null('age').end()
+select * from person where id=1
 
+res = db.table('person').column('id,name,age').where('id=1').or_where_not('id=2').or_where_in('id',
+		['1', '3', '5']).or_where_between('id', ['1', '5']).or_where_null('age').end()
+select * from person where id=1
+
+res = db.table('person').column('id,name,age').where('id=1').and_where_not('id=2').and_where_in('id',
+		['1', '3', '5']).and_where_between('id', ['1', '5']).and_where_null('age').end()
+select * from person where id=1
+
+res = db.table('person').column('id,name,age').where('id=1').where_not('id=2').where_not_in('id',
+		['1', '3', '5']).where_not_between('id', ['1', '5']).where_not_null('age').end()
+select * from person where id=1
 ```
 
 #### first/offset/limit
@@ -108,75 +130,167 @@ res := db.table('person').column('').order_by_raw('name desc,age asc').end()
 select * from person order by name desc,age asc
 ```
 
-#### group by
+#### group by/having
 
+```sql
+res := db.table('person').column('age,count(age)').group_by('age').group_by('name').end()
+select age,count(age) from person group by age,name
+res := db.table('person').column('age,count(age)').group_by_raw('age,income').end()
+select age,count(age) from person group by age,income
+//having
+res = db.table('person').column('age,count(age),avg(income)').group_by('age').having('count(*)=2').end()
+select age,count(age),avg(income) from person group by age having count(*)=2
 ```
-
-```
-
-
 
 #### join
 
-```
+```sql
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').inner_join('person as p',
+		'c.owner_id=p.id').end()
+		
+select c.id,c.name,p.name,p.age from cat as c inner join person as p on c.owner_id=p.id'
 
+// left join
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').left_join('person as p',
+		'c.owner_id=p.id').end()
+select c.id,c.name,p.name,p.age from cat as c left join person as p on c.owner_id=p.id
+
+// right join
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').right_join('person as p',
+		'c.owner_id=p.id').end()
+select c.id,c.name,p.name,p.age from cat as c right join person as p on c.owner_id=p.id
+
+// outer join
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').outer_join('person as p',
+		'c.owner_id=p.id').end()
+select c.id,c.name,p.name,p.age from cat as c full outer join person as p on c.owner_id=p.id
+
+// cross join
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').cross_join('person as p').end()
+select c.id,c.name,p.name,p.age from cat as c cross join person as p
+
+// join raw
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').join_raw('join person as p on c.owner_id=p.id').end()
+select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id
+
+// multi join
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age,f.name').left_join('person as p',
+		'c.owner_id=p.id').left_join('food as f', 'c.id=f.cat_id').end()
+select c.id,c.name,p.name,p.age,f.name from cat as c left join person as p on c.owner_id=p.id left join food as f on c.id=f.cat_id
 ```
 
 #### aggregate function
 
+```sql
+res := db.table('person').count('*').end()
+select count(*) from person
+
+res := db.table('person').count('* as rows').end()
+select count(*) as rows from person
+
+res := db.table('person').count('distinct name as n').end()
+select distinct count(name) as n from person
+
+res := db.table('person').min('age').end()
+select min(age) from person
+
+res := db.table('person').max('age').end()
+select max(age) from person
+
+res := db.table('person').min('age as min_age').max('age as max_age').end()
+select min(age) as min_age,max(age) as max_age from person
+
+res := db.table('person').sum('income').end()
+select sum(income) from person
+
+res := db.table('person').avg('income').end()
+select avg(income) from person
 ```
-
-```
-
-
 
 ### insert
 
 ```sql
+res := db.table('person').insert({
+		'id': '255'
+		'name': 'abc'
+		'age': '36'
+	}).end()
+insert into person (id,name,age) values ('255','abc','36')
 
+res := db.table('person').insert({
+		'id': '255'
+		'name': 'abc'
+		'age': '36'
+	}).returning('id', 'name').end()
+insert into person (id,name,age) values ('255','abc','36') returning id,name
+
+res := db.insert({
+		'id': '12'
+		'name': 'tom'
+	}).into('person').returning('id').end()
+insert into person (id,name) values ('12','tom') returning id
 ```
-
-
 
 ### update
 
 ```sql
+res := db.table('person').update({
+		'name': 'paris'
+	}).where('id=1').returning('id').end()
+update person set name='paris' where (id=1) returning id
 
+res := db.table('person').update({
+		'name': 'paris'
+		'age': '32'
+	}).where('id=1').returning('id').end()
+update person set name='paris',age='32' where (id=1) returning id
 ```
-
-
 
 ### delete
 
 ```sql
+res := db.table('person').delete().where('id=3').end()
+delete from person where (id=3)
 
+res := db.table('person').where('id=2').delete().end()
+delete from person where (id=2)
 ```
 
 ### schema
 
 #### create table
 
+```sql
+db.create_table('person2', fn (mut table vsql.Table) {
+		table.increment('id').primary()
+		table.boolean('is_ok')
+		table.string_('open_id', 255).size(100).unique()
+		table.datetime('attend_time')
+		table.string_('form_id', 255).not_null().reference('person(id)')
+		table.integer('is_send').default_to('1')
+		table.decimal('amount', 10, 2).not_null().check('amount>0')
+		//
+		table.primary(['id', 'name'])
+		table.unique(['id', 'name'])
+		table.check('age>30').check('age<60')
+		res := table.end()
+		assert res == ''
+}) or {
+	panic('create table failed:$err')
+}
 ```
-
-```
-
-
 
 #### alter table
 
+```sql
+res := db.rename_table('person', 'new_person')
 ```
-
-```
-
-
 
 #### drop table
 
+```sql
+res := db.drop_table('food')
 ```
-
-```
-
-
 
 ### transaction
 
@@ -192,15 +306,15 @@ t.commit()
 
 ### other
 
-```sql
-to_sql()
+```c
+end()
 print_sql()
 print_obj()
 ```
 
 
 
-### todo
+###  todo
 
 ```c
 module main
