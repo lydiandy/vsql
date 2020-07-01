@@ -1,5 +1,7 @@
 ## vsql
 
+**vsql is just wip,do not use in production**
+
 inspired by [knex](https://github.com/knex/knex)
 
 - just a query builder,not orm
