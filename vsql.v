@@ -49,7 +49,7 @@ pub fn (db &DB) exec(sql string) []pg.Row {
 // end of select|insert|update|delete stmt,generate the sql string and exec
 pub fn (db &DB) end() []pg.Row {
 	s := gen(db.stmt)
-	println(s)
+	// println(s)
 	res := db.exec(s)
 	return res
 }

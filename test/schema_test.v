@@ -40,4 +40,7 @@ fn test_schema() {
 	// drop table if exist
 	res = db.drop_table_if_exist('cat')
 	println(res)
+	// create database
+	res = db.create_database('mydb')
+	println(res)
 }

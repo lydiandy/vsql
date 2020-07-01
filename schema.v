@@ -6,12 +6,13 @@ import dialect.pg
 pub type CreateTableFn = fn (table Table)
 
 // create database
-pub fn (db &DB) create_database(name string) {
+// status:done
+pub fn (db &DB) create_database(name string) []pg.Row {
 	create_stmt := CreateDatabase{
 		db_name: name
 	}
 	db.stmt = create_stmt
-	db.end()
+	return db.end()
 }
 
 // create table
