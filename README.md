@@ -267,7 +267,7 @@ db.create_table('person2', fn (mut table vsql.Table) {
 		table.primary(['id', 'name'])
 		table.unique(['id', 'name'])
 		table.check('age>30').check('age<60')
-		res := table.end()
+		res := table.to_sql()
 		assert res == ''
 }) or {
 	panic('create table failed:$err')
@@ -301,7 +301,7 @@ t.commit()
 ### other
 
 ```c
-end()
+to_sql()
 print_sql()
 print_obj()
 ```
