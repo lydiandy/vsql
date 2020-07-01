@@ -102,9 +102,12 @@ pub fn (db &DB) group_by_raw(raw string) &DB {
 // status:done
 pub fn (db &DB) order_by(column string) &DB {
 	s := db.stmt as Select
-	col, order := split_by_space(column)
+	col, mut order := split_by_space(column)
+	if order == '' {
+		order = 'asc'
+	}
 	if order !in ['asc', 'desc'] {
-		panic('orderby must be asc or desc')
+		panic('order by must be asc or desc')
 	}
 	s.order_by << OrderBy{
 		column: col

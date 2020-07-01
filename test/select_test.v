@@ -58,4 +58,15 @@ fn test_select() {
 	assert res == 'select distinct id,name,age from person'
 	res = db.select_('id,name,age').distinct().from('person').to_sql()
 	assert res == 'select distinct id,name,age from person'
+	// order by
+	res = db.table('person').column('*').order_by('id desc').to_sql()
+	assert res == 'select * from person order by id desc'
+	res = db.table('person').column('*').order_by('name desc').order_by('age asc').to_sql()
+	assert res == 'select * from person order by name desc,age asc'
+	res = db.table('person').column('*').order_by('name desc').order_by('age').to_sql()
+	assert res == 'select * from person order by name desc,age asc'
+	res = db.table('person').column('').order_by_raw('name desc,age asc').to_sql()
+	assert res == 'select * from person order by name desc,age asc'
+	// where
+	// aggregate function
 }

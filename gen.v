@@ -81,10 +81,10 @@ pub fn gen(stmt Stmt) string {
 				s.write('$stmt.order_by_raw ')
 			} else if stmt.order_by.len > 0 {
 				s.write('order by ')
-				for order_obj in stmt.order_by {
-					s.write('$order_obj.column $order_obj.order,')
+				for o in stmt.order_by {
+					s.write('$o.column $o.order,')
 				}
-				s.go_back(1)
+				// s.go_back(1)
 			}
 			// group by statement
 			if stmt.group_by_raw != '' {
