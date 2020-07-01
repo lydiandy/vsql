@@ -38,5 +38,7 @@ fn connect_db() vsql.DB {
 	db.exec("insert into food (id,name,cat_id) values (1,'food1',1)")
 	db.exec("insert into food (id,name,cat_id) values (2,'food2',3)")
 	db.exec("insert into food (id,name,cat_id) values (3,'food3',0)")
+	// for test create table,drop person2
+	db.exec('drop table if exists person2')
 	return db
 }

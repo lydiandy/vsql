@@ -34,7 +34,7 @@ pub mut:
 }
 
 // create column
-pub fn (mut t Table) uuid(name string) &NewColumn {
+pub fn (t &Table) uuid(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'serial'
@@ -43,7 +43,7 @@ pub fn (mut t Table) uuid(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) increment(name string) &NewColumn {
+pub fn (t &Table) increment(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'serial'
@@ -52,7 +52,7 @@ pub fn (mut t Table) increment(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) integer(name string) &NewColumn {
+pub fn (t &Table) integer(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'integer'
@@ -61,7 +61,7 @@ pub fn (mut t Table) integer(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) big_integer(name string) &NewColumn {
+pub fn (t &Table) big_integer(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'bigint'
@@ -70,7 +70,7 @@ pub fn (mut t Table) big_integer(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) text(name string) &NewColumn {
+pub fn (t &Table) text(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'text'
@@ -79,7 +79,7 @@ pub fn (mut t Table) text(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) string_(name string, size int) &NewColumn {
+pub fn (t &Table) string_(name string, size int) &NewColumn {
 	if size <= 0 {
 		panic('size must be greater than zero')
 	}
@@ -93,7 +93,7 @@ pub fn (mut t Table) string_(name string, size int) &NewColumn {
 }
 
 // ??
-pub fn (mut t Table) float(name string, precision, scale int) &NewColumn {
+pub fn (t &Table) float(name string, precision, scale int) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'decimal($precision,$scale)'
@@ -104,7 +104,7 @@ pub fn (mut t Table) float(name string, precision, scale int) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) decimal(name string, precision, scale int) &NewColumn {
+pub fn (t &Table) decimal(name string, precision, scale int) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'decimal($precision,$scale)'
@@ -115,7 +115,7 @@ pub fn (mut t Table) decimal(name string, precision, scale int) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) boolean(name string) &NewColumn {
+pub fn (t &Table) boolean(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'boolean'
@@ -124,7 +124,7 @@ pub fn (mut t Table) boolean(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) date(name string) &NewColumn {
+pub fn (t &Table) date(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'date'
@@ -133,7 +133,7 @@ pub fn (mut t Table) date(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) datetime(name string) &NewColumn {
+pub fn (t &Table) datetime(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'timestamp'
@@ -142,7 +142,7 @@ pub fn (mut t Table) datetime(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) time(name string, precision int) &NewColumn {
+pub fn (t &Table) time(name string, precision int) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'time'
@@ -151,7 +151,7 @@ pub fn (mut t Table) time(name string, precision int) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) binary(name string, size int) &NewColumn {
+pub fn (t &Table) binary(name string, size int) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'bytea'
@@ -161,7 +161,7 @@ pub fn (mut t Table) binary(name string, size int) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) json(name string) &NewColumn {
+pub fn (t &Table) json(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'json'
@@ -170,7 +170,7 @@ pub fn (mut t Table) json(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) jsonb(name string) &NewColumn {
+pub fn (t &Table) jsonb(name string) &NewColumn {
 	column := NewColumn{
 		name: name
 		typ: 'jsonb'
@@ -181,128 +181,128 @@ pub fn (mut t Table) jsonb(name string) &NewColumn {
 
 // ---------
 // column method can be chain call after create column
-pub fn (mut c NewColumn) size(size int) &NewColumn {
+pub fn (c &NewColumn) size(size int) &NewColumn {
 	c.size = size
 	return c
 }
 
-pub fn (mut c NewColumn) precision(precision, scale int) &NewColumn {
+pub fn (c &NewColumn) precision(precision, scale int) &NewColumn {
 	c.precision = precision
 	c.scale = scale
 	return c
 }
 
-pub fn (mut c NewColumn) increment() &NewColumn {
+pub fn (c &NewColumn) increment() &NewColumn {
 	c.is_increment = true
 	return c
 }
 
-pub fn (mut c NewColumn) primary() &NewColumn {
+pub fn (c &NewColumn) primary() &NewColumn {
 	c.is_primary = true
 	return c
 }
 
-pub fn (mut c NewColumn) reference(ref string) &NewColumn {
+pub fn (c &NewColumn) reference(ref string) &NewColumn {
 	c.reference = ref // such like this: 'table(column)'
 	return c
 }
 
-pub fn (mut c NewColumn) unique() &NewColumn {
+pub fn (c &NewColumn) unique() &NewColumn {
 	c.is_unique = true
 	return c
 }
 
-pub fn (mut c NewColumn) not_null() &NewColumn {
+pub fn (c &NewColumn) not_null() &NewColumn {
 	c.is_not_null = true
 	return c
 }
 
-pub fn (mut c NewColumn) default_to(value string) &NewColumn {
+pub fn (c &NewColumn) default_to(value string) &NewColumn {
 	c.default_value = value
 	return c
 }
 
-pub fn (mut c NewColumn) check(check string) &NewColumn {
+pub fn (c &NewColumn) check(check string) &NewColumn {
 	c.check = check
 	return c
 }
 
-pub fn (mut c NewColumn) first() &NewColumn {
+pub fn (c &NewColumn) first() &NewColumn {
 	c.is_first = true
 	return c
 }
 
-pub fn (mut c NewColumn) after(column string) &NewColumn {
+pub fn (c &NewColumn) after(column string) &NewColumn {
 	c.after = column
 	return c
 }
 
-pub fn (mut c NewColumn) collate(column string) &NewColumn {
+pub fn (c &NewColumn) collate(column string) &NewColumn {
 	c.collate = column
 	return c
 }
 
 // --------------------
 // table constraint
-pub fn (mut t Table) primary(columns []string) &Table {
+pub fn (t &Table) primary(columns []string) &Table {
 	t.primarys = columns
 	return t
 }
 
-pub fn (mut t Table) unique(columns []string) &Table {
+pub fn (t &Table) unique(columns []string) &Table {
 	t.uniques = columns
 	return t
 }
 
-pub fn (mut t Table) check(check string) &Table {
+pub fn (t &Table) check(check string) &Table {
 	t.checks << check
 	return t
 }
 
 // ---------------------
 // for table create and alter
-pub fn (mut t Table) has_column(name string) bool {
+pub fn (t &Table) has_column(name string) bool {
 	return true
 }
 
-pub fn (mut t Table) drop_column(name string) &Table {
+pub fn (t &Table) drop_column(name string) &Table {
 	return t
 }
 
-pub fn (mut t Table) drop_columns(columns []string) &Table {
+pub fn (t &Table) drop_columns(columns []string) &Table {
 	return t
 }
 
-pub fn (mut t Table) rename_column(from, to string) &Table {
+pub fn (t &Table) rename_column(from, to string) &Table {
 	return t
 }
 
-pub fn (mut t Table) create_index(name string) &Table {
+pub fn (t &Table) create_index(name string) &Table {
 	return t
 }
 
-pub fn (mut t Table) drop_unique(name string) &Table {
+pub fn (t &Table) drop_unique(name string) &Table {
 	return t
 }
 
-pub fn (mut t Table) drop_primary(name string) &Table {
+pub fn (t &Table) drop_primary(name string) &Table {
 	return t
 }
 
-pub fn (mut t Table) drop_index(name string) &Table {
+pub fn (t &Table) drop_index(name string) &Table {
 	return t
 }
 
-pub fn (mut t Table) drop_foreign(name string) &Table {
+pub fn (t &Table) drop_foreign(name string) &Table {
 	return t
 }
 
-pub fn (mut t Table) charset(name string) &Table {
+pub fn (t &Table) charset(name string) &Table {
 	return t
 }
 
 // generate sql of create table
-pub fn (mut t Table) gen() string {
+pub fn (t &Table) gen() string {
 	mut s := strings.new_builder(200)
 	s.writeln('create table $t.name (')
 	for column in t.columns {
@@ -376,8 +376,7 @@ pub fn (mut t Table) gen() string {
 	return s.str()
 }
 
-pub fn (t &Table) to_sql() {
+pub fn (t &Table) to_sql() string {
 	s := t.gen()
-	println(s)
-	println('')
+	return s
 }
