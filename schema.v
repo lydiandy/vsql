@@ -15,6 +15,7 @@ pub fn (db &DB) create_database(name string) {
 }
 
 // create table
+// status: wip
 pub fn (db &DB) create_table(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
 	mut table := Table{
 		name: table_name
@@ -27,6 +28,7 @@ pub fn (db &DB) create_table(table_name string, create_table_fn CreateTableFn) ?
 }
 
 // create table if not exists
+// status: wip
 pub fn (db &DB) create_table_if_not_exist(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
 	if db.has_table(table_name) {
 		println('table $table_name is already exists')
@@ -36,6 +38,7 @@ pub fn (db &DB) create_table_if_not_exist(table_name string, create_table_fn Cre
 }
 
 // alter table
+// status: wip
 pub fn (db &DB) alter_table() &DB {
 	return db
 }

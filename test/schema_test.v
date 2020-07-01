@@ -32,7 +32,7 @@ fn test_schema() {
 	res = db.rename_table('person', 'new_person')
 	println(res)
 	// truncate table
-	res = db.truncate('person')
+	res = db.truncate('new_person')
 	println(res)
 	// drop table
 	res = db.drop_table('food')
