@@ -145,24 +145,21 @@ select age,count(age),avg(income) from person group by age having count(*)=2
 #### join
 
 ```sql
-res := db.table('cat as c').column('c.id,c.name,p.name,p.age').inner_join('person as p',
-		'c.owner_id=p.id').end()
+//inner join
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').inner_join('person as p','c.owner_id=p.id').end()
 		
 select c.id,c.name,p.name,p.age from cat as c inner join person as p on c.owner_id=p.id'
 
 // left join
-res := db.table('cat as c').column('c.id,c.name,p.name,p.age').left_join('person as p',
-		'c.owner_id=p.id').end()
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').left_join('person as p','c.owner_id=p.id').end()
 select c.id,c.name,p.name,p.age from cat as c left join person as p on c.owner_id=p.id
 
 // right join
-res := db.table('cat as c').column('c.id,c.name,p.name,p.age').right_join('person as p',
-		'c.owner_id=p.id').end()
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').right_join('person as p','c.owner_id=p.id').end()
 select c.id,c.name,p.name,p.age from cat as c right join person as p on c.owner_id=p.id
 
 // outer join
-res := db.table('cat as c').column('c.id,c.name,p.name,p.age').outer_join('person as p',
-		'c.owner_id=p.id').end()
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age').outer_join('person as p','c.owner_id=p.id').end()
 select c.id,c.name,p.name,p.age from cat as c full outer join person as p on c.owner_id=p.id
 
 // cross join
@@ -174,8 +171,7 @@ res := db.table('cat as c').column('c.id,c.name,p.name,p.age').join_raw('join pe
 select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id
 
 // multi join
-res := db.table('cat as c').column('c.id,c.name,p.name,p.age,f.name').left_join('person as p',
-		'c.owner_id=p.id').left_join('food as f', 'c.id=f.cat_id').end()
+res := db.table('cat as c').column('c.id,c.name,p.name,p.age,f.name').left_join('person as p','c.owner_id=p.id').left_join('food as f', 'c.id=f.cat_id').end()
 select c.id,c.name,p.name,p.age,f.name from cat as c left join person as p on c.owner_id=p.id left join food as f on c.id=f.cat_id
 ```
 
