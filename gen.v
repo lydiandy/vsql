@@ -2,6 +2,7 @@ module vsql
 
 import strings
 
+//generate Stmt to sql string
 pub fn gen(stmt Stmt) string {
 	mut s := strings.new_builder(200)
 	match stmt {
@@ -106,7 +107,6 @@ pub fn gen(stmt Stmt) string {
 				s.write('having $stmt.having ')
 			}
 			s.go_back(1)
-			return s.str()
 		}
 		Insert {
 			s.write('insert into ')
@@ -178,6 +178,7 @@ pub fn gen(stmt Stmt) string {
 			s.write('truncate table $stmt.table_name')
 		}
 	}
+	return s.str()
 }
 
 // write where clause for select,update,delete

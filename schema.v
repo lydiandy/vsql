@@ -6,7 +6,7 @@ import dialect.pg
 pub type CreateTableFn = fn (table Table)
 
 // create database
-pub fn (mut db DB) create_database(name string) {
+pub fn (db &DB) create_database(name string) {
 	create_stmt := CreateDatabase{
 		db_name: name
 	}
@@ -15,17 +15,19 @@ pub fn (mut db DB) create_database(name string) {
 }
 
 // create table
-pub fn (mut db DB) create_table(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
+pub fn (db &DB) create_table(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
 	mut table := Table{
 		name: table_name
 	}
 	create_table_fn(table)
 	s := table.gen()
+	println(s)
 	res := db.exec(s)
 	return res
 }
 
-pub fn (mut db DB) create_table_if_not_exists(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
+// create table if not exists
+pub fn (db &DB) create_table_if_not_exist(table_name string, create_table_fn CreateTableFn) ?[]pg.Row {
 	if db.has_table(table_name) {
 		println('table $table_name is already exists')
 	} else {
@@ -34,13 +36,13 @@ pub fn (mut db DB) create_table_if_not_exists(table_name string, create_table_fn
 }
 
 // alter table
-pub fn (mut db DB) alter_table() &DB {
+pub fn (db &DB) alter_table() &DB {
 	return db
 }
 
 // rename table
-// ERROR:  invalid byte sequence for encoding "UTF8": 0xae
-pub fn (mut db DB) rename_table(old_name, new_name string) []pg.Row {
+// status:done
+pub fn (db &DB) rename_table(old_name, new_name string) []pg.Row {
 	rename_stmt := RenameTable{
 		old_name: old_name
 		new_name: new_name
@@ -50,8 +52,8 @@ pub fn (mut db DB) rename_table(old_name, new_name string) []pg.Row {
 }
 
 // drop table
-// ERROR:  invalid byte sequence for encoding "UTF8": 0xae
-pub fn (mut db DB) drop_table(name string) []pg.Row {
+// status:done
+pub fn (db &DB) drop_table(name string) []pg.Row {
 	drop_stmt := DropTable{
 		table_name: name
 	}
@@ -59,16 +61,18 @@ pub fn (mut db DB) drop_table(name string) []pg.Row {
 	return db.end()
 }
 
-pub fn (mut db DB) drop_table_if_exists(name string) {
+// drop table
+// status:done
+pub fn (db &DB) drop_table_if_exist(name string) []pg.Row {
 	if db.has_table(name) {
-		db.drop_table(name)
+		return db.drop_table(name)
 	}
 }
 
 // has
 // staut:wip
 // only pg is ok
-pub fn (mut db DB) has_table(name string) bool {
+pub fn (db &DB) has_table(name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {
@@ -94,7 +98,7 @@ pub fn (mut db DB) has_table(name string) bool {
 
 // staut:wip
 // ERROR:  syntax error at or near "and column_name"
-pub fn (mut db DB) has_column(table_name, column_name string) bool {
+pub fn (db &DB) has_column(table_name, column_name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {
@@ -120,9 +124,8 @@ pub fn (mut db DB) has_column(table_name, column_name string) bool {
 }
 
 // truncate table
-// status:wip
-// ERROR:  invalid byte sequence for encoding "UTF8": 0xae
-pub fn (mut db DB) truncate(name string) []pg.Row {
+// status:done
+pub fn (db &DB) truncate(name string) []pg.Row {
 	truncate_stmt := Truncate{
 		table_name: name
 	}
