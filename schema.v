@@ -106,7 +106,7 @@ pub fn (db &DB) has_column(table_name, column_name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {
-			s = "select count(*) from information_schema.columns where table_schema=\'public\' and table_name =\'$table_name\' and column_name=\'$column_name\'"
+			s = "select count(*) from information_schema.columns where (table_schema=\'public\') and (table_name ='$table_name') and (column_name='$column_name')"
 		}
 		'mysql' {
 			// todo
@@ -118,8 +118,9 @@ pub fn (db &DB) has_column(table_name, column_name string) bool {
 			panic('unknown database client')
 		}
 	}
+	// println(s)
 	res := db.exec(s)
-	println(res)
+	// println(res)
 	if res[0].vals[0] == '1' {
 		return true
 	} else {
