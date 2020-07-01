@@ -6,7 +6,7 @@ pub fn gen(stmt Stmt) string {
 	mut s := strings.new_builder(200)
 	match stmt {
 		Select {
-			s.write('select  ')
+			s.write('select ')
 			if stmt.is_distinct {
 				s.write('distinct ')
 			}
