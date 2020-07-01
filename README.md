@@ -297,6 +297,24 @@ t.exec("insert into person (id,name,age,income) values (55,'name55',55,0)")
 t.commit()
 ```
 
+### raw sql
+
+```sql
+db.exec('drop table if exists person')
+db.exec("create table person (id integer primary key, name text default '',age integer default 0,income integer default 0);")
+
+db.exec("insert into person (id,name,age,income) values (1,'tom',29,1000)")
+db.exec("insert into person (id,name,age,income) values (2,'jack',33,500)")
+db.exec("insert into person (id,name,age,income) values (3,'mary',25,2000)")
+db.exec("insert into person (id,name,age,income) values (4,'lisa',25,1000)")
+db.exec("insert into person (id,name,age,income) values (5,'andy',18,0)")
+
+db.exec('drop table if exists cat')
+db.exec("create table cat (id integer primary key,name text default '',owner_id integer)")
+```
+
+
+
 ### other
 
 ```c
