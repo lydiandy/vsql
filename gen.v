@@ -15,7 +15,7 @@ pub fn gen(stmt Stmt) string {
 				if f.is_distinct {
 					s.write('distinct ')
 				}
-				s.write('$f.column_name) ')
+				s.write('$f.column_name)')
 				if f.column_alias != '' {
 					s.write('as ')
 					s.write('$f.column_alias,')
@@ -28,7 +28,7 @@ pub fn gen(stmt Stmt) string {
 				s.write('* ')
 			} else {
 				for column in stmt.columns {
-					s.write('$column.name ')
+					s.write('$column.name')
 					if column.alias != '' {
 						s.write('as ')
 						s.write('$column.alias,')
@@ -37,6 +37,7 @@ pub fn gen(stmt Stmt) string {
 					}
 				}
 				s.go_back(1)
+				s.write(' ')
 			}
 			s.write('from ')
 			s.write('$stmt.table_name ')
@@ -62,15 +63,17 @@ pub fn gen(stmt Stmt) string {
 					}
 				}
 			}
-			// limit
+			// offset
+			if stmt.offset > 0 {
+				s.write('offset $stmt.offset ')
+			}
+			// first
 			if stmt.first {
 				s.write('limit 1 ')
 			}
+			// limit
 			if stmt.limit > 0 {
 				s.write('limit $stmt.limit ')
-			}
-			if stmt.offset > 0 {
-				s.write('offset $stmt.offset ')
 			}
 			// order by statement
 			if stmt.order_by_raw != '' {
@@ -99,6 +102,7 @@ pub fn gen(stmt Stmt) string {
 			if stmt.having != '' {
 				s.write('having $stmt.having ')
 			}
+			s.go_back(1)
 			return s.str()
 		}
 		Insert {

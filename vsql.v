@@ -12,7 +12,7 @@ pub:
 	config Config
 	conn   pg.DB //TODO: replace to Driver interface
 mut:
-	stmt   Stmt
+	stmt   Stmt //the current statement
 }
 
 pub fn init_driver(c Config) pg.DB {

@@ -23,10 +23,39 @@ fn test_select() {
 	db.exec("insert into person (id,name,age,income) values (4,'lisa',25,0)")
 	// start to test
 	mut res := ''
+	// select+from
 	res = db.select_('*').from('person').to_sql()
-	assert res == 'select * from person '
+	assert res == 'select * from person'
 	res = db.select_('*').from('person').to_sql()
-	assert res == 'select * from person '
+	assert res == 'select * from person'
 	res = db.select_('id,name,age,income').from('person').to_sql()
-	assert res == 'select id ,name ,age ,income from person '
+	assert res == 'select id,name,age,income from person'
+	// table+column
+	res = db.table('person').column('*').to_sql()
+	assert res == 'select * from person'
+	res = db.table('person').column('id,name,age').to_sql()
+	assert res == 'select id,name,age from person'
+	// table+select is also ok
+	res = db.table('person').select_('*').to_sql()
+	assert res == 'select * from person'
+	// from+column is also ok
+	res = db.from('person').column('*').to_sql()
+	assert res == 'select * from person'
+	// first
+	res = db.table('person').column('').first().to_sql()
+	assert res == 'select * from person limit 1'
+	// limit
+	res = db.table('person').column('').limit(3).to_sql()
+	assert res == 'select * from person limit 3'
+	// offset
+	res = db.table('person').column('').offset(1).to_sql()
+	assert res == 'select * from person offset 1'
+	// offset+limit
+	res = db.table('person').column('').offset(2).limit(2).to_sql()
+	assert res == 'select * from person offset 2 limit 2'
+	// distinct
+	res = db.table('person').column('id,name,age').distinct().to_sql()
+	assert res == 'select distinct id,name,age from person'
+	res = db.select_('id,name,age').distinct().from('person').to_sql()
+	assert res == 'select distinct id,name,age from person'
 }

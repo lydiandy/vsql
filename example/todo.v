@@ -23,7 +23,7 @@ fn main() {
 		port: 5432	
 		user: 'postgres'
 		password: ''
-		database: 'dev_db'
+		database: 'test_db'
 		pool: {min:2,max:10}
 		timeout: 60000
 		debug: true

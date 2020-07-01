@@ -2,7 +2,7 @@ module vsql
 
 pub type CallbackFn = fn ()
 
-// query
+// the same with from()
 // status:done
 pub fn (db &DB) table(name string) &DB {
 	table_name, table_alias := split_to_arg(name, 'as')
@@ -31,12 +31,12 @@ pub fn (db &DB) select_(columns string) &DB {
 		select_stmt.table_alias = (db.stmt as Select).table_alias
 	}
 	if columns in [' ', '*'] {
-		return db
+		select_stmt.columns = []Column{}
 	} else {
-		columns_arr := columns.split(',')
+		column_array := columns.split(',')
 		mut name := ''
 		mut alias := ''
-		for col in columns_arr {
+		for col in column_array {
 			name, alias = split_to_arg(col, 'as')
 			select_stmt.columns << Column{
 				name: name
@@ -48,8 +48,10 @@ pub fn (db &DB) select_(columns string) &DB {
 	return db
 }
 
+// TODO
 // pub fn (mut db DB) column(columns ...string) &DB {}
 //
+// the same with select_()
 // status:done
 pub fn (db &DB) column(columns string) &DB {
 	return db.select_(columns)
