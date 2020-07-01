@@ -1,4 +1,4 @@
-module test
+import vsql
 
 pub fn test_inert() {
 }
