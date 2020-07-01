@@ -2,41 +2,42 @@ module vsql
 
 // status:done
 // aggregate fn count
-pub fn (mut db DB) count(column string) &DB {
+pub fn (db &DB) count(column string) &DB {
 	db.add_aggregate_fn('count', column)
 	return db
 }
 
 // status:done
 // aggregate fn min
-pub fn (mut db DB) min(column string) &DB {
+pub fn (db &DB) min(column string) &DB {
 	db.add_aggregate_fn('min', column)
 	return db
 }
 
 // status:done
 // aggregate fn max
-pub fn (mut db DB) max(column string) &DB {
+pub fn (db &DB) max(column string) &DB {
 	db.add_aggregate_fn('max', column)
 	return db
 }
 
 // status:done
 // aggregate fn sum
-pub fn (mut db DB) sum(column string) &DB {
+pub fn (db &DB) sum(column string) &DB {
 	db.add_aggregate_fn('sum', column)
 	return db
 }
 
 // status:done
 // aggregate fn avg
-pub fn (mut db DB) avg(column string) &DB {
+pub fn (db &DB) avg(column string) &DB {
 	db.add_aggregate_fn('avg', column)
 	return db
 }
 
-fn (mut db DB) add_aggregate_fn(fn_name, column string) {
+fn (db &DB) add_aggregate_fn(fn_name, column string) {
 	s := db.stmt as Select
+	s.columns = []Column{}
 	mut new_fn := AggregateFn{
 		name: fn_name
 	}
@@ -47,16 +48,17 @@ fn (mut db DB) add_aggregate_fn(fn_name, column string) {
 		name, alias := split_to_arg(column, 'as')
 		new_fn.column_name = name
 		new_fn.column_alias = alias
-	}
-	mut col := ''
-	if column.starts_with('distinct ') {
-		new_fn.is_distinct = true
-		col = column.substr(9, column.len)
 	} else {
-		col = column
+		mut col := ''
+		if column.starts_with('distinct ') {
+			new_fn.is_distinct = true
+			col = column.substr(9, column.len)
+		} else {
+			col = column
+		}
+		name, alias := split_to_arg(col, 'as')
+		new_fn.column_name = name
+		new_fn.column_alias = alias
 	}
-	name, alias := split_to_arg(col, 'as')
-	new_fn.column_name = name
-	new_fn.column_alias = alias
 	s.aggregate_fn << new_fn
 }

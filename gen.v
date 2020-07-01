@@ -10,24 +10,26 @@ pub fn gen(stmt Stmt) string {
 			if stmt.is_distinct {
 				s.write('distinct ')
 			}
-			for f in stmt.aggregate_fn {
-				s.write('${f.name}(')
+			for i, f in stmt.aggregate_fn {
 				if f.is_distinct {
 					s.write('distinct ')
 				}
+				s.write('${f.name}(')
 				s.write('$f.column_name)')
+				s.write(' ')
 				if f.column_alias != '' {
 					s.write('as ')
 					s.write('$f.column_alias,')
+					if i == stmt.aggregate_fn.len - 1 {
+						s.go_back(1)
+						s.write(' ')
+					}
 				}
-			}
-			if stmt.aggregate_fn.len > 0 {
-				s.go_back(1)
 			}
 			if stmt.columns.len == 0 && stmt.aggregate_fn.len == 0 {
 				s.write('* ')
 			} else {
-				for column in stmt.columns {
+				for i, column in stmt.columns {
 					s.write('$column.name')
 					if column.alias != '' {
 						s.write('as ')
@@ -35,9 +37,11 @@ pub fn gen(stmt Stmt) string {
 					} else {
 						s.write(',')
 					}
+					if i == stmt.columns.len - 1 {
+						s.go_back(1)
+						s.write(' ')
+					}
 				}
-				s.go_back(1)
-				s.write(' ')
 			}
 			s.write('from ')
 			s.write('$stmt.table_name ')

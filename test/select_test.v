@@ -77,8 +77,25 @@ fn test_select() {
 	res = db.table('person').column('age,count(age),avg(income)').group_by('age').to_sql()
 	assert res == 'select age,count(age),avg(income) from person group by age'
 	// having
-	res = db.table('person').select_('age,count(age),avg(income)').group_by('age').having('count(*)=2').to_sql()
+	res = db.table('person').column('age,count(age),avg(income)').group_by('age').having('count(*)=2').to_sql()
 	assert res == 'select age,count(age),avg(income) from person group by age having count(*)=2'
 	// where
 	// aggregate function
+	res = db.table('person').count('*').to_sql()
+	assert res == 'select count(*) from person'
+	res = db.table('person').count('* as cc').to_sql()
+	assert res == 'select count(*) as cc from person'
+	res = db.table('person').count('distinct name as n').to_sql()
+	assert res == 'select distinct count(name) as n from person'
+	res = db.table('person').min('age').to_sql()
+	assert res == 'select min(age) from person'
+	res = db.table('person').max('age').to_sql()
+	assert res == 'select max(age) from person'
+	res = db.table('person').min('age as min_age').max('age as max_age').to_sql()
+	assert res == 'select min(age) as min_age,max(age) as max_age from person'
+	res = db.table('person').sum('income').to_sql()
+	assert res == 'select sum(income) from person'
+	res = db.table('person').avg('income').to_sql()
+	assert res == 'select avg(income) from person'
+	// join
 }
