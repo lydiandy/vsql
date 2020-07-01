@@ -123,13 +123,13 @@ pub fn gen(stmt Stmt) string {
 			for len, val in stmt.vals {
 				s.write("\'$val\'")
 				if len < stmt.vals.len - 1 {
-					s.write(', ')
+					s.write(',')
 				}
 			}
-			s.write(') ')
+			s.write(')')
 			// write returning
 			if stmt.returning.len != 0 {
-				s.write('returning ')
+				s.write(' returning ')
 				for r in stmt.returning {
 					s.write('$r,')
 				}
@@ -145,10 +145,11 @@ pub fn gen(stmt Stmt) string {
 				s.write("$key=\'$val\',")
 			}
 			s.go_back(1)
+			s.write(' ')
 			// where statement
 			write_where(&stmt.where, &s)
 			if stmt.returning.len != 0 {
-				s.write('returning ')
+				s.write(' returning ')
 				for r in stmt.returning {
 					s.write('$r,')
 				}
@@ -183,7 +184,7 @@ pub fn gen(stmt Stmt) string {
 fn write_where(where &[]Where, s &strings.Builder) {
 	// where statement
 	if where.len > 0 {
-		s.write('where ')
+		s.write('where')
 		mut operator := ''
 		for pos, w in where {
 			// if where is the second where clause,operator is and
@@ -194,7 +195,7 @@ fn write_where(where &[]Where, s &strings.Builder) {
 			}
 			match w.typ {
 				'where' {
-					s.write('$operator ($w.condition) ')
+					s.write('$operator ($w.condition)')
 				}
 				'where_in' {
 					mut range_str := ''

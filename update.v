@@ -3,8 +3,12 @@ module vsql
 // insert statement
 // status: done
 // todo:map[string]string => map[string]interface{}
-pub fn (mut db DB) insert(data map[string]string) &DB {
-	mut insert_stmt := Insert{}
+pub fn (db &DB) insert(data map[string]string) &DB {
+	mut insert_stmt := Insert{
+		keys: []
+		vals: []
+		returning: []
+	}
 	if db.stmt is Select {
 		insert_stmt.table_name = (db.stmt as Select).table_name
 	}
@@ -17,14 +21,15 @@ pub fn (mut db DB) insert(data map[string]string) &DB {
 }
 
 // status:done
-pub fn (mut db DB) into(name string) &DB {
+pub fn (db &DB) into(name string) &DB {
 	s := db.stmt as Insert
 	s.table_name = name
 	return db
 }
 
+// only use for pg,mysql
 // status:done
-pub fn (mut db DB) returning(column string, other_columns ...string) &DB {
+pub fn (db &DB) returning(column string, other_columns ...string) &DB {
 	stmt := db.stmt
 	match stmt {
 		Insert {
@@ -46,7 +51,7 @@ pub fn (mut db DB) returning(column string, other_columns ...string) &DB {
 
 // update statement
 // staus:done
-pub fn (mut db DB) update(data map[string]string) &DB {
+pub fn (db &DB) update(data map[string]string) &DB {
 	mut update_stmt := Update{
 		table_name: (db.stmt as Select).table_name
 		data: data
@@ -55,17 +60,17 @@ pub fn (mut db DB) update(data map[string]string) &DB {
 	return db
 }
 
-pub fn (mut db DB) increment(column string) &DB {
+pub fn (db &DB) increment(column string) &DB {
 	return db
 }
 
-pub fn (mut db DB) decrement(column string) &DB {
+pub fn (db &DB) decrement(column string) &DB {
 	return db
 }
 
 // delete statement
 // staus:done
-pub fn (mut db DB) delete() &DB {
+pub fn (db &DB) delete() &DB {
 	delete_stmt := Delete{
 		table_name: (db.stmt as Select).table_name
 		where: (db.stmt as Select).where
