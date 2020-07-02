@@ -58,11 +58,6 @@ pub fn (db &DB) where_not(condition string) &DB {
 }
 
 // status:done
-pub fn (db &DB) and_where_not(condition string) &DB {
-	return db.where_type('where', 'and not', condition)
-}
-
-// status:done
 pub fn (db &DB) or_where_not(condition string) &DB {
 	return db.where_type('where', 'or not', condition)
 }

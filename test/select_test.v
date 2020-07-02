@@ -72,9 +72,6 @@ fn test_select() {
 	// where not
 	res = db.table('person').column('id,name,age').where('id=1').where_not('age=0').to_sql()
 	assert res == 'select id,name,age from person where (id=1) and not (age=0)'
-	// and where not
-	res = db.table('person').column('id,name,age').where('id=1').and_where_not('age=0').to_sql()
-	assert res == 'select id,name,age from person where (id=1) and not (age=0)'
 	// or where not
 	res = db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').to_sql()
 	assert res == 'select id,name,age from person where (id=1) or not (age=0)'

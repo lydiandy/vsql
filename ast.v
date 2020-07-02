@@ -44,7 +44,7 @@ pub mut:
 pub struct Where {
 pub mut:
 	typ         string // where,where_in,where_null,where_exists,where_between,where_raw
-	operator    string // '',and,or,not,or_not
+	operator    string // '',and,or,not,or not
 	condition   string // where raw use
 	column_name string // where null use
 	range       []string // where range and where in use.  should interface type
