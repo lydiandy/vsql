@@ -105,7 +105,21 @@ fn test_select() {
 	//or where not null
 	res = db.table('person').column('id,name,age').where('id>1').or_where_not_null('income').to_sql()
 	assert res == 'select id,name,age from person where (id>1) or not (income is null)'
-
+	//where between
+	res = db.table('person').column('id,name,age,income').where('id>1').where_between('income',['100','1000']).to_sql()
+	assert res== 'select id,name,age,income from person where (id>1) and (income between 100 and 1000)'
+	//or where between
+	res = db.table('person').column('id,name,age,income').where('id>1').or_where_between('income',['100','1000']).to_sql()
+	assert res== 'select id,name,age,income from person where (id>1) or (income between 100 and 1000)'
+	//and where between
+	res = db.table('person').column('id,name,age,income').where('id>1').and_where_between('income',['100','1000']).to_sql()
+	assert res== 'select id,name,age,income from person where (id>1) and (income between 100 and 1000)'
+	//where not between
+	res = db.table('person').column('id,name,age,income').where('id>1').where_not_between('income',['100','1000']).to_sql()
+	assert res== 'select id,name,age,income from person where (id>1) and not (income between 100 and 1000)'
+	//or where not between
+	res = db.table('person').column('id,name,age,income').where('id>1').or_where_not_between('income',['100','1000']).to_sql()
+	assert res== 'select id,name,age,income from person where (id>1) or not (income between 100 and 1000)'
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'
