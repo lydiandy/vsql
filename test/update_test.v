@@ -33,7 +33,7 @@ pub fn test_inert_update_delete() {
 	assert res == "update person set name='paris',age='32' where (id=1) returning id"
 	// delete
 	res = db.table('person').delete().where('id=3').to_sql()
-	assert res == 'delete from person where (id=3)'
+	assert res == 'delete from person where (id=3) '
 	res = db.table('person').where('id=2').delete().to_sql()
-	assert res == 'delete from person where (id=2)'
+	assert res == 'delete from person where (id=2) '
 }

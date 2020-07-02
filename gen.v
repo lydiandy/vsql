@@ -148,7 +148,7 @@ pub fn gen(stmt Stmt) string {
 			// where statement
 			write_where(&stmt.where, &s)
 			if stmt.returning.len != 0 {
-				s.write(' returning ')
+				s.write('returning ')
 				for r in stmt.returning {
 					s.write('$r,')
 				}
