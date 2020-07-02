@@ -45,10 +45,10 @@ pub struct Where {
 pub mut:
 	typ         string // where,where_in,where_null,where_exists,where_between,where_raw
 	operator    string // '',and,or,not,or_not
-	condition   string
-	column_name string
-	range       []string // ??interface
-	exist_stmt  string
+	condition   string // where raw use
+	column_name string // where null use
+	range       []string // where range and where in use.  should interface type
+	exist_stmt  string // where exist use
 }
 
 // join statement

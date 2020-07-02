@@ -57,24 +57,28 @@ fn test_select() {
 	// having
 	res = db.table('person').column('age,count(age),avg(income)').group_by('age').having('count(*)=2').to_sql()
 	assert res == 'select age,count(age),avg(income) from person group by age having count(*)=2'
-	// where
+	// where raw
 	// res = db.table('person').where_raw('id=?', 1).to_sql()
 	// assert res == 'select * from person where id=1'
-	//
-	res = db.table('person').column('id,name,age').where('id=1').end()
+	// where
+	res = db.table('person').column('id,name,age').where('id=1').to_sql()
 	assert res == 'select id,name,age from person where (id=1)'
+	// or where
+	res = db.table('person').column('id,name,age').where('id=1').or_where('id=2').to_sql()
+	assert res == 'select id,name,age from person where (id=1) or (id=2)'
+	// and where
+	res = db.table('person').column('id,name,age').where('id=1').and_where('age=29').to_sql()
+	assert res == 'select id,name,age from person where (id=1) and (age=29)'
+	// where not
+	res = db.table('person').column('id,name,age').where('id=1').where_not('age=0').to_sql()
+	assert res == 'select id,name,age from person where (id=1) and not (age=0)'
+	// and where not
+	res = db.table('person').column('id,name,age').where('id=1').and_where_not('age=0').to_sql()
+	assert res == 'select id,name,age from person where (id=1) and not (age=0)'
+	// or where not
+	res = db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').to_sql()
+	assert res == 'select id,name,age from person where (id=1) or not (age=0)'
 	//
-	res = db.table('person').column('id,name,age').where('id=1').or_where_not('id=2').or_where_in('id',
-		['1', '3', '5']).or_where_between('id', ['1', '5']).or_where_null('age').to_sql()
-	assert res == 'select * from person where id=1'
-	//
-	res = db.table('person').column('id,name,age').where('id=1').and_where_not('id=2').and_where_in('id',
-		['1', '3', '5']).and_where_between('id', ['1', '5']).and_where_null('age').to_sql()
-	assert res == 'select * from person where id=1'
-	//
-	res = db.table('person').column('id,name,age').where('id=1').where_not('id=2').where_not_in('id',
-		['1', '3', '5']).where_not_between('id', ['1', '5']).where_not_null('age').to_sql()
-	assert res == 'select * from person where id=1'
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'

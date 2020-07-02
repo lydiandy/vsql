@@ -2,7 +2,7 @@ module vsql
 
 import strings
 
-//generate Stmt to sql string
+// generate Stmt to sql string
 pub fn gen(stmt Stmt) string {
 	mut s := strings.new_builder(200)
 	match stmt {
@@ -218,7 +218,9 @@ fn write_where(where &[]Where, s &strings.Builder) {
 				'where_raw' {
 					s.write('$w.condition ')
 				}
-				else {}
+				else {
+					panic('unknown where type')
+				}
 			}
 		}
 	}
