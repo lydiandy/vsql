@@ -1,8 +1,7 @@
 module test
 
 fn test_select() {
-	db := connect_db()
-	// start to test
+	db := connect_and_init_db()
 	mut res := ''
 	// select+from
 	res = db.select_('*').from('person').to_sql()

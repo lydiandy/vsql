@@ -4,8 +4,7 @@ import vsql
 import dialect.pg
 
 fn test_schema() {
-	mut db := connect_db()
-	// start to test
+	mut db := connect_and_init_db()
 	mut res := []pg.Row{}
 	// create database
 	res = db.create_database('mydb')
@@ -23,8 +22,8 @@ fn test_schema() {
 		table.primary(['id', 'name'])
 		table.unique(['id', 'name'])
 		table.check('age>30').check('age<60')
-		res := table.to_sql()
-		assert res == ''
+		result := table.to_sql()
+		assert result == ''
 	}) or {
 		panic('create table failed:$err')
 	}

@@ -196,7 +196,7 @@ fn write_where(where &[]Where, s &strings.Builder) {
 			}
 			match w.typ {
 				'where' {
-					s.write('$operator ($w.condition)')
+					s.write('$operator ($w.condition) ')
 				}
 				'where_in' {
 					mut range_str := ''

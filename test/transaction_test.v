@@ -1,8 +1,7 @@
 module test
 
 fn test_transaction() {
-	mut db := connect_db()
-	// start to test
+	mut db := connect_and_init_db()
 	t := db.transaction()
 	// t := db.tx() //the shorter fn
 	t.exec("insert into person (id,name,age,income) values (33,'name33',33,0)")

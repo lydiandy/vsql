@@ -2,7 +2,7 @@ module test
 
 import vsql
 
-fn connect_db() vsql.DB {
+fn connect_and_init_db() vsql.DB {
 	config := vsql.Config{
 		client: 'pg'
 		host: 'localhost'

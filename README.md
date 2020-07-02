@@ -313,17 +313,76 @@ db.exec('drop table if exists cat')
 db.exec("create table cat (id integer primary key,name text default '',owner_id integer)")
 ```
 
-
-
 ### other
 
-```c
-to_sql()
-print_sql()
-print_obj()
+**print_sql**
+
+If you need to print the sql string,you can use print_sql() before end().
+
+```sql
+db.table('person').column('id,name,age').where('id=1').print_sql().end()
 ```
 
+```sql
+select id,name,age from person where (id=1)
+```
 
+**print_obj**
+
+If you need to print the object struct of sql,you can you print_obj() before end().
+
+```sql
+db.table('person').column('id,name,age').where('id=1').print_obj().end()
+```
+
+```json
+vsql.Select {
+    table_name: 'person'
+    table_alias: ''
+    is_distinct: false
+    columns: [vsql.Column {
+    name: 'id'
+    alias: ''
+}, vsql.Column {
+    name: 'name'
+    alias: ''
+}, vsql.Column {
+    name: 'age'
+    alias: ''
+}]
+    where: [vsql.Where {
+    typ: 'where'
+    operator: ''
+    condition: 'id=1'
+    column_name: ''
+    range: []
+    exist_stmt: ''
+}]
+    join: []
+    join_raw: ''
+    first: false
+    limit: 0
+    offset: 0
+    order_by: []
+    order_by_raw: ''
+    group_by: []
+    group_by_raw: ''
+    having: ''
+    aggregate_fn: []
+    timeout: 0
+}
+```
+
+**to_sql**
+
+to_sql() is used to test. It will not execute the sql,just generate the sql string.
+
+```c
+res := db.table('person').column('*').to_sql()
+assert res == 'select * from person'
+res := db.table('person').column('id,name,age').to_sql()
+assert res == 'select id,name,age from person'
+```
 
 ###  todo
 
