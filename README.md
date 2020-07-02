@@ -101,6 +101,36 @@ res := db.table('person').where_raw('id=?', '1').end()
 select * from person where id=1
 ```
 
+where in
+
+```sql
+res :=db.table('person').column('id,name,age').where('id=1').or_where_in('id', ['1', '2', '3']).to_sql()
+select id,name,age from person where (id=1) or (id in (1,2,3))
+```
+
+where null
+
+```sql
+res :=db.table('person').column('id,name,age').where('id>1').where_null('income).to_sql()
+select id,name,age from person where (id>1) and (income is null)
+```
+
+where between
+
+```sql
+res := db.table('person').column('id,name,age,income').where('id>1').where_between('income',['100','1000']).to_sql()
+select id,name,age,income from person where (id>1) and (income between 100 and 1000)
+```
+
+where exists
+
+```sql
+res := db.table('person').column('id,name,age,income').where('id>1').where_exists('select income from person where income>1000').to_sql()
+select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)
+```
+
+
+
 #### first/offset/limit
 
 ```sql
