@@ -216,7 +216,7 @@ fn write_where(where &[]Where, s &strings.Builder) {
 					s.write('exists ($operator $w.exist_stmt) ')
 				}
 				'where_raw' {
-					s.write('$w.condition ')
+					s.write(' $w.condition ')
 				}
 				else {
 					panic('unknown where type')

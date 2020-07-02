@@ -58,8 +58,8 @@ fn test_select() {
 	res = db.table('person').column('age,count(age),avg(income)').group_by('age').having('count(*)=2').to_sql()
 	assert res == 'select age,count(age),avg(income) from person group by age having count(*)=2'
 	// where raw
-	// res = db.table('person').where_raw('id=?', 1).to_sql()
-	// assert res == 'select * from person where id=1'
+	res = db.table('person').column('*').where_raw('id=?', '1').to_sql()
+	assert res == 'select * from person where id=1'
 	// where
 	res = db.table('person').column('id,name,age').where('id=1').to_sql()
 	assert res == 'select id,name,age from person where (id=1)'

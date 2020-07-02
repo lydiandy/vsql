@@ -1,24 +1,31 @@
 module vsql
 
-// status: wip
-// a bug in ...args,just waiting for fixed in V
-// pub fn (db &DB) where_raw(raw string,...args interface) &DB {
-// mut s := db.stmt as Select
-// count := raw.count('?')
-// times := if count == -1 { 0 } else { count }
-// len := args.len
-// if times != len {
-// panic('the ? count is not match argument count')
-// }
-// mut condition := raw
-// for arg in args {
-// condition = condition.replace_once('?', arg)
-// }
-// db.where << Where{
-// condition: condition
-// }
-// return db
-// }
+// status: done
+pub fn (db &DB) where_raw(raw string, args ...string) &DB { // TODO: interface type
+	count := raw.count('?')
+	times := if count == -1 { 0 } else { count }
+	len := args.len
+	if times != len {
+		panic('the ? count is not match argument count')
+	}
+	mut condition := raw
+	for arg in args {
+		condition = condition.replace_once('?', arg)
+	}
+	w := Where{
+		typ: 'where_raw'
+		condition: condition
+	}
+	stmt := db.stmt
+	match stmt {
+		Select { stmt.where << w }
+		Update { stmt.where << w }
+		Delete { stmt.where << w }
+		else { panic('unknown where clause') }
+	}
+	return db
+}
+
 // ---------------
 // status:done
 fn (db &DB) where_type(typ, operator, condition string) &DB {
