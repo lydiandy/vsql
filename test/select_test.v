@@ -76,7 +76,7 @@ fn test_select() {
 	res = db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').to_sql()
 	assert res == 'select id,name,age from person where (id=1) or not (age=0)'
 	// where in
-	res = db.table('person').column('id,name,age').where_in('id', ['1', '2', '3'])
+	res = db.table('person').column('id,name,age').where_in('id', ['1', '2', '3']).to_sql()
 	assert res == 'select id,name,age from person where (id in (1,2,3))'
 	// or where in
 	res = db.table('person').column('id,name,age').where('id=1').or_where_in('id', ['1', '2', '3']).to_sql()
