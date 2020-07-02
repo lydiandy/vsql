@@ -96,9 +96,6 @@ select id,name,age from person where (id=1) and not (age=0)
 // or where not
 res:= db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').end()
 select id,name,age from person where (id=1) or not (age=0)
-//where raw 
-res := db.table('person').where_raw('id=?', '1').end()
-select * from person where id=1
 ```
 
 where in
@@ -127,6 +124,13 @@ where exists
 ```sql
 res := db.table('person').column('id,name,age,income').where('id>1').where_exists('select income from person where income>1000').to_sql()
 select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)
+```
+
+where raw
+
+```sql
+res := db.table('person').where_raw('id=?', '1').end()
+select * from person where id=1
 ```
 
 
