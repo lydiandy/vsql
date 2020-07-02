@@ -81,23 +81,24 @@ select * from person
 #### where
 
 ```sql
-res := db.table('person').column('id,name,age').where('id=1').to_sql()
+//where
+res := db.table('person').column('id,name,age').where('id=1').end()
 select id,name,age from person where (id=1)
 // or where
-res:=db.table('person').column('id,name,age').where('id=1').or_where('id=2').to_sql()
+res:= db.table('person').column('id,name,age').where('id=1').or_where('id=2').end()
 select id,name,age from person where (id=1) or (id=2)
 // and where
-res:=db.table('person').column('id,name,age').where('id=1').and_where('age=29').to_sql()
+res:= db.table('person').column('id,name,age').where('id=1').and_where('age=29').end()
 select id,name,age from person where (id=1) and (age=29)
 // where not
-res:=db.table('person').column('id,name,age').where('id=1').where_not('age=0').to_sql()
-select id,name,age from person where (id=1) and not (age=0)
-// and where not
-res:=db.table('person').column('id,name,age').where('id=1').and_where_not('age=0').to_sql()
+res:= db.table('person').column('id,name,age').where('id=1').where_not('age=0').end()
 select id,name,age from person where (id=1) and not (age=0)
 // or where not
-res:=db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').to_sql()
+res:= db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').end()
 select id,name,age from person where (id=1) or not (age=0)
+//where raw 
+res := db.table('person').where_raw('id=?', '1').end()
+select * from person where id=1
 ```
 
 #### first/offset/limit

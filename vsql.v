@@ -10,9 +10,9 @@ pub const (
 pub struct DB {
 pub:
 	config Config
-	conn   pg.DB //TODO: replace to Driver interface
+	conn   pg.DB // TODO: replace to Driver interface
 mut:
-	stmt   Stmt //the current statement
+	stmt   Stmt // the current statement
 }
 
 pub fn init_driver(c Config) pg.DB {
@@ -47,9 +47,12 @@ pub fn (db &DB) exec(sql string) []pg.Row {
 }
 
 // end of select|insert|update|delete stmt,generate the sql string and exec
+// do not use together with to_sql()
 pub fn (db &DB) end() []pg.Row {
 	s := gen(db.stmt)
 	// println(s)
 	res := db.exec(s)
+	// after exec clear the db.stmt,that do not impact next sql
+	db.stmt = Select{}
 	return res
 }

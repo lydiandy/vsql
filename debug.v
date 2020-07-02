@@ -21,8 +21,11 @@ pub fn (db &DB) print_sql() &DB {
 }
 
 // generate sql string for debug
+//do not use together with end()
 pub fn (db &DB) to_sql() string {
 	s := gen(db.stmt)
+	// after to_sql clear the db.stmt,that do not impact next sql
+	db.stmt = Select{}
 	return s
 }
 
