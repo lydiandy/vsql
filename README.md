@@ -335,7 +335,7 @@ If you need to print the object struct of sql,you can you print_obj() before end
 db.table('person').column('id,name,age').where('id=1').print_obj().end()
 ```
 
-```json
+```
 vsql.Select {
     table_name: 'person'
     table_alias: ''
