@@ -84,15 +84,19 @@ select * from person
 //where
 res := db.table('person').column('id,name,age').where('id=1').end()
 select id,name,age from person where (id=1)
+
 // or where
 res:= db.table('person').column('id,name,age').where('id=1').or_where('id=2').end()
 select id,name,age from person where (id=1) or (id=2)
+
 // and where
 res:= db.table('person').column('id,name,age').where('id=1').and_where('age=29').end()
 select id,name,age from person where (id=1) and (age=29)
+
 // where not
 res:= db.table('person').column('id,name,age').where('id=1').where_not('age=0').end()
 select id,name,age from person where (id=1) and not (age=0)
+
 // or where not
 res:= db.table('person').column('id,name,age').where('id=1').or_where_not('age=0').end()
 select id,name,age from person where (id=1) or not (age=0)
@@ -104,15 +108,19 @@ where in
 //where in
 res := db.table('person').column('id,name,age').where_in('id', ['1', '2', '3']).end()
 select id,name,age from person where (id in (1,2,3))
+
 // or where in
 res := db.table('person').column('id,name,age').where('id=1').or_where_in('id', ['1', '2', '3']).end()
 select id,name,age from person where (id=1) or (id in (1,2,3))
+
 // and where in
 res := db.table('person').column('id,name,age').where('id=1').and_where_in('id', ['1', '2', '3']).end()
 select id,name,age from person where (id=1) and (id in (1,2,3))
+
 // where not in
 res := db.table('person').column('id,name,age').where('id=1').where_not_in('id', ['2', '3']).end()
 select id,name,age from person where (id=1) and not (id in (2,3))
+
 // or where not in
 res := db.table('person').column('id,name,age').where('id=1').or_where_not_in('id', ['2', '3']).end()
 select id,name,age from person where (id=1) or not (id in (2,3))
@@ -121,17 +129,22 @@ select id,name,age from person where (id=1) or not (id in (2,3))
 where null
 
 ```sql
+//where null
 res := db.table('person').column('id,name,age').where('id>1').where_null('income).end()
 select id,name,age from person where (id>1) and (income is null)
+                                                                         
 //or where null
 res := db.table('person').column('id,name,age').where('id>1').or_where_null('income').end()
 select id,name,age from person where (id>1) or (income is null)
+                                                                         
 //and where null
 res := db.table('person').column('id,name,age').where('id>1').and_where_null('income').end()
 select id,name,age from person where (id>1) and (income is null)
+                                                                         
 //where not null
 res := db.table('person').column('id,name,age').where('id>1').where_not_null('income').end()
 select id,name,age from person where (id>1) and not (income is null)
+                                                                         
 //or where not null
 res := db.table('person').column('id,name,age').where('id>1').or_where_not_null('income').end()
 select id,name,age from person where (id>1) or not (income is null)
@@ -140,17 +153,22 @@ select id,name,age from person where (id>1) or not (income is null)
 where between
 
 ```sql
+//where between
 res := db.table('person').column('id,name,age,income').where('id>1').where_between('income',['100','1000']).end()
 select id,name,age,income from person where (id>1) and (income between 100 and 1000)
+
 //or where between
 res := db.table('person').column('id,name,age,income').where('id>1').or_where_between('income',['100','1000']).end()
 select id,name,age,income from person where (id>1) or (income between 100 and 1000)
+
 //and where between
 res := db.table('person').column('id,name,age,income').where('id>1').and_where_between('income',['100','1000']).end()
 select id,name,age,income from person where (id>1) and (income between 100 and 1000)
+
 //where not between
 res := db.table('person').column('id,name,age,income').where('id>1').where_not_between('income',['100','1000']).end()
 select id,name,age,income from person where (id>1) and not (income between 100 and 1000)
+
 //or where not between
 res := db.table('person').column('id,name,age,income').where('id>1').or_where_not_between('income',['100','1000']).end()
 select id,name,age,income from person where (id>1) or not (income between 100 and 1000)
@@ -159,17 +177,22 @@ select id,name,age,income from person where (id>1) or not (income between 100 an
 where exists
 
 ```sql
+//where exists
 res := db.table('person').column('id,name,age,income').where('id>1').where_exists('select income from person where income>1000').end()
 select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)
+
 //or where exists
 res := db.table('person').column('id,name,age,income').where('id>1').or_where_exists('select income from person where income>1000').end()
 select id,name,age,income from person where (id>1) or exists (select income from person where income>1000)
+
 //and where exists
 res := db.table('person').column('id,name,age,income').where('id>1').and_where_exists('select income from person where income>1000').end()
 select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)
+
 //where not exists
 res := db.table('person').column('id,name,age,income').where('id>1').where_not_exists('select income from person where income>1000').end()
 select id,name,age,income from person where (id>1) and not exists (select income from person where income>1000)
+
 //or where not exists
 res := db.table('person').column('id,name,age,income').where('id>1').or_where_not_exists('select income from person where income>1000').end()
 select id,name,age,income from person where (id>1) or not exists (select income from person where income>1000)
