@@ -90,6 +90,22 @@ fn test_select() {
 	// or where not in
 	res = db.table('person').column('id,name,age').where('id=1').or_where_not_in('id', ['2', '3']).to_sql()
 	assert res == 'select id,name,age from person where (id=1) or not (id in (2,3))'
+	//where null
+	res = db.table('person').column('id,name,age').where('id>1').where_null('income').to_sql()
+	assert res == 'select id,name,age from person where (id>1) and (income is null)'
+	//or where null
+	res = db.table('person').column('id,name,age').where('id>1').or_where_null('income').to_sql()
+	assert res == 'select id,name,age from person where (id>1) or (income is null)'
+	//and where null
+	res = db.table('person').column('id,name,age').where('id>1').and_where_null('income').to_sql()
+	assert res == 'select id,name,age from person where (id>1) and (income is null)'
+	//where not null
+	res = db.table('person').column('id,name,age').where('id>1').where_not_null('income').to_sql()
+	assert res == 'select id,name,age from person where (id>1) and not (income is null)'
+	//or where not null
+	res = db.table('person').column('id,name,age').where('id>1').or_where_not_null('income').to_sql()
+	assert res == 'select id,name,age from person where (id>1) or not (income is null)'
+
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'
