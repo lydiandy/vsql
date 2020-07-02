@@ -516,43 +516,6 @@ import vsql.dialect.mssql
 
 	//select
 res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
-	//where in select
-	db.table('person').select_('*').where('id',1)
-	db.table('person').select_('*').where({id:1,name:'tom'})
-	db.table('person').select_('*').where('name','like','t*')
-	db.table('person').select_('*').where('age','>',20)
-	db.table('person').select_('*').where('age>20')
-
-	db.table('person').select_('*').where_not('age','>',20)
-	db.table('person').select_('*').or_where_not('age','>',20)
-
-	db.table('person').select_('*').where_in('age',[10,12,15])
-	db.table('person').select_('*').or_where_in('age',[10,12,15])
-	db.table('person').select_('*').where_not_in('age',[10,12,15])
-	db.table('person').select_('*').or_where_not_in('age',[10,12,15])
-
-	db.table('person').select_('*').where_exists(fn() {})
-	db.table('person').select_('*').or_where_exists(fn() {})
-	db.table('person').select_('*').where_not_exists(fn() {})
-	db.table('person').select_('*').orwhere_not_exists(fn() {})
-
-	db.table('person').select_('*').where('name','like','t*').or_where('id',1).or_where()
-	db.table('person').select_('*').where('age','>',20).and_where('id',1)
-
-	db.table('person').select_('*').where_null('id')
-	db.table('person').select_('*').or_where_null('id')
-	db.table('person').select_('*').where_not_null('id')
-	db.table('person').select_('*').or_where_not_null('id')
-
-	db.table('person').select_('*').where_between('votes', [1, 100])
-	db.table('person').select_('*').or_where_between('votes', [1, 100])
-	db.table('person').select_('*').and_where_between('votes', [1, 100])
-	db.table('person').select_('*').where_not_between('votes', [1, 100])
-	db.table('person').select_('*').or_where_not_between('votes', [1, 100])
-	db.table('person').select_('*').and_where_not_between('votes', [1, 100])
-
-	db.table('person').select_('*').where_raw('id = ?', [1])
-	db.table('person').select_('*').or_where_raw('id = ?', [1])
 
 	//union
 	db.table('person').select_('id','name','age').union_(fn() {
@@ -560,8 +523,6 @@ res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
 	}).order_by('id asc')
 
 	//shcema ddl
-	db.create_database('person') //optional
-
 	db.create_table_if_not_exists('person',fn(table Table) {
 		table.increment('id')
 		table.uuid('leader_id').primary().index()
@@ -573,6 +534,7 @@ res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
 	}) or {
 		panic('wrong')
 	}
+
 	db.create_table('person',fn(t Table) {
 		t.increment('id')
 		t.uuid('leader_id').primary().index()
