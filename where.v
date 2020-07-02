@@ -1,7 +1,7 @@
 module vsql
 
 // status: done
-pub fn (db &DB) where_raw(raw string, args ...string) &DB { // TODO: interface type
+pub fn (db &DB) where_raw(raw string, args ...string) &DB { //TODO: interface type
 	count := raw.count('?')
 	times := if count == -1 { 0 } else { count }
 	len := args.len
@@ -227,7 +227,7 @@ pub fn (db &DB) and_where_exists(stmt string) &DB {
 }
 
 pub fn (db &DB) where_not_exists(stmt string) &DB {
-	return db.where_exists_type('where_exists', 'not', stmt)
+	return db.where_exists_type('where_exists', 'and not', stmt)
 }
 
 pub fn (db &DB) or_where_not_exists(stmt string) &DB {

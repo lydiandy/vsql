@@ -120,6 +120,21 @@ fn test_select() {
 	//or where not between
 	res = db.table('person').column('id,name,age,income').where('id>1').or_where_not_between('income',['100','1000']).to_sql()
 	assert res== 'select id,name,age,income from person where (id>1) or not (income between 100 and 1000)'
+	//where exists
+	res= db.table('person').column('id,name,age,income').where('id>1').where_exists('select income from person where income>1000').to_sql()
+	assert res=='select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)'
+	//or where exists
+	res= db.table('person').column('id,name,age,income').where('id>1').or_where_exists('select income from person where income>1000').to_sql()
+	assert res=='select id,name,age,income from person where (id>1) or exists (select income from person where income>1000)'
+	//and where exists
+	res= db.table('person').column('id,name,age,income').where('id>1').and_where_exists('select income from person where income>1000').to_sql()
+	assert res=='select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)'
+	//where not exists
+	res= db.table('person').column('id,name,age,income').where('id>1').where_not_exists('select income from person where income>1000').to_sql()
+	assert res=='select id,name,age,income from person where (id>1) and not exists (select income from person where income>1000)'
+	//or where not exists
+	res= db.table('person').column('id,name,age,income').where('id>1').or_where_not_exists('select income from person where income>1000').to_sql()
+	assert res=='select id,name,age,income from person where (id>1) or not exists (select income from person where income>1000)'
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'

@@ -213,7 +213,7 @@ fn write_where(where &[]Where, s &strings.Builder) {
 					s.write('$operator ($w.column_name between ${w.range[0]} and ${w.range[1]}) ')
 				}
 				'where_exists' {
-					s.write('exists ($operator $w.exist_stmt) ')
+					s.write('$operator exists ($w.exist_stmt) ')
 				}
 				'where_raw' {
 					s.write(' $w.condition ')
