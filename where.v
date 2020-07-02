@@ -20,6 +20,7 @@ module vsql
 // return db
 // }
 // ---------------
+// status:done
 fn (db &DB) where_type(typ, operator, condition string) &DB {
 	w := Where{
 		typ: typ

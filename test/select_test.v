@@ -61,9 +61,8 @@ fn test_select() {
 	// res = db.table('person').where_raw('id=?', 1).to_sql()
 	// assert res == 'select * from person where id=1'
 	//
-	res = db.table('person').column('id,name,age').where('id=1').where_not('id=2').where_in('id',
-		['1', '3', '5']).where_between('id', ['1', '5']).where_null('age').to_sql()
-	assert res == 'select * from person where id=1'
+	res = db.table('person').column('id,name,age').where('id=1').end()
+	assert res == 'select id,name,age from person where (id=1)'
 	//
 	res = db.table('person').column('id,name,age').where('id=1').or_where_not('id=2').or_where_in('id',
 		['1', '3', '5']).or_where_between('id', ['1', '5']).or_where_null('age').to_sql()

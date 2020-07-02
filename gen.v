@@ -135,7 +135,6 @@ pub fn gen(stmt Stmt) string {
 				}
 				s.go_back(1)
 			}
-			return s.str()
 		}
 		Update {
 			s.write('update ')
@@ -155,14 +154,12 @@ pub fn gen(stmt Stmt) string {
 				}
 				s.go_back(1)
 			}
-			return s.str()
 		}
 		Delete {
 			s.write('delete from ')
 			s.write('$stmt.table_name ')
 			// where statement
 			write_where(&stmt.where, &s)
-			return s.str()
 		}
 		CreateDatabase {
 			s.write('create database $stmt.db_name')
