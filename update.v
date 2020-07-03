@@ -51,7 +51,7 @@ pub fn (db &DB) returning(column string, other_columns ...string) &DB {
 
 // update statement
 // staus:done
-pub fn (db &DB) update(data map[string]string) &DB {
+pub fn (db &DB) update(data map[string]string) &DB { // TODO:map[string]interface
 	mut update_stmt := Update{
 		table_name: (db.stmt as Select).table_name
 		data: data
@@ -60,10 +60,12 @@ pub fn (db &DB) update(data map[string]string) &DB {
 	return db
 }
 
+// staus:wip
 pub fn (db &DB) increment(column string) &DB {
 	return db
 }
 
+// staus:wip
 pub fn (db &DB) decrement(column string) &DB {
 	return db
 }

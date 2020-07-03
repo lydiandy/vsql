@@ -123,34 +123,36 @@ pub fn (db &DB) order_by_raw(raw string) &DB {
 	return db
 }
 
-pub fn (db &DB) union_(union_fn CallbackFn) &DB {
-	return db
-}
-
-pub fn (db &DB) union_all(union_fn CallbackFn) &DB {
-	return db
-}
-
-pub fn (db &DB) intersect(union_fn CallbackFn) &DB {
-	return db
-}
-
-pub fn (db &DB) except(union_fn CallbackFn) &DB {
-	return db
-}
-
+// status:done
 pub fn (db &DB) having(condition string) &DB {
 	s := db.stmt as Select
 	s.having = condition
 	return db
 }
 
-// raw sql
-pub fn (db &DB) raw(arg ...string) &DB {
+//union statement
+// status:wip
+pub fn (db &DB) union_(union_fn CallbackFn) &DB {
+	return db
+}
+
+// status:wip
+pub fn (db &DB) union_all(union_fn CallbackFn) &DB {
+	return db
+}
+
+// status:wip
+pub fn (db &DB) intersect(union_fn CallbackFn) &DB {
+	return db
+}
+
+// status:wip
+pub fn (db &DB) except(union_fn CallbackFn) &DB {
 	return db
 }
 
 // result to struct
+// status:wip
 pub fn (db &DB) to() &DB {
 	return db
 }
