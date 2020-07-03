@@ -597,4 +597,4 @@ Inspired by [knex](https://github.com/knex/knex),it was my favorite sql query bu
 
 ## License
 
-Licensed under [MIT](LICENSE)
+Licensed under [MIT](license)
