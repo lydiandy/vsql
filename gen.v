@@ -117,8 +117,8 @@ pub fn (db &DB) gen_sql() string {
 			mut keys:=[]string{}
 			mut vals:=[]string{}
 			for key,val in stmt.data {
-				keys<<key
-				vals<<val
+				keys << key
+				vals << val
 			}
 			for key in keys {
 				s.write('$key,')
@@ -154,6 +154,7 @@ pub fn (db &DB) gen_sql() string {
 			s.write(' ')
 			// where statement
 			db.write_where(&stmt.where, &s)
+			// write returning
 			if stmt.returning.len != 0 {
 				s.write('returning ')
 				for r in stmt.returning {
@@ -171,6 +172,7 @@ pub fn (db &DB) gen_sql() string {
 		.create_database {
 			s.write('create database $stmt.db_name')
 		}
+		.create_table {}
 		.alter_table {}
 		.rename_table {
 			s.write('alter table $stmt.table_name rename to $stmt.new_table_name')
@@ -181,9 +183,7 @@ pub fn (db &DB) gen_sql() string {
 		.truncate_table {
 			s.write('truncate table $stmt.table_name')
 		}
-		else {
-			panic('unknown statement,sql generate failed')
-		}
+
 	}
 	return s.str()
 }

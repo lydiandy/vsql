@@ -16,10 +16,6 @@ pub fn (db &DB) left_join(table, join_condition string) &DB {
 }
 
 // status:done
-// pub fn (db &DB) left_outer_join(table, join_condition string) &DB {
-// return db.join_type('left outer join',table,join_condition)
-// }
-// status:done
 pub fn (db &DB) right_join(table, join_condition string) &DB {
 	return db.join_type('right join', table, join_condition)
 }
