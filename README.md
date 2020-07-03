@@ -2,9 +2,7 @@
 
 **vsql is just wip,do not use in production**
 
-inspired by [knex](https://github.com/knex/knex)
-
-- just a query builder,not orm
+- just a sql query builder,not orm
 
 - easy to learn,easy to use
 
@@ -593,3 +591,10 @@ db.down()
 
 ```
 
+## Acknowledgments
+
+Inspired by [knex](https://github.com/knex/knex),it was my favorite sql query builder before I meet V.
+
+## License
+
+Licensed under [MIT](LICENSE)

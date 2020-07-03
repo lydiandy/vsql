@@ -1,5 +1,5 @@
 Module {
 	name: 'vsql',
-	description: '',
+	description: 'A sql query builder for V',
 	dependencies: []
 }
