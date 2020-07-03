@@ -1,5 +1,9 @@
 vsql.dylib
-example/demo
-example/done
+example/create_and_init_db
 example/hello
+example/demo
+example/select
+example/schema
+example/update
+example/transaction
 example/demo.v
