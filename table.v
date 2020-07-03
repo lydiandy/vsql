@@ -1,6 +1,6 @@
 module vsql
 
-// create table use
+// create table statement
 pub struct Table {
 pub mut:
 	name     string

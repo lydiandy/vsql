@@ -5,7 +5,7 @@ import strings
 // generate stmt to sql string
 pub fn (db &DB) gen_sql() string {
 	mut s := strings.new_builder(200)
-	stmt:=db.stmt
+	stmt := db.stmt
 	match stmt {
 		Select {
 			s.write('select ')
