@@ -52,7 +52,7 @@ fn main() {
 
 ```
 
-all the sql statement can be found in test directory
+all the sql statement can be found in example or test directory
 
 ### select
 
