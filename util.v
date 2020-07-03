@@ -1,6 +1,6 @@
 module vsql
 
-// 'name','name asc','name desc abc'
+// split the string by space, like this:'name','name asc','name desc abc'
 pub fn split_by_space(str string) (string, string) {
 	args := str.trim_space().split(' ')
 	match args.len {
@@ -10,7 +10,7 @@ pub fn split_by_space(str string) (string, string) {
 	}
 }
 
-// 'name','name as n','name as n abc'
+// split the string by separator, like this:'name','name as n','name as n abc'
 pub fn split_by_separator(str, separator string) (string, string) {
 	args := str.trim_space().split(' ')
 	match args.len {

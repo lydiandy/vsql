@@ -15,15 +15,15 @@ pub fn (db &DB) print_obj() &DB {
 
 // print sql string for debug
 pub fn (db &DB) print_sql() &DB {
-	s := gen(db.stmt)
+	s := db.gen_sql()
 	println(s)
 	return db
 }
 
 // generate sql string for debug
-//do not use together with end()
+// do not use together with end()
 pub fn (db &DB) to_sql() string {
-	s := gen(db.stmt)
+	s := db.gen_sql()
 	// after to_sql clear the db.stmt,that do not impact next sql
 	db.stmt = Select{}
 	return s

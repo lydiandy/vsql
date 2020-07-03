@@ -22,7 +22,7 @@ pub fn (db &DB) create_table(table_name string, create_table_fn CreateTableFn) ?
 		name: table_name
 	}
 	create_table_fn(table)
-	s := table.gen()
+	s := db.gen_table_sql(table)
 	println(s)
 	res := db.exec(s)
 	return res

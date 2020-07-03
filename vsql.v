@@ -49,7 +49,7 @@ pub fn (db &DB) exec(sql string) []pg.Row {
 // end of select|insert|update|delete stmt,generate the sql string and exec
 // do not use together with to_sql()
 pub fn (db &DB) end() []pg.Row {
-	s := gen(db.stmt)
+	s := db.gen_sql()
 	// println(s)
 	res := db.exec(s)
 	// after exec clear the db.stmt,that do not impact next sql

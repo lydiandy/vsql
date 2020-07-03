@@ -1,7 +1,5 @@
 module vsql
 
-import strings
-
 // create table use
 pub struct Table {
 pub mut:
@@ -300,88 +298,4 @@ pub fn (mut t Table) drop_foreign(name string) &Table {
 
 pub fn (mut t Table) charset(name string) &Table {
 	return t
-}
-
-// generate sql of create table
-pub fn (t Table) gen() string {
-	mut s := strings.new_builder(200)
-	s.write('create table $t.name (')
-	if t.columns.len==0 {
-		s.write(');')
-		return s.str()
-	}
-	for column in t.columns {
-		s.write('$column.name ')
-		s.write('$column.typ ')
-		if column.default_value != '' {
-			s.write("default \'$column.default_value\' ")
-		}
-		if column.is_increment {
-			s.write('serial ')
-		}
-		if column.is_not_null {
-			s.write('not null ')
-		}
-		if column.is_primary {
-			s.write('primary key ')
-		}
-		if column.is_unique {
-			s.write('unique ')
-		}
-		if column.index != '' {
-			s.write('index $column.index ')
-		}
-		if column.reference != '' {
-			s.write('references $column.reference ')
-		}
-		if column.is_first {
-		}
-		if column.after != '' {
-		}
-		if column.collate != '' {
-		}
-		if column.check != '' {
-			s.write('check ($column.check)')
-		}
-		// s.go_back(1)
-		s.writeln(',')
-	}
-	if t.primarys.len == 0 && t.uniques.len == 0 && t.checks.len == 0 {
-		s.go_back(2)
-	}
-	// s.writeln('')
-	// table constraint
-	// primary key
-	if t.primarys.len > 0 {
-		s.write('primary key (')
-		for column in t.primarys {
-			s.write('$column,')
-		}
-		s.go_back(1)
-		s.writeln('),')
-	}
-	// unique
-	if t.uniques.len > 0 {
-		s.write('unique (')
-		for column in t.uniques {
-			s.write('$column,')
-		}
-		s.go_back(1)
-		s.writeln('),')
-	}
-	// check
-	if t.checks.len > 0 {
-		for c in t.checks {
-			s.writeln('check ($c),')
-		}
-		s.go_back(2)
-	}
-	s.writeln('')
-	s.write(');')
-	return s.str()
-}
-
-pub fn (mut t Table) to_sql() string {
-	s := t.gen()
-	return s
 }

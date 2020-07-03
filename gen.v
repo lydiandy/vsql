@@ -2,9 +2,10 @@ module vsql
 
 import strings
 
-// generate Stmt to sql string
-pub fn gen(stmt Stmt) string {
+// generate stmt to sql string
+pub fn (db &DB) gen_sql() string {
 	mut s := strings.new_builder(200)
+	stmt:=db.stmt
 	match stmt {
 		Select {
 			s.write('select ')
@@ -50,7 +51,7 @@ pub fn gen(stmt Stmt) string {
 				s.write('as $stmt.table_alias ')
 			}
 			// where statement
-			write_where(&stmt.where, &s)
+			db.write_where(&stmt.where, &s)
 			// join statement
 			if stmt.join_raw != '' {
 				s.write('$stmt.join_raw ')
@@ -146,7 +147,7 @@ pub fn gen(stmt Stmt) string {
 			s.go_back(1)
 			s.write(' ')
 			// where statement
-			write_where(&stmt.where, &s)
+			db.write_where(&stmt.where, &s)
 			if stmt.returning.len != 0 {
 				s.write('returning ')
 				for r in stmt.returning {
@@ -159,7 +160,7 @@ pub fn gen(stmt Stmt) string {
 			s.write('delete from ')
 			s.write('$stmt.table_name ')
 			// where statement
-			write_where(&stmt.where, &s)
+			db.write_where(&stmt.where, &s)
 		}
 		CreateDatabase {
 			s.write('create database $stmt.db_name')
@@ -179,7 +180,7 @@ pub fn gen(stmt Stmt) string {
 }
 
 // write where clause for select,update,delete
-fn write_where(where &[]Where, s &strings.Builder) {
+pub fn (db &DB) write_where(where &[]Where, s &strings.Builder) {
 	// where statement
 	if where.len > 0 {
 		s.write('where')
@@ -224,4 +225,83 @@ fn write_where(where &[]Where, s &strings.Builder) {
 			}
 		}
 	}
+}
+
+// generate create table stmt to sql string
+pub fn (db &DB) gen_table_sql(t Table) string {
+	mut s := strings.new_builder(200)
+	s.write('create table $t.name (')
+	if t.columns.len == 0 {
+		s.write(');')
+		return s.str()
+	}
+	for column in t.columns {
+		s.write('$column.name ')
+		s.write('$column.typ ')
+		if column.default_value != '' {
+			s.write("default \'$column.default_value\' ")
+		}
+		if column.is_increment {
+			s.write('serial ')
+		}
+		if column.is_not_null {
+			s.write('not null ')
+		}
+		if column.is_primary {
+			s.write('primary key ')
+		}
+		if column.is_unique {
+			s.write('unique ')
+		}
+		if column.index != '' {
+			s.write('index $column.index ')
+		}
+		if column.reference != '' {
+			s.write('references $column.reference ')
+		}
+		if column.is_first {
+		}
+		if column.after != '' {
+		}
+		if column.collate != '' {
+		}
+		if column.check != '' {
+			s.write('check ($column.check)')
+		}
+		// s.go_back(1)
+		s.writeln(',')
+	}
+	if t.primarys.len == 0 && t.uniques.len == 0 && t.checks.len == 0 {
+		s.go_back(2)
+	}
+	// s.writeln('')
+	// table constraint
+	// primary key
+	if t.primarys.len > 0 {
+		s.write('primary key (')
+		for column in t.primarys {
+			s.write('$column,')
+		}
+		s.go_back(1)
+		s.writeln('),')
+	}
+	// unique
+	if t.uniques.len > 0 {
+		s.write('unique (')
+		for column in t.uniques {
+			s.write('$column,')
+		}
+		s.go_back(1)
+		s.writeln('),')
+	}
+	// check
+	if t.checks.len > 0 {
+		for c in t.checks {
+			s.writeln('check ($c),')
+		}
+		s.go_back(2)
+	}
+	s.writeln('')
+	s.write(');')
+	return s.str()
 }
