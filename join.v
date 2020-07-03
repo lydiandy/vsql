@@ -45,7 +45,7 @@ pub fn (db &DB) join_raw(raw string) &DB {
 // status:done
 fn (db &DB) join_type(typ, table, join_condition string) &DB {
 	mut s := db.stmt as Select
-	name, alias := split_to_arg(table, 'as')
+	name, alias := split_by_separator(table, 'as')
 	s.join << Join{
 		typ: typ
 		table_name: name

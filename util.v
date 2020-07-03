@@ -11,7 +11,7 @@ pub fn split_by_space(str string) (string, string) {
 }
 
 // 'name','name as n','name as n abc'
-pub fn split_to_arg(str, separator string) (string, string) {
+pub fn split_by_separator(str, separator string) (string, string) {
 	args := str.trim_space().split(' ')
 	match args.len {
 		1 {

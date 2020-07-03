@@ -46,7 +46,7 @@ fn (db &DB) add_aggregate_fn(fn_name, column string) {
 		panic('only count function can use *')
 	}
 	if fn_name == 'count' && column.starts_with('*') {
-		name, alias := split_to_arg(column, 'as')
+		name, alias := split_by_separator(column, 'as')
 		new_fn.column_name = name
 		new_fn.column_alias = alias
 	} else {
@@ -57,7 +57,7 @@ fn (db &DB) add_aggregate_fn(fn_name, column string) {
 		} else {
 			col = column
 		}
-		name, alias := split_to_arg(col, 'as')
+		name, alias := split_by_separator(col, 'as')
 		new_fn.column_name = name
 		new_fn.column_alias = alias
 	}

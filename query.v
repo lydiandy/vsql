@@ -2,10 +2,9 @@ module vsql
 
 pub type CallbackFn = fn ()
 
-// the same with from()
 // status:done
 pub fn (db &DB) table(name string) &DB {
-	table_name, table_alias := split_to_arg(name, 'as')
+	table_name, table_alias := split_by_separator(name, 'as')
 	mut select_stmt := Select{
 		table_name: table_name
 		table_alias: table_alias
@@ -19,12 +18,7 @@ pub fn (db &DB) table(name string) &DB {
 }
 
 // status:done
-pub fn (db &DB) from(name string) &DB {
-	return db.table(name)
-}
-
-// status:done
-pub fn (db &DB) select_(columns string) &DB {
+pub fn (db &DB) column(columns string) &DB {
 	mut select_stmt := Select{}
 	if db.stmt is Select {
 		select_stmt.table_name = (db.stmt as Select).table_name
@@ -37,7 +31,7 @@ pub fn (db &DB) select_(columns string) &DB {
 		mut name := ''
 		mut alias := ''
 		for col in column_array {
-			name, alias = split_to_arg(col, 'as')
+			name, alias = split_by_separator(col, 'as')
 			select_stmt.columns << Column{
 				name: name
 				alias: alias
@@ -48,13 +42,16 @@ pub fn (db &DB) select_(columns string) &DB {
 	return db
 }
 
-// TODO
-// pub fn (mut db DB) column(columns ...string) &DB {}
-//
-// the same with select_()
+// the same with table()
 // status:done
-pub fn (db &DB) column(columns string) &DB {
-	return db.select_(columns)
+pub fn (db &DB) from(name string) &DB {
+	return db.table(name)
+}
+
+// the same with column()
+// status:done
+pub fn (db &DB) select_(columns string) &DB {
+	return db.column(columns)
 }
 
 // status:done
@@ -130,7 +127,7 @@ pub fn (db &DB) having(condition string) &DB {
 	return db
 }
 
-//union statement
+// union statement
 // status:wip
 pub fn (db &DB) union_(union_fn CallbackFn) &DB {
 	return db
