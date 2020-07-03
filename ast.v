@@ -26,13 +26,6 @@ pub mut:
 	timeout      int // ms
 }
 
-// table, table('user as u')
-pub struct TableName {
-pub mut:
-	name  string
-	alias string
-}
-
 // select column
 pub struct Column {
 pub mut:
@@ -69,7 +62,7 @@ pub mut:
 	is_distinct  bool
 }
 
-// order_by
+// order by statement
 pub struct OrderBy {
 pub mut:
 	column string
@@ -95,7 +88,7 @@ pub mut:
 pub struct Update {
 pub mut:
 	table_name string
-	data       map[string]string
+	data       map[string]string // TODO:map[string]interface
 	where      []Where
 	returning  []string
 }
@@ -107,13 +100,13 @@ pub mut:
 	where      []Where
 }
 
-// -----------------------------------
-// create database
+// create database statement
 pub struct CreateDatabase {
 pub mut:
 	db_name string
 }
 
+// alter table statement
 pub struct AlterTable {
 pub mut:
 	table_name    string
