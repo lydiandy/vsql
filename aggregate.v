@@ -37,8 +37,7 @@ pub fn (db &DB) avg(column string) &DB {
 
 // status:done
 fn (db &DB) add_aggregate_fn(fn_name, column string) {
-	s := db.stmt as Select
-	s.columns = []Column{}
+	db.stmt.columns = []Column{}
 	mut new_fn := AggregateFn{
 		name: fn_name
 	}
@@ -61,5 +60,5 @@ fn (db &DB) add_aggregate_fn(fn_name, column string) {
 		new_fn.column_name = name
 		new_fn.column_alias = alias
 	}
-	s.aggregate_fn << new_fn
+	db.stmt.aggregate_fn << new_fn
 }

@@ -1,29 +1,50 @@
 module vsql
 
-// the sql statement sum type
-pub type Stmt = AlterTable | CreateDatabase | Delete | DropTable | Insert | RenameTable |
-	Select | Truncate | Update
+// type of stmt
+pub enum StmtType {
+	select_
+	insert
+	update
+	delete
+	create_database
+	create_table
+	alter_table
+	rename_table
+	truncate_table
+	drop_table
+}
 
-// select statement
-pub struct Select {
+// sql statement
+pub struct Stmt {
 pub mut:
-	table_name   string
-	table_alias  string
-	is_distinct  bool
-	columns      []Column // [] is *
-	where        []Where
-	join         []Join
-	join_raw     string
-	first        bool
-	limit        int
-	offset       int
-	order_by     []OrderBy
-	order_by_raw string
-	group_by     []string
-	group_by_raw string
-	having       string
-	aggregate_fn []AggregateFn
-	timeout      int // ms
+	// public
+	typ           StmtType
+	table_name    string
+	table_alias   string
+	// select
+	is_distinct   bool
+	columns       []Column // [] is *
+	where         []Where
+	join          []Join
+	join_raw      string
+	first         bool
+	limit         int
+	offset        int
+	order_by      []OrderBy
+	order_by_raw  string
+	group_by      []string
+	group_by_raw  string
+	having        string
+	aggregate_fn  []AggregateFn
+	// insert,update
+	data          map[string]string // TODO:map[string]interface
+	returning     []string
+	// create_database
+	db_name       string
+	// alter_table
+	alter_content []AlterContent
+	// rename_talbe
+	new_table_name      string
 }
 
 // select column
@@ -75,67 +96,11 @@ pub struct Union {
 	union_fn CallbackFn
 }
 
-// insert statement
-pub struct Insert {
-pub mut:
-	table_name string
-	keys       []string
-	vals       []string
-	returning  []string
-}
-
-// update statement
-pub struct Update {
-pub mut:
-	table_name string
-	data       map[string]string // TODO:map[string]interface
-	where      []Where
-	returning  []string
-}
-
-// delete statement
-pub struct Delete {
-pub mut:
-	table_name string
-	where      []Where
-}
-
-// create database statement
-pub struct CreateDatabase {
-pub mut:
-	db_name string
-}
-
 // alter table statement
-pub struct AlterTable {
-pub mut:
-	table_name    string
-	alter_content []AlterContent
-}
-
 pub struct AlterContent {
 	typ         string // create_column,rename_column,drop_column,has_column,drop_index,drop_foreign,drop_unique,drop_primary
 	new_column  NewColumn // for create new column
 	new_name    string // for rename
 	old_name    string // for rename
 	column_name string // for drop
-}
-
-// rename table
-pub struct RenameTable {
-pub mut:
-	old_name string
-	new_name string
-}
-
-// drop table
-pub struct DropTable {
-pub mut:
-	table_name string
-}
-
-// truncate table
-pub struct Truncate {
-pub mut:
-	table_name string
 }

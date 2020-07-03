@@ -8,10 +8,8 @@ pub type CreateTableFn = fn (table Table)
 // create database
 // status:done
 pub fn (db &DB) create_database(name string) []pg.Row {
-	create_stmt := CreateDatabase{
-		db_name: name
-	}
-	db.stmt = create_stmt
+	db.stmt.typ = .create_database
+	db.stmt.db_name = name
 	return db.end()
 }
 
@@ -47,21 +45,17 @@ pub fn (db &DB) alter_table() &DB {
 // rename table
 // status:done
 pub fn (db &DB) rename_table(old_name, new_name string) []pg.Row {
-	rename_stmt := RenameTable{
-		old_name: old_name
-		new_name: new_name
-	}
-	db.stmt = rename_stmt
+	db.stmt.typ = .rename_table
+	db.stmt.table_name = old_name
+	db.stmt.new_table_name = new_name
 	return db.end()
 }
 
 // drop table
 // status:done
 pub fn (db &DB) drop_table(name string) []pg.Row {
-	drop_stmt := DropTable{
-		table_name: name
-	}
-	db.stmt = drop_stmt
+	db.stmt.typ = .drop_table
+	db.stmt.table_name = name
 	return db.end()
 }
 
@@ -131,9 +125,7 @@ pub fn (db &DB) has_column(table_name, column_name string) bool {
 // truncate table
 // status:done
 pub fn (db &DB) truncate(name string) []pg.Row {
-	truncate_stmt := Truncate{
-		table_name: name
-	}
-	db.stmt = truncate_stmt
+	db.stmt.typ = .truncate_table
+	db.stmt.table_name = name
 	return db.end()
 }

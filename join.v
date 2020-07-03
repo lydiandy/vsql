@@ -37,16 +37,14 @@ pub fn (db &DB) cross_join(table string) &DB {
 
 // status:done
 pub fn (db &DB) join_raw(raw string) &DB {
-	mut s := db.stmt as Select
-	s.join_raw = raw
+	db.stmt.join_raw = raw
 	return db
 }
 
 // status:done
 fn (db &DB) join_type(typ, table, join_condition string) &DB {
-	mut s := db.stmt as Select
 	name, alias := split_by_separator(table, 'as')
-	s.join << Join{
+	db.stmt.join << Join{
 		typ: typ
 		table_name: name
 		table_alias: alias

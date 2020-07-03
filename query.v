@@ -5,40 +5,28 @@ pub type CallbackFn = fn ()
 // status:done
 pub fn (db &DB) table(name string) &DB {
 	table_name, table_alias := split_by_separator(name, 'as')
-	mut select_stmt := Select{
-		table_name: table_name
-		table_alias: table_alias
-	}
-	if db.stmt is Select {
-		select_stmt.columns = (db.stmt as Select).columns
-		select_stmt.is_distinct = (db.stmt as Select).is_distinct
-	}
-	db.stmt = select_stmt
+	db.stmt.typ = .select_
+	db.stmt.table_name = table_name
+	db.stmt.table_alias = table_alias
 	return db
 }
 
 // status:done
 pub fn (db &DB) column(columns string) &DB {
-	mut select_stmt := Select{}
-	if db.stmt is Select {
-		select_stmt.table_name = (db.stmt as Select).table_name
-		select_stmt.table_alias = (db.stmt as Select).table_alias
-	}
 	if columns in [' ', '*'] {
-		select_stmt.columns = []Column{}
+		db.stmt.columns = []Column{}
 	} else {
 		column_array := columns.split(',')
-		mut name := ''
-		mut alias := ''
+		// mut name := ''
+		// mut alias := ''
 		for col in column_array {
-			name, alias = split_by_separator(col, 'as')
-			select_stmt.columns << Column{
+			name, alias := split_by_separator(col, 'as') // deal with column and column alias,like:column('id,name as name2,age as age2')
+			db.stmt.columns << Column{
 				name: name
 				alias: alias
 			}
 		}
 	}
-	db.stmt = select_stmt
 	return db
 }
 
@@ -56,49 +44,42 @@ pub fn (db &DB) select_(columns string) &DB {
 
 // status:done
 pub fn (db &DB) first() &DB {
-	s := db.stmt as Select
-	s.first = true
+	db.stmt.first = true
 	return db
 }
 
 // status:done
 pub fn (db &DB) limit(num int) &DB {
-	s := db.stmt as Select
-	s.limit = num
+	db.stmt.limit = num
 	return db
 }
 
 // status:done
 pub fn (db &DB) offset(num int) &DB {
-	s := db.stmt as Select
-	s.offset = num
+	db.stmt.offset = num
 	return db
 }
 
 // status:done
 pub fn (db &DB) distinct() &DB {
-	s := db.stmt as Select
-	s.is_distinct = true
+	db.stmt.is_distinct = true
 	return db
 }
 
 // status:done
 pub fn (db &DB) group_by(column string) &DB {
-	s := db.stmt as Select
-	s.group_by << column
+	db.stmt.group_by << column
 	return db
 }
 
 // status:done
 pub fn (db &DB) group_by_raw(raw string) &DB {
-	mut s := db.stmt as Select
-	s.group_by_raw = raw
+	db.stmt.group_by_raw = raw
 	return db
 }
 
 // status:done
 pub fn (db &DB) order_by(column string) &DB {
-	s := db.stmt as Select
 	col, mut order := split_by_space(column)
 	if order == '' {
 		order = 'asc'
@@ -106,7 +87,7 @@ pub fn (db &DB) order_by(column string) &DB {
 	if order !in ['asc', 'desc'] {
 		panic('order by must be asc or desc')
 	}
-	s.order_by << OrderBy{
+	db.stmt.order_by << OrderBy{
 		column: col
 		order: order
 	}
@@ -115,15 +96,13 @@ pub fn (db &DB) order_by(column string) &DB {
 
 // status:done
 pub fn (db &DB) order_by_raw(raw string) &DB {
-	mut s := db.stmt as Select
-	s.order_by_raw = raw
+	db.stmt.order_by_raw = raw
 	return db
 }
 
 // status:done
 pub fn (db &DB) having(condition string) &DB {
-	s := db.stmt as Select
-	s.having = condition
+	db.stmt.having = condition
 	return db
 }
 

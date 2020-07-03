@@ -2,14 +2,7 @@ module vsql
 
 // print sql to object struct for debug
 pub fn (db &DB) print_obj() &DB {
-	stmt := db.stmt
-	match stmt {
-		Select { println(stmt) }
-		Insert { println(stmt) }
-		Update { println(stmt) }
-		Delete { println(stmt) }
-		else { println('unknown struct') }
-	}
+	println(db.stmt)
 	return db
 }
 
@@ -25,7 +18,7 @@ pub fn (db &DB) print_sql() &DB {
 pub fn (db &DB) to_sql() string {
 	s := db.gen_sql()
 	// after to_sql clear the db.stmt,that do not impact next sql
-	db.stmt = Select{}
+	db.stmt = Stmt{}
 	return s
 }
 

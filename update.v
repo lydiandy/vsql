@@ -4,47 +4,23 @@ module vsql
 // status: done
 // todo:map[string]string => map[string]interface{}
 pub fn (db &DB) insert(data map[string]string) &DB {
-	mut insert_stmt := Insert{
-		keys: []
-		vals: []
-		returning: []
-	}
-	if db.stmt is Select {
-		insert_stmt.table_name = (db.stmt as Select).table_name
-	}
-	for key, val in data {
-		insert_stmt.keys << key
-		insert_stmt.vals << val
-	}
-	db.stmt = insert_stmt
+	db.stmt.typ = .insert
+	db.stmt.data = data
 	return db
 }
 
 // status:done
 pub fn (db &DB) into(name string) &DB {
-	s := db.stmt as Insert
-	s.table_name = name
+	db.stmt.table_name = name
 	return db
 }
 
 // only use for pg,mysql
 // status:done
 pub fn (db &DB) returning(column string, other_columns ...string) &DB {
-	stmt := db.stmt
-	match stmt {
-		Insert {
-			stmt.returning << column
-			for c in other_columns {
-				stmt.returning << c
-			}
-		}
-		Update {
-			stmt.returning << column
-			for c in other_columns {
-				stmt.returning << c
-			}
-		}
-		else {}
+	db.stmt.returning << column
+	for c in other_columns {
+		db.stmt.returning << c
 	}
 	return db
 }
@@ -52,11 +28,8 @@ pub fn (db &DB) returning(column string, other_columns ...string) &DB {
 // update statement
 // staus:done
 pub fn (db &DB) update(data map[string]string) &DB { // TODO:map[string]interface
-	mut update_stmt := Update{
-		table_name: (db.stmt as Select).table_name
-		data: data
-	}
-	db.stmt = update_stmt
+	db.stmt.typ = .update
+	db.stmt.data = data
 	return db
 }
 
@@ -73,10 +46,6 @@ pub fn (db &DB) decrement(column string) &DB {
 // delete statement
 // staus:done
 pub fn (db &DB) delete() &DB {
-	delete_stmt := Delete{
-		table_name: (db.stmt as Select).table_name
-		where: (db.stmt as Select).where
-	}
-	db.stmt = delete_stmt
+	db.stmt.typ = .delete
 	return db
 }

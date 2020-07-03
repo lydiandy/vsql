@@ -1,9 +1,7 @@
 module vsql
 
-pub fn (db DB) up() {
-	
+pub fn (db &DB) up() {
 }
 
-pub fn(db DB) down() {
-	
+pub fn (db &DB) down() {
 }

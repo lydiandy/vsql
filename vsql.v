@@ -53,6 +53,6 @@ pub fn (db &DB) end() []pg.Row {
 	// println(s)
 	res := db.exec(s)
 	// after exec clear the db.stmt,that do not impact next sql
-	db.stmt = Select{}
+	db.stmt = Stmt{}
 	return res
 }

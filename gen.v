@@ -6,8 +6,8 @@ import strings
 pub fn (db &DB) gen_sql() string {
 	mut s := strings.new_builder(200)
 	stmt := db.stmt
-	match stmt {
-		Select {
+	match stmt.typ {
+		.select_ {
 			s.write('select ')
 			if stmt.is_distinct {
 				s.write('distinct ')
@@ -109,21 +109,27 @@ pub fn (db &DB) gen_sql() string {
 			}
 			s.go_back(1)
 		}
-		Insert {
+		.insert {
 			s.write('insert into ')
 			s.write('$stmt.table_name ')
 			// write data
 			s.write('(')
-			for key in stmt.keys {
+			mut keys:=[]string{}
+			mut vals:=[]string{}
+			for key,val in stmt.data {
+				keys<<key
+				vals<<val
+			}
+			for key in keys {
 				s.write('$key,')
 			}
 			s.go_back(1)
 			s.write(')')
 			s.write(' values ')
 			s.write('(')
-			for len, val in stmt.vals {
+			for len, val in vals {
 				s.write("\'$val\'")
-				if len < stmt.vals.len - 1 {
+				if len < vals.len - 1 {
 					s.write(',')
 				}
 			}
@@ -137,7 +143,7 @@ pub fn (db &DB) gen_sql() string {
 				s.go_back(1)
 			}
 		}
-		Update {
+		.update {
 			s.write('update ')
 			s.write('$stmt.table_name ')
 			s.write('set ')
@@ -156,24 +162,27 @@ pub fn (db &DB) gen_sql() string {
 				s.go_back(1)
 			}
 		}
-		Delete {
+		.delete {
 			s.write('delete from ')
 			s.write('$stmt.table_name ')
 			// where statement
 			db.write_where(&stmt.where, &s)
 		}
-		CreateDatabase {
+		.create_database {
 			s.write('create database $stmt.db_name')
 		}
-		AlterTable {}
-		RenameTable {
-			s.write('alter table $stmt.old_name rename to $stmt.new_name')
+		.alter_table {}
+		.rename_table {
+			s.write('alter table $stmt.table_name rename to $stmt.new_table_name')
 		}
-		DropTable {
+		.drop_table {
 			s.write('drop table $stmt.table_name')
 		}
-		Truncate {
+		.truncate_table {
 			s.write('truncate table $stmt.table_name')
+		}
+		else {
+			panic('unknown statement,sql generate failed')
 		}
 	}
 	return s.str()

@@ -17,13 +17,7 @@ pub fn (db &DB) where_raw(raw string, args ...string) &DB { // TODO: interface t
 		typ: 'where_raw'
 		condition: condition
 	}
-	stmt := db.stmt
-	match stmt {
-		Select { stmt.where << w }
-		Update { stmt.where << w }
-		Delete { stmt.where << w }
-		else { panic('unknown where clause') }
-	}
+	db.stmt.where << w
 	return db
 }
 
@@ -35,13 +29,7 @@ fn (db &DB) where_type(typ, operator, condition string) &DB {
 		operator: operator
 		condition: condition
 	}
-	stmt := db.stmt
-	match stmt {
-		Select { stmt.where << w }
-		Update { stmt.where << w }
-		Delete { stmt.where << w }
-		else { panic('unknown where clause') }
-	}
+	db.stmt.where << w
 	return db
 }
 
@@ -78,13 +66,7 @@ fn (db &DB) where_in_type(typ, operator, column string, range []string) &DB {
 		column_name: column
 		range: range
 	}
-	stmt := db.stmt
-	match stmt {
-		Select { stmt.where << w }
-		Update { stmt.where << w }
-		Delete { stmt.where << w }
-		else { panic('unknown where clause') }
-	}
+	db.stmt.where << w
 	return db
 }
 
@@ -120,13 +102,7 @@ fn (db &DB) where_null_type(typ, operator, column string) &DB {
 		operator: operator
 		column_name: column
 	}
-	stmt := db.stmt
-	match stmt {
-		Select { stmt.where << w }
-		Update { stmt.where << w }
-		Delete { stmt.where << w }
-		else { panic('unknown where clause') }
-	}
+	db.stmt.where << w
 	return db
 }
 
@@ -163,13 +139,7 @@ fn (db &DB) where_between_type(typ, operator, column string, range []string) &DB
 		column_name: column
 		range: range
 	}
-	stmt := db.stmt
-	match stmt {
-		Select { stmt.where << w }
-		Update { stmt.where << w }
-		Delete { stmt.where << w }
-		else { panic('unknown where clause') }
-	}
+	db.stmt.where << w
 	return db
 }
 
@@ -206,13 +176,7 @@ fn (db &DB) where_exists_type(typ, operator, stmt string) &DB {
 		operator: operator
 		exist_stmt: stmt
 	}
-	s := db.stmt
-	match s {
-		Select { s.where << w }
-		Update { s.where << w }
-		Delete { s.where << w }
-		else { panic('unknown where clause') }
-	}
+	db.stmt.where << w
 	return db
 }
 
