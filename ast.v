@@ -36,6 +36,10 @@ pub mut:
 	group_by_raw   string
 	having         string
 	aggregate_fn   []AggregateFn
+	// union statement
+	union_type     string
+	union_stmts    []string
+	// union_stmt     UnionStmt
 	// insert,update
 	data           map[string]string // TODO:map[string]interface
 	returning      []string
@@ -91,9 +95,10 @@ pub mut:
 }
 
 // union statement
-pub struct Union {
-	tye      string // union,union_all,intersect
-	union_fn CallbackFn
+pub struct UnionStmt {
+pub mut:
+	typ   string // union,union all,intersect,except
+	stmts []string
 }
 
 // alter table statement

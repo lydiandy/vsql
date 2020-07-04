@@ -1,7 +1,5 @@
 module vsql
 
-pub type CallbackFn = fn ()
-
 // status:done
 pub fn (db &DB) table(name string) &DB {
 	table_name, table_alias := split_by_separator(name, 'as')
@@ -107,24 +105,34 @@ pub fn (db &DB) having(condition string) &DB {
 }
 
 // union statement
-// status:wip
-pub fn (db &DB) union_(union_fn CallbackFn) &DB {
+// status:done
+pub fn (db &DB) union_type(typ, stmt string, other_stmts ...string) &DB {
+	db.stmt.union_type = typ
+	db.stmt.union_stmts << stmt
+	for s in other_stmts {
+		db.stmt.union_stmts << s
+	}
 	return db
 }
 
-// status:wip
-pub fn (db &DB) union_all(union_fn CallbackFn) &DB {
-	return db
+// status:done
+pub fn (db &DB) union_(stmt string, other_stmts ...string) &DB {
+	return db.union_type('union', stmt, other_stmts)
 }
 
-// status:wip
-pub fn (db &DB) intersect(union_fn CallbackFn) &DB {
-	return db
+// status:done
+pub fn (db &DB) union_all(stmt string, other_stmts ...string) &DB {
+	return db.union_type('union all', stmt, other_stmts)
 }
 
-// status:wip
-pub fn (db &DB) except(union_fn CallbackFn) &DB {
-	return db
+// status:done
+pub fn (db &DB) intersect(stmt string, other_stmts ...string) &DB {
+	return db.union_type('intersect', stmt, other_stmts)
+}
+
+// status:done
+pub fn (db &DB) except(stmt string, other_stmts ...string) &DB {
+	return db.union_type('except', stmt, other_stmts)
 }
 
 // result to struct

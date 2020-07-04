@@ -21,7 +21,8 @@ fn main() {
 
 	//union
 	db.table('person').select_('id','name','age').union_(fn() {
-		db.table('person2').select_('id','name','age')
+		db.table('person2').select_('id','name','age').end()
+		db.table('person2').select_('id','name','age').end()
 	}).order_by('id asc')
 
 	//shcema ddl

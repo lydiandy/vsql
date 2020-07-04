@@ -107,6 +107,13 @@ pub fn (db &DB) gen_sql() string {
 			if stmt.having != '' {
 				s.write('having $stmt.having ')
 			}
+			// union statement
+			if stmt.union_stmts.len > 0 {
+				for us in stmt.union_stmts {
+					s.write('$stmt.union_type ')
+					s.write('$us ')
+				}
+			}
 			s.go_back(1)
 		}
 		.insert {
