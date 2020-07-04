@@ -557,6 +557,16 @@ db.down()
 
 ```
 
+### run vsql test
+
+all the test sql statement are in vsql/test,you can run the test by:
+
+```shell
+v test vsql/test
+```
+
+
+
 ## Acknowledgments
 
 Inspired by [knex](https://github.com/knex/knex),it was my favorite sql query builder before I meet V.
