@@ -73,10 +73,6 @@ pub fn (db &DB) gen_sql() string {
 			if stmt.offset > 0 {
 				s.write('offset $stmt.offset ')
 			}
-			// first
-			if stmt.first {
-				s.write('limit 1 ')
-			}
 			// limit
 			if stmt.limit > 0 {
 				s.write('limit $stmt.limit ')

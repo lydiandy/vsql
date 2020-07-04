@@ -2,7 +2,7 @@ module vsql
 
 // status:done
 pub fn (db &DB) table(name string) &DB {
-	table_name, table_alias := split_by_separator(name, 'as')// select * from person or select * from person as p
+	table_name, table_alias := split_by_separator(name, 'as') // select * from person or select * from person as p
 	db.stmt.typ = .select_
 	db.stmt.table_name = table_name
 	db.stmt.table_alias = table_alias
@@ -40,12 +40,15 @@ pub fn (db &DB) select_(columns string) &DB {
 
 // status:done
 pub fn (db &DB) first() &DB {
-	db.stmt.first = true
+	db.stmt.limit = 1
 	return db
 }
 
 // status:done
 pub fn (db &DB) limit(num int) &DB {
+	if num <= 0 {
+		panic('limit must great zero')
+	}
 	db.stmt.limit = num
 	return db
 }

@@ -27,7 +27,6 @@ pub mut:
 	where          []Where
 	join           []Join
 	join_raw       string
-	first          bool
 	limit          int
 	offset         int
 	order_by       []OrderBy
