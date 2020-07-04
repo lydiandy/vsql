@@ -1,15 +1,15 @@
 module vsql
 
-// print sql to object struct for debug
-pub fn (db &DB) print_obj() &DB {
-	println(db.stmt)
-	return db
-}
-
 // print sql string for debug
 pub fn (db &DB) print_sql() &DB {
 	s := db.gen_sql()
 	println(s)
+	return db
+}
+
+// print sql to object struct for debug
+pub fn (db &DB) print_obj() &DB {
+	println(db.stmt)
 	return db
 }
 
@@ -22,14 +22,6 @@ pub fn (db &DB) to_sql() string {
 	return s
 }
 
-// debug mode
-pub fn (db &DB) debug() {
-}
-
-// timeout,only mysql pg
-pub fn (db &DB) timeout(during int) {
-}
-
 // ----------
 // create table print sql string for debug
 pub fn (t &Table) print_sql() &Table {
@@ -38,8 +30,22 @@ pub fn (t &Table) print_sql() &Table {
 	return t
 }
 
+// create table print sql to object struct for debug
+pub fn (t &Table) print_obj() &Table {
+	println(t)
+	return t
+}
+
 // create table generate sql string for debug
 pub fn (t &Table) to_sql() string {
 	s := t.gen_table_sql()
 	return s
+}
+
+// debug mode
+pub fn (db &DB) debug() {
+}
+
+// timeout,only mysql pg
+pub fn (db &DB) timeout(during int) {
 }
