@@ -312,6 +312,8 @@ select avg(income) from person
 
 #### union
 
+union is a key word of v,so use union_()
+
 ```sql
 stmt1 := db.table('person').column('id,name').where('id=1').to_sql()
 stmt2 := db.table('person').column('id,name').where('id=2').to_sql()
@@ -381,9 +383,10 @@ db.create_table('person2', fn (mut table vsql.Table) {
 		//table.increment('id').primary()
 		table.increment('id')          
 		table.boolean('is_ok')
+		//string is a key word of v, so use string_
 		table.string_('open_id', 255).size(100).unique()
 		table.datetime('attend_time')
-		table.string_('form_id', 255).not_null()
+		table.string_('form_id', 255).not_null() 
 		table.integer('is_send').default_to('1')
 		table.decimal('amount', 10, 2).not_null().check('amount>0')
 		//table constraint
