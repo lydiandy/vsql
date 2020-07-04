@@ -82,59 +82,77 @@ fn test_select() {
 	res = db.table('person').column('id,name,age').where('id=1').or_where_in('id', ['1', '2', '3']).to_sql()
 	assert res == 'select id,name,age from person where (id=1) or (id in (1,2,3))'
 	// and where in
-	res = db.table('person').column('id,name,age').where('id=1').and_where_in('id', ['1', '2', '3']).to_sql()
+	res = db.table('person').column('id,name,age').where('id=1').and_where_in('id', ['1', '2',
+		'3'
+	]).to_sql()
 	assert res == 'select id,name,age from person where (id=1) and (id in (1,2,3))'
 	// where not in
 	res = db.table('person').column('id,name,age').where('id=1').where_not_in('id', ['2', '3']).to_sql()
 	assert res == 'select id,name,age from person where (id=1) and not (id in (2,3))'
 	// or where not in
-	res = db.table('person').column('id,name,age').where('id=1').or_where_not_in('id', ['2', '3']).to_sql()
+	res = db.table('person').column('id,name,age').where('id=1').or_where_not_in('id',
+		['2', '3']).to_sql()
 	assert res == 'select id,name,age from person where (id=1) or not (id in (2,3))'
-	//where null
+	// where null
 	res = db.table('person').column('id,name,age').where('id>1').where_null('income').to_sql()
 	assert res == 'select id,name,age from person where (id>1) and (income is null)'
-	//or where null
+	// or where null
 	res = db.table('person').column('id,name,age').where('id>1').or_where_null('income').to_sql()
 	assert res == 'select id,name,age from person where (id>1) or (income is null)'
-	//and where null
+	// and where null
 	res = db.table('person').column('id,name,age').where('id>1').and_where_null('income').to_sql()
 	assert res == 'select id,name,age from person where (id>1) and (income is null)'
-	//where not null
+	// where not null
 	res = db.table('person').column('id,name,age').where('id>1').where_not_null('income').to_sql()
 	assert res == 'select id,name,age from person where (id>1) and not (income is null)'
-	//or where not null
+	// or where not null
 	res = db.table('person').column('id,name,age').where('id>1').or_where_not_null('income').to_sql()
 	assert res == 'select id,name,age from person where (id>1) or not (income is null)'
-	//where between
-	res = db.table('person').column('id,name,age,income').where('id>1').where_between('income',['100','1000']).to_sql()
-	assert res== 'select id,name,age,income from person where (id>1) and (income between 100 and 1000)'
-	//or where between
-	res = db.table('person').column('id,name,age,income').where('id>1').or_where_between('income',['100','1000']).to_sql()
-	assert res== 'select id,name,age,income from person where (id>1) or (income between 100 and 1000)'
-	//and where between
-	res = db.table('person').column('id,name,age,income').where('id>1').and_where_between('income',['100','1000']).to_sql()
-	assert res== 'select id,name,age,income from person where (id>1) and (income between 100 and 1000)'
-	//where not between
-	res = db.table('person').column('id,name,age,income').where('id>1').where_not_between('income',['100','1000']).to_sql()
-	assert res== 'select id,name,age,income from person where (id>1) and not (income between 100 and 1000)'
-	//or where not between
-	res = db.table('person').column('id,name,age,income').where('id>1').or_where_not_between('income',['100','1000']).to_sql()
-	assert res== 'select id,name,age,income from person where (id>1) or not (income between 100 and 1000)'
-	//where exists
-	res= db.table('person').column('id,name,age,income').where('id>1').where_exists('select income from person where income>1000').to_sql()
-	assert res=='select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)'
-	//or where exists
-	res= db.table('person').column('id,name,age,income').where('id>1').or_where_exists('select income from person where income>1000').to_sql()
-	assert res=='select id,name,age,income from person where (id>1) or exists (select income from person where income>1000)'
-	//and where exists
-	res= db.table('person').column('id,name,age,income').where('id>1').and_where_exists('select income from person where income>1000').to_sql()
-	assert res=='select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)'
-	//where not exists
-	res= db.table('person').column('id,name,age,income').where('id>1').where_not_exists('select income from person where income>1000').to_sql()
-	assert res=='select id,name,age,income from person where (id>1) and not exists (select income from person where income>1000)'
-	//or where not exists
-	res= db.table('person').column('id,name,age,income').where('id>1').or_where_not_exists('select income from person where income>1000').to_sql()
-	assert res=='select id,name,age,income from person where (id>1) or not exists (select income from person where income>1000)'
+	// where between
+	res = db.table('person').column('id,name,age,income').where('id>1').where_between('income',
+		['100', '1000']).to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) and (income between 100 and 1000)'
+	// or where between
+	res = db.table('person').column('id,name,age,income').where('id>1').or_where_between('income',
+		['100', '1000']).to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) or (income between 100 and 1000)'
+	// and where between
+	res = db.table('person').column('id,name,age,income').where('id>1').and_where_between('income',
+		['100', '1000']).to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) and (income between 100 and 1000)'
+	// where not between
+	res = db.table('person').column('id,name,age,income').where('id>1').where_not_between('income',
+		['100', '1000']).to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) and not (income between 100 and 1000)'
+	// or where not between
+	res = db.table('person').column('id,name,age,income').where('id>1').or_where_not_between('income',
+		['100', '1000']).to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) or not (income between 100 and 1000)'
+	// where exists
+	res = db.table('person').column('id,name,age,income').where('id>1').where_exists('select income from person where income>1000').to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)'
+	// or where exists
+	res = db.table('person').column('id,name,age,income').where('id>1').or_where_exists('select income from person where income>1000').to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) or exists (select income from person where income>1000)'
+	// and where exists
+	res = db.table('person').column('id,name,age,income').where('id>1').and_where_exists('select income from person where income>1000').to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) and exists (select income from person where income>1000)'
+	// where not exists
+	res = db.table('person').column('id,name,age,income').where('id>1').where_not_exists('select income from person where income>1000').to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) and not exists (select income from person where income>1000)'
+	// or where not exists
+	res = db.table('person').column('id,name,age,income').where('id>1').or_where_not_exists('select income from person where income>1000').to_sql()
+	assert res ==
+		'select id,name,age,income from person where (id>1) or not exists (select income from person where income>1000)'
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'
@@ -152,22 +170,26 @@ fn test_select() {
 	assert res == 'select sum(income) from person'
 	res = db.table('person').avg('income').to_sql()
 	assert res == 'select avg(income) from person'
-	//union statement
+	// union statement
 	stmt1 := db.table('person').column('id,name').where('id=1').to_sql()
 	stmt2 := db.table('person').column('id,name').where('id=2').to_sql()
 	stmt3 := db.table('person').column('id,name').where('id=3').to_sql()
-	//union
+	// union
 	res = db.table('person').column('id,name').where('id=4').union_(stmt1, stmt2, stmt3).to_sql()
-	assert res=='select id,name from person where (id=4) union select id,name from person where (id=1) union select id,name from person where (id=2) union select id,name from person where (id=3)'
-	//union all
+	assert res ==
+		'select id,name from person where (id=4) union select id,name from person where (id=1) union select id,name from person where (id=2) union select id,name from person where (id=3)'
+	// union all
 	res = db.table('person').column('id,name').where('id=4').union_all(stmt1, stmt2, stmt3).to_sql()
-	assert res=='select id,name from person where (id=4) union all select id,name from person where (id=1) union all select id,name from person where (id=2) union all select id,name from person where (id=3)'
-	//intersect
+	assert res ==
+		'select id,name from person where (id=4) union all select id,name from person where (id=1) union all select id,name from person where (id=2) union all select id,name from person where (id=3)'
+	// intersect
 	res = db.table('person').column('id,name').where('id=4').intersect(stmt1, stmt2, stmt3).to_sql()
-	assert res=='select id,name from person where (id=4) intersect select id,name from person where (id=1) intersect select id,name from person where (id=2) intersect select id,name from person where (id=3)'
-	//except
+	assert res ==
+		'select id,name from person where (id=4) intersect select id,name from person where (id=1) intersect select id,name from person where (id=2) intersect select id,name from person where (id=3)'
+	// except
 	res = db.table('person').column('id,name').where('id=4').except(stmt1, stmt2, stmt3).to_sql()
-	assert res=='select id,name from person where (id=4) except select id,name from person where (id=1) except select id,name from person where (id=2) except select id,name from person where (id=3)'
+	assert res ==
+		'select id,name from person where (id=4) except select id,name from person where (id=1) except select id,name from person where (id=2) except select id,name from person where (id=3)'
 	// join
 	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').join('person as p',
 		'c.owner_id=p.id').to_sql()
@@ -203,4 +225,13 @@ fn test_select() {
 		'c.owner_id=p.id').left_join('food as f', 'c.id=f.cat_id').to_sql()
 	assert res ==
 		'select c.id,c.name,p.name,p.age,f.name from cat as c left join person as p on c.owner_id=p.id left join food as f on c.id=f.cat_id'
+}
+
+fn test_other_select() {
+	db := connect_and_init_db()
+	mut res := ''
+	res = db.table('person as p').to_sql()
+	assert res == 'select * from person as p'
+	res = db.table('person as p').column('id,name as name2,age as age2').to_sql()
+	assert res == 'select id,name as name2,age as age2 from person as p'
 }

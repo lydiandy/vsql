@@ -1,18 +1,18 @@
 module vsql
 
-// split the string by space, like this:'name','name asc','name desc abc'
-pub fn split_by_space(str string) (string, string) {
-	args := str.trim_space().split(' ')
+// split the string by space, like this:'name'=>('name',''),'name asc'=>('name','asc'),'name desc abc'=> error
+pub fn split_by_space(s string) (string, string) {
+	args := s.trim_space().split(' ')
 	match args.len {
 		1 { return args[0], '' }
 		2 { return args[0], args[1] }
-		else { panic('string split to arg failed,it should be one or tow args,and seperate by space') }
+		else { panic('table name or column name is wrong,it should be one or tow substring,and seperate by space') }
 	}
 }
 
-// split the string by separator, like this:'name','name as n','name as n abc'
-pub fn split_by_separator(str, separator string) (string, string) {
-	args := str.trim_space().split(' ')
+// split the string by separator, like this:'name'=>('name',''),'name as n'=>('name','n'),'name as n abc'=> error
+pub fn split_by_separator(s, separator string) (string, string) {
+	args := s.trim_space().split(' ')
 	match args.len {
 		1 {
 			return args[0], ''
@@ -21,11 +21,11 @@ pub fn split_by_separator(str, separator string) (string, string) {
 			if args[1] == separator {
 				return args[0], args[2]
 			} else {
-				panic('string split to arg failed,it should be one or tow args,and seperate by $separator')
+				panic('table name or column name is wrong,it should be one or tow substring,and seperate by $separator')
 			}
 		}
 		else {
-			panic('string split to arg failed,it should be one or tow args,and seperate by $separator')
+			panic('table name or column name is wrong,it should be one or tow substring,and seperate by $separator')
 		}
 	}
 }

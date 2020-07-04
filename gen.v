@@ -34,7 +34,7 @@ pub fn (db &DB) gen_sql() string {
 				for i, column in stmt.columns {
 					s.write('$column.name')
 					if column.alias != '' {
-						s.write('as ')
+						s.write(' as ')
 						s.write('$column.alias,')
 					} else {
 						s.write(',')
