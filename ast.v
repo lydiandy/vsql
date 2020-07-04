@@ -95,11 +95,11 @@ pub mut:
 }
 
 // union statement
-pub struct UnionStmt {
-pub mut:
-	typ   string // union,union all,intersect,except
-	stmts []string
-}
+// pub struct UnionStmt {
+// pub mut:
+// 	typ   string // union,union all,intersect,except
+// 	stmts []string
+// }
 
 // alter table statement
 pub struct AlterContent {
