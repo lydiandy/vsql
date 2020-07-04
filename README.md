@@ -515,26 +515,6 @@ res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
 	}).order_by('id asc')
 
 	//shcema ddl
-	db.create_table_if_not_exists('person',fn(table Table) {
-		table.increment('id')
-		table.uuid('leader_id').primary().index()
-		table.str('open_id').size(255).uinique()
-		table.datetime('attend_time').nullable()
-		table.str('form_id').not_nullable()
-		table.integer('is_send').default(1)
-		table.decimal('amount').size(10,2).comment('field comment')
-	}) or {
-		panic('wrong')
-	}
-
-	db.create_table('person',fn(t Table) {
-		t.increment('id')
-		t.uuid('leader_id').primary().index()
-		t.str('open_id').size(255).uinique()
-		t.datetime('attend_time').nullable()
-
-	})
-
 	db.alter_table('person',fn(t Table) {
 		t.drop_column('form_id')
 		t.drop_columns('form_id','is_send')
@@ -548,15 +528,7 @@ res:=db.table('person').column('id,name,age').where('id',3).to(&person).end()
 	})
 
 	//transaction
-	//way one 
-	t:=db.transaction()
-
-	t.table('person')....
-	t.table('person')....
-
-	t.commit() //or
-	t.rollback()
-
+  
 	//way two
 	db.transaction(fn(t Transaction) {
 		db.table('person')...
