@@ -91,18 +91,6 @@ pub fn (mut t Table) string_(name string, size int) &NewColumn {
 	return &t.columns.last()
 }
 
-// ??
-pub fn (mut t Table) float(name string, precision, scale int) &NewColumn {
-	column := NewColumn{
-		name: name
-		typ: 'decimal($precision,$scale)'
-		precision: precision
-		scale: scale
-	}
-	t.columns << column
-	return &t.columns.last()
-}
-
 pub fn (mut t Table) decimal(name string, precision, scale int) &NewColumn {
 	column := NewColumn{
 		name: name
