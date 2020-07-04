@@ -11,20 +11,35 @@ fn test_schema() {
 	println(res)
 	// create table
 	db.create_table('person2', fn (mut table vsql.Table) {
-		table.increment('id').primary()
+		// table.increment('id').primary()
+		table.increment('id')
 		table.boolean('is_ok')
 		table.string_('open_id', 255).size(100).unique()
 		table.datetime('attend_time')
 		table.string_('form_id', 255).not_null()
 		table.integer('is_send').default_to('1')
 		table.decimal('amount', 10, 2).not_null().check('amount>0')
-		//
-		// table.primary(['id', 'name'])
-		// table.unique(['id', 'name'])
-		// table.check('age>30').check('age<60')
+		// table constraint
+		table.primary(['id'])
+		table.unique(['id'])
+		table.check('amount>30')
+		table.check('amount<60')
 		result := table.to_sql()
-		assert result ==
-			"create table person2 (\nid serial primary key,\nis_ok boolean,\nopen_id varchar(255) unique,\nattend_time timestamp,\nform_id varchar(255) not null,\nis_send integer default '1',\namount decimal(10,2) not null check (amount>0)\n);"
+		expert := "create table person2 (
+id serial,
+is_ok boolean,
+open_id varchar(255) unique,
+attend_time timestamp,
+form_id varchar(255) not null,
+is_send integer default '1',
+amount decimal(10,2) not null check (amount>0),
+
+primary key (id),
+unique (id),
+check (amount>30),
+check (amount<60)
+);"
+		assert result == expert
 	})
 	// alter table
 	//

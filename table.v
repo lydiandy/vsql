@@ -190,10 +190,9 @@ pub fn (c &NewColumn) primary() &NewColumn {
 }
 
 // pub fn (c &NewColumn) reference(ref string) &NewColumn {
-// 	c.reference = ref // such like this: 'table(column)'
-// 	return c
+// c.reference = ref // such like this: 'table(column)'
+// return c
 // }
-
 pub fn (c &NewColumn) unique() &NewColumn {
 	c.is_unique = true
 	return c
@@ -238,6 +237,11 @@ pub fn (mut t Table) primary(columns []string) &Table {
 
 pub fn (mut t Table) unique(columns []string) &Table {
 	t.uniques = columns
+	return t
+}
+
+pub fn (mut t Table) index(indexs []string) &Table {
+	t.indexs = indexs
 	return t
 }
 

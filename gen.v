@@ -266,7 +266,7 @@ pub fn (t &Table) gen_table_sql() string {
 			s.write('index $column.index ')
 		}
 		// if column.reference != '' {
-		// 	s.write('references \'$column.reference\' ')
+		// s.write('references \'$column.reference\' ')
 		// }
 		if column.is_first {
 		}
@@ -283,8 +283,11 @@ pub fn (t &Table) gen_table_sql() string {
 	if t.primarys.len == 0 && t.uniques.len == 0 && t.checks.len == 0 {
 		s.go_back(2)
 	}
-	// s.writeln('')
+	//
 	// table constraint
+	if t.primarys.len > 0 || t.uniques.len > 0 || t.indexs.len > 0 || t.checks.len > 0 {
+		s.writeln('')
+	}
 	// primary key
 	if t.primarys.len > 0 {
 		s.write('primary key (')
@@ -302,6 +305,9 @@ pub fn (t &Table) gen_table_sql() string {
 		}
 		s.go_back(1)
 		s.writeln('),')
+	}
+	if t.indexs.len > 0 {
+		// TODO
 	}
 	// check
 	if t.checks.len > 0 {
