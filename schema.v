@@ -3,7 +3,7 @@ module vsql
 // import database.sql
 import dialect.pg
 
-pub type CreateTableFn = fn (tablemut  Table)
+pub type CreateTableFn = fn (mut tablemut  Table)
 
 // create database
 // status:done
