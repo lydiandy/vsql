@@ -29,3 +29,17 @@ pub fn (db &DB) debug() {
 // timeout,only mysql pg
 pub fn (db &DB) timeout(during int) {
 }
+
+// ----------
+// create table print sql string for debug
+pub fn (t &Table) print_sql() &Table {
+	s := t.gen_table_sql()
+	println(s)
+	return t
+}
+
+// create table generate sql string for debug
+pub fn (t &Table) to_sql() string {
+	s := t.gen_table_sql()
+	return s
+}

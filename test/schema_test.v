@@ -15,18 +15,17 @@ fn test_schema() {
 		table.boolean('is_ok')
 		table.string_('open_id', 255).size(100).unique()
 		table.datetime('attend_time')
-		table.string_('form_id', 255).not_null().reference('person(id)')
+		table.string_('form_id', 255).not_null()
 		table.integer('is_send').default_to('1')
 		table.decimal('amount', 10, 2).not_null().check('amount>0')
 		//
-		table.primary(['id', 'name'])
-		table.unique(['id', 'name'])
-		table.check('age>30').check('age<60')
+		// table.primary(['id', 'name'])
+		// table.unique(['id', 'name'])
+		// table.check('age>30').check('age<60')
 		result := table.to_sql()
-		assert result == ''
-	}) or {
-		panic('create table failed:$err')
-	}
+		assert result ==
+			"create table person2 (\nid serial primary key,\nis_ok boolean,\nopen_id varchar(255) unique,\nattend_time timestamp,\nform_id varchar(255) not null,\nis_send integer default '1',\namount decimal(10,2) not null check (amount>0)\n);"
+	})
 	// alter table
 	//
 	// rename table

@@ -180,63 +180,63 @@ pub fn (mut t Table) jsonb(name string) &NewColumn {
 
 // ---------
 // column method can be chain call after create column
-pub fn (mut c NewColumn) size(size int) &NewColumn {
+pub fn (c &NewColumn) size(size int) &NewColumn {
 	c.size = size
 	return c
 }
 
-pub fn (mut c NewColumn) precision(precision, scale int) &NewColumn {
+pub fn (c &NewColumn) precision(precision, scale int) &NewColumn {
 	c.precision = precision
 	c.scale = scale
 	return c
 }
 
-pub fn (mut c NewColumn) increment() &NewColumn {
+pub fn (c &NewColumn) increment() &NewColumn {
 	c.is_increment = true
 	return c
 }
 
-pub fn (mut c NewColumn) primary() &NewColumn {
+pub fn (c &NewColumn) primary() &NewColumn {
 	c.is_primary = true
 	return c
 }
 
-pub fn (mut c NewColumn) reference(ref string) &NewColumn {
-	c.reference = ref // such like this: 'table(column)'
-	return c
-}
+// pub fn (c &NewColumn) reference(ref string) &NewColumn {
+// 	c.reference = ref // such like this: 'table(column)'
+// 	return c
+// }
 
-pub fn (mut c NewColumn) unique() &NewColumn {
+pub fn (c &NewColumn) unique() &NewColumn {
 	c.is_unique = true
 	return c
 }
 
-pub fn (mut c NewColumn) not_null() &NewColumn {
+pub fn (c &NewColumn) not_null() &NewColumn {
 	c.is_not_null = true
 	return c
 }
 
-pub fn (mut c NewColumn) default_to(value string) &NewColumn {
+pub fn (c &NewColumn) default_to(value string) &NewColumn {
 	c.default_value = value
 	return c
 }
 
-pub fn (mut c NewColumn) check(check string) &NewColumn {
+pub fn (c &NewColumn) check(check string) &NewColumn {
 	c.check = check
 	return c
 }
 
-pub fn (mut c NewColumn) first() &NewColumn {
+pub fn (c &NewColumn) first() &NewColumn {
 	c.is_first = true
 	return c
 }
 
-pub fn (mut c NewColumn) after(column string) &NewColumn {
+pub fn (c &NewColumn) after(column string) &NewColumn {
 	c.after = column
 	return c
 }
 
-pub fn (mut c NewColumn) collate(column string) &NewColumn {
+pub fn (c &NewColumn) collate(column string) &NewColumn {
 	c.collate = column
 	return c
 }

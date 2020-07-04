@@ -114,9 +114,9 @@ pub fn (db &DB) gen_sql() string {
 			s.write('$stmt.table_name ')
 			// write data
 			s.write('(')
-			mut keys:=[]string{}
-			mut vals:=[]string{}
-			for key,val in stmt.data {
+			mut keys := []string{}
+			mut vals := []string{}
+			for key, val in stmt.data {
 				keys << key
 				vals << val
 			}
@@ -183,7 +183,6 @@ pub fn (db &DB) gen_sql() string {
 		.truncate_table {
 			s.write('truncate table $stmt.table_name')
 		}
-
 	}
 	return s.str()
 }
@@ -237,13 +236,14 @@ pub fn (db &DB) write_where(where &[]Where, s &strings.Builder) {
 }
 
 // generate create table stmt to sql string
-pub fn (db &DB) gen_table_sql(t Table) string {
+pub fn (t &Table) gen_table_sql() string {
 	mut s := strings.new_builder(200)
 	s.write('create table $t.name (')
 	if t.columns.len == 0 {
 		s.write(');')
 		return s.str()
 	}
+	s.writeln('')
 	for column in t.columns {
 		s.write('$column.name ')
 		s.write('$column.typ ')
@@ -265,9 +265,9 @@ pub fn (db &DB) gen_table_sql(t Table) string {
 		if column.index != '' {
 			s.write('index $column.index ')
 		}
-		if column.reference != '' {
-			s.write('references $column.reference ')
-		}
+		// if column.reference != '' {
+		// 	s.write('references \'$column.reference\' ')
+		// }
 		if column.is_first {
 		}
 		if column.after != '' {
@@ -275,9 +275,9 @@ pub fn (db &DB) gen_table_sql(t Table) string {
 		if column.collate != '' {
 		}
 		if column.check != '' {
-			s.write('check ($column.check)')
+			s.write('check ($column.check) ')
 		}
-		// s.go_back(1)
+		s.go_back(1)
 		s.writeln(',')
 	}
 	if t.primarys.len == 0 && t.uniques.len == 0 && t.checks.len == 0 {

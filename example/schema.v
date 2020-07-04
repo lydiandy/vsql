@@ -1,4 +1,4 @@
-//before you run the example,run create_and_init_db.v first
+// before you run the example,run create_and_init_db.v first
 module main
 
 import vsql
@@ -22,23 +22,19 @@ fn main() {
 	res = db.create_database('mydb')
 	println(res)
 	// create table
-	// db.create_table('person2', fn (mut table vsql.Table) {
-	// 	table.increment('id').primary()
-	// 	table.boolean('is_ok')
-	// 	table.string_('open_id', 255).size(100).unique()
-	// 	table.datetime('attend_time')
-	// 	table.string_('form_id', 255).not_null().reference('person(id)')
-	// 	table.integer('is_send').default_to('1')
-	// 	table.decimal('amount', 10, 2).not_null().check('amount>0')
-	// 	//
-	// 	table.primary(['id', 'name'])
-	// 	table.unique(['id', 'name'])
-	// 	table.check('age>30').check('age<60')
-	// 	result := table.end()
-	// 	assert result == ''
-	// }) or {
-	// 	panic('create table failed:$err')
-	// }
+	db.create_table('person2', fn (mut table vsql.Table) {
+		table.increment('id').primary()
+		table.boolean('is_ok')
+		table.string_('open_id', 255).size(100).unique()
+		table.datetime('attend_time')
+		table.string_('form_id', 255).not_null()
+		table.integer('is_send').default_to('1')
+		table.decimal('amount', 10, 2).not_null().check('amount>0')
+		//
+		// table.primary(['id', 'name'])
+		// table.unique(['id', 'name'])
+		// table.check('age>30').check('age<60')
+	})
 	// alter table
 	//
 	// rename table

@@ -18,33 +18,33 @@ pub enum StmtType {
 pub struct Stmt {
 pub mut:
 	// public
-	typ           StmtType
-	table_name    string
-	table_alias   string
+	typ            StmtType
+	table_name     string
+	table_alias    string
 	// select
-	is_distinct   bool
-	columns       []Column // [] is *
-	where         []Where
-	join          []Join
-	join_raw      string
-	first         bool
-	limit         int
-	offset        int
-	order_by      []OrderBy
-	order_by_raw  string
-	group_by      []string
-	group_by_raw  string
-	having        string
-	aggregate_fn  []AggregateFn
+	is_distinct    bool
+	columns        []Column // [] is *
+	where          []Where
+	join           []Join
+	join_raw       string
+	first          bool
+	limit          int
+	offset         int
+	order_by       []OrderBy
+	order_by_raw   string
+	group_by       []string
+	group_by_raw   string
+	having         string
+	aggregate_fn   []AggregateFn
 	// insert,update
-	data          map[string]string // TODO:map[string]interface
-	returning     []string
+	data           map[string]string // TODO:map[string]interface
+	returning      []string
 	// create_database
-	db_name       string
+	db_name        string
 	// alter_table
-	alter_content []AlterContent
+	alter_content  []AlterContent
 	// rename_talbe
-	new_table_name      string
+	new_table_name string
 }
 
 // select column
