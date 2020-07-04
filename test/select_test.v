@@ -152,6 +152,22 @@ fn test_select() {
 	assert res == 'select sum(income) from person'
 	res = db.table('person').avg('income').to_sql()
 	assert res == 'select avg(income) from person'
+	//union statement
+	stmt1 := db.table('person').column('id,name').where('id=1').to_sql()
+	stmt2 := db.table('person').column('id,name').where('id=2').to_sql()
+	stmt3 := db.table('person').column('id,name').where('id=3').to_sql()
+	//union
+	res = db.table('person').column('id,name').where('id=4').union_(stmt1, stmt2, stmt3).to_sql()
+	assert res=='select id,name from person where (id=4) union select id,name from person where (id=1) union select id,name from person where (id=2) union select id,name from person where (id=3)'
+	//union all
+	res = db.table('person').column('id,name').where('id=4').union_all(stmt1, stmt2, stmt3).to_sql()
+	assert res=='select id,name from person where (id=4) union all select id,name from person where (id=1) union all select id,name from person where (id=2) union all select id,name from person where (id=3)'
+	//intersect
+	res = db.table('person').column('id,name').where('id=4').intersect(stmt1, stmt2, stmt3).to_sql()
+	assert res=='select id,name from person where (id=4) intersect select id,name from person where (id=1) intersect select id,name from person where (id=2) intersect select id,name from person where (id=3)'
+	//except
+	res = db.table('person').column('id,name').where('id=4').except(stmt1, stmt2, stmt3).to_sql()
+	assert res=='select id,name from person where (id=4) except select id,name from person where (id=1) except select id,name from person where (id=2) except select id,name from person where (id=3)'
 	// join
 	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').join('person as p',
 		'c.owner_id=p.id').to_sql()

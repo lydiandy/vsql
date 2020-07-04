@@ -18,13 +18,7 @@ import vsql.dialect.mssql
 fn main() {
 	//result to variable
 	db.table('person').column('id,name,age').where('id',3).to(&person).end()
-
-	//union
-	db.table('person').select_('id','name','age').union_(fn() {
-		db.table('person2').select_('id','name','age').end()
-		db.table('person2').select_('id','name','age').end()
-	}).order_by('id asc')
-
+	
 	//shcema ddl
 	db.alter_table('person',fn(t Table) {
 		t.drop_column('form_id')

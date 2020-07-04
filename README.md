@@ -310,6 +310,18 @@ res := db.table('person').avg('income').end()
 select avg(income) from person
 ```
 
+#### union
+
+```sql
+stmt1 := db.table('person').column('id,name').where('id=1').to_sql()
+stmt2 := db.table('person').column('id,name').where('id=2').to_sql()
+stmt3 := db.table('person').column('id,name').where('id=3').to_sql()
+res = db.table('person').column('id,name').where('id=4').union_(stmt1, stmt2, stmt3).end()
+res = db.table('person').column('id,name').where('id=4').union_all(stmt1, stmt2, stmt3).end()
+res = db.table('person').column('id,name').where('id=4').intersect(stmt1, stmt2, stmt3).end()
+res = db.table('person').column('id,name').where('id=4').except(stmt1, stmt2, stmt3).end()
+```
+
 ### insert
 
 ```sql
