@@ -55,6 +55,9 @@ pub fn (db &DB) limit(num int) &DB {
 
 // status:done
 pub fn (db &DB) offset(num int) &DB {
+	if num <= 0 {
+		panic('offset must great zero')
+	}
 	db.stmt.offset = num
 	return db
 }
@@ -86,6 +89,12 @@ pub fn (db &DB) order_by(column string) &DB {
 	if order !in ['asc', 'desc'] {
 		panic('order by must be asc or desc')
 	}
+	// check col is already in order_by array
+	for c in db.stmt.order_by {
+		if c.column == col {
+			panic('$col is already in order by')
+		}
+	}
 	db.stmt.order_by << OrderBy{
 		column: col
 		order: order
@@ -95,6 +104,9 @@ pub fn (db &DB) order_by(column string) &DB {
 
 // status:done
 pub fn (db &DB) order_by_raw(raw string) &DB {
+	if db.stmt.order_by.len > 0 {
+		panic('when use order_by_raw,the order_by will be ignored,remove order_by first')
+	}
 	db.stmt.order_by_raw = raw
 	return db
 }
