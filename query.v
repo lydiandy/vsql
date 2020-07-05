@@ -76,6 +76,9 @@ pub fn (db &DB) group_by(column string) &DB {
 
 // status:done
 pub fn (db &DB) group_by_raw(raw string) &DB {
+	if db.stmt.group_by.len > 0 {
+		panic('when use group_by_raw,the group_by will be ignored,remove group_by first')
+	}
 	db.stmt.group_by_raw = raw
 	return db
 }
