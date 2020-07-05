@@ -51,7 +51,7 @@ pub fn (db &DB) gen_sql() string {
 				s.write('as $stmt.table_alias ')
 			}
 			// where statement
-			db.write_where(&stmt.where, &s)
+			db.write_where(stmt.where, &s)
 			// join statement
 			if stmt.join_raw != '' {
 				s.write('$stmt.join_raw ')
@@ -156,7 +156,7 @@ pub fn (db &DB) gen_sql() string {
 			s.go_back(1)
 			s.write(' ')
 			// where statement
-			db.write_where(&stmt.where, &s)
+			db.write_where(stmt.where, &s)
 			// write returning
 			if stmt.returning.len != 0 {
 				s.write('returning ')
@@ -170,7 +170,7 @@ pub fn (db &DB) gen_sql() string {
 			s.write('delete from ')
 			s.write('$stmt.table_name ')
 			// where statement
-			db.write_where(&stmt.where, &s)
+			db.write_where(stmt.where, &s)
 		}
 		.create_database {
 			s.write('create database $stmt.db_name')
@@ -191,7 +191,7 @@ pub fn (db &DB) gen_sql() string {
 }
 
 // write where clause for select,update,delete
-pub fn (db &DB) write_where(where &[]Where, s &strings.Builder) {
+pub fn (db &DB) write_where(where []Where, s &strings.Builder) {
 	// where statement
 	if where.len > 0 {
 		s.write('where')
