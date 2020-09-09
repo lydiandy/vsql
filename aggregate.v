@@ -2,41 +2,41 @@ module vsql
 
 // status:done
 // aggregate fn count
-pub fn (db &DB) count(column string) &DB {
+pub fn (mut db DB) count(column string) &&DB {
 	db.add_aggregate_fn('count', column)
-	return db
+	return &db
 }
 
 // status:done
 // aggregate fn min
-pub fn (db &DB) min(column string) &DB {
+pub fn (mut db DB) min(column string) &&DB {
 	db.add_aggregate_fn('min', column)
-	return db
+	return &db
 }
 
 // status:done
 // aggregate fn max
-pub fn (db &DB) max(column string) &DB {
+pub fn (mut db DB) max(column string) &&DB {
 	db.add_aggregate_fn('max', column)
-	return db
+	return &db
 }
 
 // status:done
 // aggregate fn sum
-pub fn (db &DB) sum(column string) &DB {
+pub fn (mut db DB) sum(column string) &&DB {
 	db.add_aggregate_fn('sum', column)
-	return db
+	return &db
 }
 
 // status:done
 // aggregate fn avg
-pub fn (db &DB) avg(column string) &DB {
+pub fn (mut db DB) avg(column string) &&DB {
 	db.add_aggregate_fn('avg', column)
-	return db
+	return &db
 }
 
 // status:done
-fn (db &DB) add_aggregate_fn(fn_name, column string) {
+fn (mut db DB) add_aggregate_fn(fn_name, column string) {
 	db.stmt.columns = []Column{}
 	mut new_fn := AggregateFn{
 		name: fn_name

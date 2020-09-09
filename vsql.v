@@ -30,25 +30,25 @@ pub fn init_driver(c Config) pg.DB {
 }
 
 // connect to sql
-pub fn connect(c Config) ?DB {
+pub fn connect(c Config) ?&DB {
 	conn := init_driver(c)
-	db := &DB{
+	db := DB{
 		config: c
 		stmt: Stmt{}
 		conn: conn
 	}
-	return db
+	return &db
 }
 
 // execute the sql statement
-pub fn (db &DB) exec(sql string) []pg.Row {
+pub fn (mut db DB) exec(sql string) []pg.Row {
 	res := db.conn.exec(sql)
 	return res
 }
 
 // end of select|insert|update|delete stmt,generate the sql string and exec
 // do not use together with to_sql()
-pub fn (db &DB) end() []pg.Row {
+pub fn (mut db DB) end() []pg.Row {
 	s := db.gen_sql()
 	// println(s)
 	res := db.exec(s)

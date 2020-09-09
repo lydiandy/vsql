@@ -1,7 +1,7 @@
 module test
 
 pub fn test_inert_update_delete() {
-	db := connect_and_init_db()
+	mut db := connect_and_init_db()
 	mut res := ''
 	// insert
 	res = db.table('person').insert({

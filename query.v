@@ -1,16 +1,16 @@
 module vsql
 
 // status:done
-pub fn (db &DB) table(name string) &DB {
+pub fn (mut db DB) table(name string) &DB {
 	table_name, table_alias := split_by_separator(name, 'as') // select * from person or select * from person as p
 	db.stmt.typ = .select_
 	db.stmt.table_name = table_name
 	db.stmt.table_alias = table_alias
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) column(columns string) &DB {
+pub fn (mut db DB) column(columns string) &DB {
 	if columns in [' ', '*'] {
 		db.stmt.columns = []Column{}
 	} else {
@@ -23,68 +23,68 @@ pub fn (db &DB) column(columns string) &DB {
 			}
 		}
 	}
-	return db
+	return &db
 }
 
 // the same with table()
 // status:done
-pub fn (db &DB) from(name string) &DB {
+pub fn (mut db DB) from(name string) &DB {
 	return db.table(name)
 }
 
 // the same with column()
 // status:done
-pub fn (db &DB) select_(columns string) &DB {
+pub fn (mut db DB) select_(columns string) &DB {
 	return db.column(columns)
 }
 
 // status:done
-pub fn (db &DB) first() &DB {
+pub fn (mut db DB) first() &DB {
 	db.stmt.limit = 1
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) limit(num int) &DB {
+pub fn (mut db DB) limit(num int) &DB {
 	if num <= 0 {
 		panic('limit must great zero')
 	}
 	db.stmt.limit = num
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) offset(num int) &DB {
+pub fn (mut db DB) offset(num int) &DB {
 	if num <= 0 {
 		panic('offset must great zero')
 	}
 	db.stmt.offset = num
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) distinct() &DB {
+pub fn (mut db DB) distinct() &DB {
 	db.stmt.is_distinct = true
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) group_by(column string) &DB {
+pub fn (mut db DB) group_by(column string) &DB {
 	db.stmt.group_by << column
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) group_by_raw(raw string) &DB {
+pub fn (mut db DB) group_by_raw(raw string) &DB {
 	if db.stmt.group_by.len > 0 {
 		panic('when use group_by_raw,the group_by will be ignored,remove group_by first')
 	}
 	db.stmt.group_by_raw = raw
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) order_by(column string) &DB {
+pub fn (mut db DB) order_by(column string) &DB {
 	col, mut order := split_by_space(column)
 	if order == '' {
 		order = 'asc'
@@ -102,57 +102,57 @@ pub fn (db &DB) order_by(column string) &DB {
 		column: col
 		order: order
 	}
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) order_by_raw(raw string) &DB {
+pub fn (mut db DB) order_by_raw(raw string) &DB {
 	if db.stmt.order_by.len > 0 {
 		panic('when use order_by_raw,the order_by will be ignored,remove order_by first')
 	}
 	db.stmt.order_by_raw = raw
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) having(condition string) &DB {
+pub fn (mut db DB) having(condition string) &DB {
 	db.stmt.having = condition
-	return db
+	return &db
 }
 
 // union statement
 // status:done
-pub fn (db &DB) union_type(typ, stmt string, other_stmts ...string) &DB {
+pub fn (mut db DB) union_type(typ, stmt string, other_stmts ...string) &DB {
 	db.stmt.union_type = typ
 	db.stmt.union_stmts << stmt
 	for s in other_stmts {
 		db.stmt.union_stmts << s
 	}
-	return db
+	return &db
 }
 
 // status:done
-pub fn (db &DB) union_(stmt string, other_stmts ...string) &DB {
+pub fn (mut db DB) union_(stmt string, other_stmts ...string) &DB {
 	return db.union_type('union', stmt, other_stmts)
 }
 
 // status:done
-pub fn (db &DB) union_all(stmt string, other_stmts ...string) &DB {
+pub fn (mut db DB) union_all(stmt string, other_stmts ...string) &DB {
 	return db.union_type('union all', stmt, other_stmts)
 }
 
 // status:done
-pub fn (db &DB) intersect(stmt string, other_stmts ...string) &DB {
+pub fn (mut db DB) intersect(stmt string, other_stmts ...string) &DB {
 	return db.union_type('intersect', stmt, other_stmts)
 }
 
 // status:done
-pub fn (db &DB) except(stmt string, other_stmts ...string) &DB {
+pub fn (mut db DB) except(stmt string, other_stmts ...string) &DB {
 	return db.union_type('except', stmt, other_stmts)
 }
 
 // result to struct
 // status:wip
-pub fn (db &DB) to() &DB {
-	return db
+pub fn (mut db DB) to() &DB {
+	return &db
 }

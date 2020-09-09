@@ -1,7 +1,7 @@
 module test
 
 fn test_select() {
-	db := connect_and_init_db()
+	mut db := connect_and_init_db()
 	mut res := ''
 	// select+from
 	res = db.select_('*').from('person').to_sql()
@@ -228,7 +228,7 @@ fn test_select() {
 }
 
 fn test_other_select() {
-	db := connect_and_init_db()
+	mut db := connect_and_init_db()
 	mut res := ''
 	res = db.table('person as p').to_sql()
 	assert res == 'select * from person as p'

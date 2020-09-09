@@ -1,21 +1,21 @@
 module vsql
 
 // print sql string for debug
-pub fn (db &DB) print_sql() &DB {
+pub fn (mut db DB) print_sql() &DB {
 	s := db.gen_sql()
 	println(s)
-	return db
+	return &db
 }
 
 // print sql to object struct for debug
-pub fn (db &DB) print_obj() &DB {
+pub fn (mut db DB) print_obj() &DB {
 	println(db.stmt)
-	return db
+	return &db
 }
 
 // generate sql string for debug
 // do not use together with end()
-pub fn (db &DB) to_sql() string {
+pub fn (mut db DB) to_sql() string {
 	s := db.gen_sql()
 	// after to_sql clear the db.stmt,that do not impact next sql
 	db.stmt = Stmt{}
@@ -43,9 +43,9 @@ pub fn (t &Table) to_sql() string {
 }
 
 // debug mode
-pub fn (db &DB) debug() {
+pub fn (mut db DB) debug() {
 }
 
 // timeout,only mysql pg
-pub fn (db &DB) timeout(during int) {
+pub fn (mut db DB) timeout(during int) {
 }

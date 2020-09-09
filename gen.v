@@ -3,7 +3,7 @@ module vsql
 import strings
 
 // generate stmt to sql string
-pub fn (db &DB) gen_sql() string {
+pub fn (mut db DB) gen_sql() string {
 	mut s := strings.new_builder(200)
 	stmt := db.stmt
 	match stmt.typ {
@@ -191,7 +191,7 @@ pub fn (db &DB) gen_sql() string {
 }
 
 // write where clause for select,update,delete
-pub fn (db &DB) write_where(where []Where, s &strings.Builder) {
+pub fn (mut db DB) write_where(where []Where, mut s strings.Builder) {
 	// where statement
 	if where.len > 0 {
 		s.write('where')

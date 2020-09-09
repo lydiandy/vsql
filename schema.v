@@ -7,7 +7,7 @@ pub type CreateTableFn = fn (mut tablemut  Table)
 
 // create database
 // status:done
-pub fn (db &DB) create_database(name string) []pg.Row {
+pub fn (mut db DB) create_database(name string) []pg.Row {
 	db.stmt.typ = .create_database
 	db.stmt.db_name = name
 	return db.end()
@@ -15,7 +15,7 @@ pub fn (db &DB) create_database(name string) []pg.Row {
 
 // create table
 // status:done
-pub fn (db &DB) create_table(table_name string, create_table_fn CreateTableFn) []pg.Row {
+pub fn (mut db DB) create_table(table_name string, create_table_fn CreateTableFn) []pg.Row {
 	mut table := Table{
 		name: table_name
 	}
@@ -27,23 +27,24 @@ pub fn (db &DB) create_table(table_name string, create_table_fn CreateTableFn) [
 
 // create table if not exists
 // status:done
-pub fn (db &DB) create_table_if_not_exist(table_name string, create_table_fn CreateTableFn) []pg.Row {
+pub fn (mut db DB) create_table_if_not_exist(table_name string, create_table_fn CreateTableFn) []pg.Row {
 	if db.has_table(table_name) {
 		println('table $table_name is already exists')
 	} else {
 		return db.create_table(table_name, create_table_fn)
 	}
+	return []pg.Row{}
 }
 
 // alter table
 // status: wip
-pub fn (db &DB) alter_table() &DB {
-	return db
+pub fn (mut db DB) alter_table() &DB {
+	return &db
 }
 
 // rename table
 // status:done
-pub fn (db &DB) rename_table(old_name, new_name string) []pg.Row {
+pub fn (mut db DB) rename_table(old_name, new_name string) []pg.Row {
 	db.stmt.typ = .rename_table
 	db.stmt.table_name = old_name
 	db.stmt.new_table_name = new_name
@@ -52,7 +53,7 @@ pub fn (db &DB) rename_table(old_name, new_name string) []pg.Row {
 
 // drop table
 // status:done
-pub fn (db &DB) drop_table(name string) []pg.Row {
+pub fn (mut db DB) drop_table(name string) []pg.Row {
 	db.stmt.typ = .drop_table
 	db.stmt.table_name = name
 	return db.end()
@@ -60,16 +61,17 @@ pub fn (db &DB) drop_table(name string) []pg.Row {
 
 // drop table
 // status:done
-pub fn (db &DB) drop_table_if_exist(name string) []pg.Row {
+pub fn (mut db DB) drop_table_if_exist(name string) []pg.Row {
 	if db.has_table(name) {
 		return db.drop_table(name)
 	}
+	return []pg.Row{}
 }
 
 // has
 // staut:wip
 // only pg is ok
-pub fn (db &DB) has_table(name string) bool {
+pub fn (mut db DB) has_table(name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {
@@ -95,7 +97,7 @@ pub fn (db &DB) has_table(name string) bool {
 
 // staut:wip
 // ERROR:  syntax error at or near "and column_name"
-pub fn (db &DB) has_column(table_name, column_name string) bool {
+pub fn (mut db DB) has_column(table_name, column_name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {
@@ -123,7 +125,7 @@ pub fn (db &DB) has_column(table_name, column_name string) bool {
 
 // truncate table
 // status:done
-pub fn (db &DB) truncate(name string) []pg.Row {
+pub fn (mut db DB) truncate(name string) []pg.Row {
 	db.stmt.typ = .truncate_table
 	db.stmt.table_name = name
 	return db.end()
