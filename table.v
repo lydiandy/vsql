@@ -42,13 +42,13 @@ pub fn (mut t Table) uuid(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) increment(name string) NewColumn {
+pub fn (mut t Table) increment(name string) &NewColumn {
 	mut column := NewColumn{
 		name: name
 		typ: 'serial'
 	}
 	t.columns << column
-	return t.columns.last()
+	return &t.columns.last()
 }
 
 pub fn (mut t Table) integer(name string) &NewColumn {
@@ -184,9 +184,9 @@ pub fn (mut c NewColumn) increment() &NewColumn {
 	return &c
 }
 
-pub fn (mut c NewColumn) primary() NewColumn {
+pub fn (mut c NewColumn) primary() &NewColumn {
 	c.is_primary = true
-	return c
+	return &c
 }
 
 // pub fn (mut c NewColumn) reference(ref string) &NewColumn {

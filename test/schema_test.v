@@ -12,15 +12,13 @@ fn test_schema() {
 	// create table
 	db.create_table('person2', fn(mut table vsql.Table) {
 		table.increment('id').primary()
-		// mut c:=table.increment('id')
-		// c.primary()
 		table.increment('id')
 		table.boolean('is_ok')
-		// table.string_('open_id', 255).size(100).unique()
+		table.string_('open_id', 255).size(100).unique()
 		table.datetime('attend_time')
-		// table.string_('form_id', 255).not_null()
-		// table.integer('is_send').default_to('1')
-		// table.decimal('amount', 10, 2).not_null().check('amount>0')
+		table.string_('form_id', 255).not_null()
+		table.integer('is_send').default_to('1')
+		table.decimal('amount', 10, 2).not_null().check('amount>0')
 		// table constraint
 		table.primary(['id'])
 		table.unique(['id'])
