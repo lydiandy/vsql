@@ -34,7 +34,7 @@ pub mut:
 
 // create column
 pub fn (mut t Table) uuid(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'serial'
 	}
@@ -42,17 +42,17 @@ pub fn (mut t Table) uuid(name string) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) increment(name string) &NewColumn {
-	column := NewColumn{
+pub fn (mut t Table) increment(name string) NewColumn {
+	mut column := NewColumn{
 		name: name
 		typ: 'serial'
 	}
 	t.columns << column
-	return &t.columns.last()
+	return t.columns.last()
 }
 
 pub fn (mut t Table) integer(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'integer'
 	}
@@ -61,7 +61,7 @@ pub fn (mut t Table) integer(name string) &NewColumn {
 }
 
 pub fn (mut t Table) big_integer(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'bigint'
 	}
@@ -70,7 +70,7 @@ pub fn (mut t Table) big_integer(name string) &NewColumn {
 }
 
 pub fn (mut t Table) text(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'text'
 	}
@@ -82,7 +82,7 @@ pub fn (mut t Table) string_(name string, size int) &NewColumn {
 	if size <= 0 {
 		panic('size must be greater than zero')
 	}
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'varchar($size)'
 		size: size
@@ -92,7 +92,7 @@ pub fn (mut t Table) string_(name string, size int) &NewColumn {
 }
 
 pub fn (mut t Table) decimal(name string, precision, scale int) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'decimal($precision,$scale)'
 		precision: precision
@@ -103,7 +103,7 @@ pub fn (mut t Table) decimal(name string, precision, scale int) &NewColumn {
 }
 
 pub fn (mut t Table) boolean(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'boolean'
 	}
@@ -112,7 +112,7 @@ pub fn (mut t Table) boolean(name string) &NewColumn {
 }
 
 pub fn (mut t Table) date(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'date'
 	}
@@ -121,7 +121,7 @@ pub fn (mut t Table) date(name string) &NewColumn {
 }
 
 pub fn (mut t Table) datetime(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'timestamp'
 	}
@@ -130,7 +130,7 @@ pub fn (mut t Table) datetime(name string) &NewColumn {
 }
 
 pub fn (mut t Table) time(name string, precision int) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'time'
 	}
@@ -139,7 +139,7 @@ pub fn (mut t Table) time(name string, precision int) &NewColumn {
 }
 
 pub fn (mut t Table) binary(name string, size int) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'bytea'
 		size: size
@@ -149,7 +149,7 @@ pub fn (mut t Table) binary(name string, size int) &NewColumn {
 }
 
 pub fn (mut t Table) json(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'json'
 	}
@@ -158,7 +158,7 @@ pub fn (mut t Table) json(name string) &NewColumn {
 }
 
 pub fn (mut t Table) jsonb(name string) &NewColumn {
-	column := NewColumn{
+	mut column := NewColumn{
 		name: name
 		typ: 'jsonb'
 	}
@@ -184,9 +184,9 @@ pub fn (mut c NewColumn) increment() &NewColumn {
 	return &c
 }
 
-pub fn (mut c NewColumn) primary() &NewColumn {
+pub fn (mut c NewColumn) primary() NewColumn {
 	c.is_primary = true
-	return &c
+	return c
 }
 
 // pub fn (mut c NewColumn) reference(ref string) &NewColumn {
@@ -289,5 +289,5 @@ pub fn (mut t Table) drop_foreign(name string) &Table {
 }
 
 pub fn (mut t Table) charset(name string) &Table {
-	return &t
+	return t
 }
