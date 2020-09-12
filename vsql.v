@@ -41,7 +41,7 @@ pub fn connect(c Config) ?&DB {
 }
 
 // execute the sql statement
-pub fn (mut db DB) exec(sql string) []pg.Row {
+pub fn (db DB) exec(sql string) []pg.Row {
 	res := db.conn.exec(sql)
 	return res
 }

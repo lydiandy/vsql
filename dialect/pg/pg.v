@@ -42,7 +42,7 @@ pub fn connect(config Config) ?DB {
 	conninfo := 'host=$config.host port=$config.port user=$config.user dbname=$config.dbname password=$config.password'
 	conn := C.PQconnectdb(conninfo.str)
 	status := C.PQstatus(conn)
-	println("status=$status")
+	// println("status=$status")
 	if status != C.CONNECTION_OK {
 		error_msg := C.PQerrorMessage(conn)
 		return error ('Connection to a PG database failed: ' + unsafe { error_msg.vstring() } )
