@@ -44,7 +44,7 @@ pub fn (mut db DB) alter_table() &DB {
 
 // rename table
 // status:done
-pub fn (mut db DB) rename_table(old_name, new_name string) []pg.Row {
+pub fn (mut db DB) rename_table(old_name string, new_name string) []pg.Row {
 	db.stmt.typ = .rename_table
 	db.stmt.table_name = old_name
 	db.stmt.new_table_name = new_name
@@ -97,7 +97,7 @@ pub fn (mut db DB) has_table(name string) bool {
 
 // staut:wip
 // ERROR:  syntax error at or near "and column_name"
-pub fn (mut db DB) has_column(table_name, column_name string) bool {
+pub fn (mut db DB) has_column(table_name string, column_name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {

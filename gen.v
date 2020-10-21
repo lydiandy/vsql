@@ -51,7 +51,7 @@ pub fn (mut db DB) gen_sql() string {
 				s.write('as $stmt.table_alias ')
 			}
 			// where statement
-			db.write_where(stmt.where, &s)
+			db.write_where(stmt.where, mut &s)
 			// join statement
 			if stmt.join_raw != '' {
 				s.write('$stmt.join_raw ')
@@ -156,7 +156,7 @@ pub fn (mut db DB) gen_sql() string {
 			s.go_back(1)
 			s.write(' ')
 			// where statement
-			db.write_where(stmt.where, &s)
+			db.write_where(stmt.where, mut &s)
 			// write returning
 			if stmt.returning.len != 0 {
 				s.write('returning ')
@@ -170,7 +170,7 @@ pub fn (mut db DB) gen_sql() string {
 			s.write('delete from ')
 			s.write('$stmt.table_name ')
 			// where statement
-			db.write_where(stmt.where, &s)
+			db.write_where(stmt.where, mut &s)
 		}
 		.create_database {
 			s.write('create database $stmt.db_name')

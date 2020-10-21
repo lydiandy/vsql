@@ -11,7 +11,7 @@ pub fn split_by_space(s string) (string, string) {
 }
 
 // split the string by separator, like this:'name'=>('name',''),'name as n'=>('name','n'),'name as n abc'=> error
-pub fn split_by_separator(s, separator string) (string, string) {
+pub fn split_by_separator(s string, separator string) (string, string) {
 	args := s.trim_space().split(' ')
 	match args.len {
 		1 {

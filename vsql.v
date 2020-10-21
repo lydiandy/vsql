@@ -11,7 +11,7 @@ pub struct DB {
 pub:
 	config Config
 	conn   pg.DB // TODO: replace to Driver interface
-mut:
+pub mut:
 	stmt   Stmt // the current statement
 }
 

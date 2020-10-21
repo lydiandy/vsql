@@ -1,27 +1,27 @@
 module vsql
 
 // status:done
-pub fn (mut db DB) join(table, join_condition string) &DB {
+pub fn (mut db DB) join(table string, join_condition string) &DB {
 	return db.join_type('join', table, join_condition)
 }
 
 // status:done
-pub fn (mut db DB) inner_join(table, join_condition string) &DB {
+pub fn (mut db DB) inner_join(table string, join_condition string) &DB {
 	return db.join_type('inner join', table, join_condition)
 }
 
 // status:done
-pub fn (mut db DB) left_join(table, join_condition string) &DB {
+pub fn (mut db DB) left_join(table string, join_condition string) &DB {
 	return db.join_type('left join', table, join_condition)
 }
 
 // status:done
-pub fn (mut db DB) right_join(table, join_condition string) &DB {
+pub fn (mut db DB) right_join(table string, join_condition string) &DB {
 	return db.join_type('right join', table, join_condition)
 }
 
 // status:done
-pub fn (mut db DB) outer_join(table, join_condition string) &DB {
+pub fn (mut db DB) outer_join(table string, join_condition string) &DB {
 	return db.join_type('full outer join', table, join_condition)
 }
 
@@ -38,7 +38,7 @@ pub fn (mut db DB) join_raw(raw string) &DB {
 }
 
 // status:done
-fn (mut db DB) join_type(typ, table, join_condition string) &DB {
+fn (mut db DB) join_type(typ string, table string, join_condition string) &DB {
 	name, alias := split_by_separator(table, 'as')
 	db.stmt.join << Join{
 		typ: typ

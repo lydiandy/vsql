@@ -6,7 +6,7 @@ pub fn (mut db DB) table(name string) &DB {
 	db.stmt.typ = .select_
 	db.stmt.table_name = table_name
 	db.stmt.table_alias = table_alias
-	return &db
+	return db
 }
 
 // status:done
@@ -23,7 +23,7 @@ pub fn (mut db DB) column(columns string) &DB {
 			}
 		}
 	}
-	return &db
+	return db
 }
 
 // the same with table()
@@ -41,7 +41,7 @@ pub fn (mut db DB) select_(columns string) &DB {
 // status:done
 pub fn (mut db DB) first() &DB {
 	db.stmt.limit = 1
-	return &db
+	return db
 }
 
 // status:done
@@ -50,7 +50,7 @@ pub fn (mut db DB) limit(num int) &DB {
 		panic('limit must great zero')
 	}
 	db.stmt.limit = num
-	return &db
+	return db
 }
 
 // status:done
@@ -59,19 +59,19 @@ pub fn (mut db DB) offset(num int) &DB {
 		panic('offset must great zero')
 	}
 	db.stmt.offset = num
-	return &db
+	return db
 }
 
 // status:done
 pub fn (mut db DB) distinct() &DB {
 	db.stmt.is_distinct = true
-	return &db
+	return db
 }
 
 // status:done
 pub fn (mut db DB) group_by(column string) &DB {
 	db.stmt.group_by << column
-	return &db
+	return db
 }
 
 // status:done
@@ -80,7 +80,7 @@ pub fn (mut db DB) group_by_raw(raw string) &DB {
 		panic('when use group_by_raw,the group_by will be ignored,remove group_by first')
 	}
 	db.stmt.group_by_raw = raw
-	return &db
+	return db
 }
 
 // status:done
@@ -102,7 +102,7 @@ pub fn (mut db DB) order_by(column string) &DB {
 		column: col
 		order: order
 	}
-	return &db
+	return db
 }
 
 // status:done
@@ -111,24 +111,24 @@ pub fn (mut db DB) order_by_raw(raw string) &DB {
 		panic('when use order_by_raw,the order_by will be ignored,remove order_by first')
 	}
 	db.stmt.order_by_raw = raw
-	return &db
+	return db
 }
 
 // status:done
 pub fn (mut db DB) having(condition string) &DB {
 	db.stmt.having = condition
-	return &db
+	return db
 }
 
 // union statement
 // status:done
-pub fn (mut db DB) union_type(typ, stmt string, other_stmts ...string) &DB {
+pub fn (mut db DB) union_type(typ string, stmt string, other_stmts ...string) &DB {
 	db.stmt.union_type = typ
 	db.stmt.union_stmts << stmt
 	for s in other_stmts {
 		db.stmt.union_stmts << s
 	}
-	return &db
+	return db
 }
 
 // status:done
@@ -154,5 +154,5 @@ pub fn (mut db DB) except(stmt string, other_stmts ...string) &DB {
 // result to struct
 // status:wip
 pub fn (mut db DB) to() &DB {
-	return &db
+	return db
 }

@@ -91,7 +91,7 @@ pub fn (mut t Table) string_(name string, size int) &NewColumn {
 	return &t.columns.last()
 }
 
-pub fn (mut t Table) decimal(name string, precision, scale int) &NewColumn {
+pub fn (mut t Table) decimal(name string, precision int, scale int) &NewColumn {
 	mut column := NewColumn{
 		name: name
 		typ: 'decimal($precision,$scale)'
@@ -173,7 +173,7 @@ pub fn (mut c NewColumn) size(size int) &NewColumn {
 	return &c
 }
 
-pub fn (mut c NewColumn) precision(precision, scale int) &NewColumn {
+pub fn (mut c NewColumn) precision(precision int, scale int) &NewColumn {
 	c.precision = precision
 	c.scale = scale
 	return &c
@@ -264,7 +264,7 @@ pub fn (mut t Table) drop_columns(columns []string) &Table {
 	return &t
 }
 
-pub fn (mut t Table) rename_column(from, to string) &Table {
+pub fn (mut t Table) rename_column(from string, to string) &Table {
 	return &t
 }
 

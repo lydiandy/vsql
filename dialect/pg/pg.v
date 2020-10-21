@@ -141,7 +141,7 @@ pub fn (db DB) exec_param_many(query string, params []string) []Row {
 	}
 }
 
-pub fn (db DB) exec_param2(query string, param, param2 string) []Row {
+pub fn (db DB) exec_param2(query string, param string, param2 string) []Row {
 	mut param_vals := [2]byteptr{}
 	param_vals[0] = param.str
 	param_vals[1] = param2.str

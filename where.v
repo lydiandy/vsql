@@ -23,7 +23,7 @@ pub fn (mut db DB) where_raw(raw string, args ...string) &DB { // TODO: interfac
 
 // where
 // status:done
-fn (mut db DB) where_type(typ, operator, condition string) &DB {
+fn (mut db DB) where_type(typ string, operator string, condition string) &DB {
 	w := Where{
 		typ: typ
 		operator: operator
@@ -59,7 +59,7 @@ pub fn (mut db DB) or_where_not(condition string) &DB {
 }
 
 // where in
-fn (mut db DB) where_in_type(typ, operator, column string, range []string) &DB {
+fn (mut db DB) where_in_type(typ string, operator string, column string, range []string) &DB {
 	w := Where{
 		typ: typ
 		operator: operator
@@ -96,7 +96,7 @@ pub fn (mut db DB) or_where_not_in(column string, range []string) &DB {
 }
 
 // where null
-fn (mut db DB) where_null_type(typ, operator, column string) &DB {
+fn (mut db DB) where_null_type(typ string, operator string, column string) &DB {
 	w := Where{
 		typ: typ
 		operator: operator
@@ -132,7 +132,7 @@ pub fn (mut db DB) or_where_not_null(column string) &DB {
 }
 
 // where between
-fn (mut db DB) where_between_type(typ, operator, column string, range []string) &DB {
+fn (mut db DB) where_between_type(typ string, operator string, column string, range []string) &DB {
 	w := Where{
 		typ: typ
 		operator: operator
@@ -170,7 +170,7 @@ pub fn (mut db DB) or_where_not_between(column string, range []string) &DB {
 
 // where exists
 // status:done
-fn (mut db DB) where_exists_type(typ, operator, stmt string) &DB {
+fn (mut db DB) where_exists_type(typ string, operator string, stmt string) &DB {
 	w := Where{
 		typ: typ
 		operator: operator

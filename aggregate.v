@@ -36,7 +36,7 @@ pub fn (mut db DB) avg(column string) &&DB {
 }
 
 // status:done
-fn (mut db DB) add_aggregate_fn(fn_name, column string) {
+fn (mut db DB) add_aggregate_fn(fn_name string, column string) {
 	db.stmt.columns = []Column{}
 	mut new_fn := AggregateFn{
 		name: fn_name
