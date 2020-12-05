@@ -1,6 +1,6 @@
 ## vsql
 
-**vsql is just wip,do not use in production**
+**vsql is just wip,do not use in production,but it can works now**
 
 - just a sql query builder,not orm
 
@@ -8,11 +8,11 @@
 
 - support multi-dialect:pg,mysql,sqlite,mssql, by now just pg as the first version
 
-- function call chain 
+- method call chain 
 
 ### main idea
 
-the main idea of vsql is:  **function call chain => ast => sql**
+the main idea of vsql is:  **method call chain => ast => sql**
 
 ### some limit
 
