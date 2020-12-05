@@ -25,6 +25,7 @@ pub mut:
 	is_distinct    bool
 	columns        []Column // [] is *
 	where          []Where
+	has_where      bool //handle where must be the first,and other where just can after it
 	join           []Join
 	join_raw       string
 	limit          int

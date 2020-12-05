@@ -22,8 +22,19 @@ pub fn (mut db DB) where_raw(raw string, args ...string) &DB { // TODO: interfac
 }
 
 // where
+//make sure the other(and/or/not) where methods must be after where method
+fn (mut db DB) check_where_order(operator string) {
+	if operator == '' {
+		db.stmt.has_where = true
+	}
+	if operator != '' && !db.stmt.has_where {
+		panic('the other(and/or/not) where methods must be after where method')
+	}
+}
+
 // status:done
 fn (mut db DB) where_type(typ string, operator string, condition string) &DB {
+	db.check_where_order(operator)
 	w := Where{
 		typ: typ
 		operator: operator
@@ -60,6 +71,7 @@ pub fn (mut db DB) or_where_not(condition string) &DB {
 
 // where in
 fn (mut db DB) where_in_type(typ string, operator string, column string, range []string) &DB {
+	db.check_where_order(operator)
 	w := Where{
 		typ: typ
 		operator: operator
@@ -97,6 +109,7 @@ pub fn (mut db DB) or_where_not_in(column string, range []string) &DB {
 
 // where null
 fn (mut db DB) where_null_type(typ string, operator string, column string) &DB {
+	db.check_where_order(operator)
 	w := Where{
 		typ: typ
 		operator: operator
@@ -133,6 +146,7 @@ pub fn (mut db DB) or_where_not_null(column string) &DB {
 
 // where between
 fn (mut db DB) where_between_type(typ string, operator string, column string, range []string) &DB {
+	db.check_where_order(operator)
 	w := Where{
 		typ: typ
 		operator: operator
@@ -171,6 +185,7 @@ pub fn (mut db DB) or_where_not_between(column string, range []string) &DB {
 // where exists
 // status:done
 fn (mut db DB) where_exists_type(typ string, operator string, stmt string) &DB {
+	db.check_where_order(operator)
 	w := Where{
 		typ: typ
 		operator: operator

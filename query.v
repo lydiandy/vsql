@@ -2,7 +2,8 @@ module vsql
 
 // status:done
 pub fn (mut db DB) table(name string) &DB {
-	table_name, table_alias := split_by_separator(name, 'as') // select * from person or select * from person as p
+	// handle table alias,like:select * from person as p
+	table_name, table_alias := split_by_separator(name, 'as')
 	db.stmt.typ = .select_
 	db.stmt.table_name = table_name
 	db.stmt.table_alias = table_alias
@@ -16,7 +17,8 @@ pub fn (mut db DB) column(columns string) &DB {
 	} else {
 		column_array := columns.split(',')
 		for col in column_array {
-			name, alias := split_by_separator(col, 'as') // deal with column and column alias,like:column('id,name as name2,age as age2')
+			// handle column and column alias,like:column('id,name as name2,age as age2')
+			name, alias := split_by_separator(col, 'as')
 			db.stmt.columns << Column{
 				name: name
 				alias: alias

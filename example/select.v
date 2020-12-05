@@ -17,7 +17,6 @@ fn main() {
 	mut db := vsql.connect(config) or {
 		panic('connect error:$err')
 	}
-	println(db)
 	mut res := []pg.Row{}
 	// select+from
 	res = db.select_('*').from('person').end()
@@ -30,13 +29,13 @@ fn main() {
 	// from+column is also ok
 	res = db.from('person').column('*').end()
 	// first
-	res = db.table('person').column('').first().end()
+	res = db.table('person').column('*').first().end()
 	// limit
-	res = db.table('person').column('').limit(3).end()
+	res = db.table('person').column('*').limit(3).end()
 	// offset
-	res = db.table('person').column('').offset(1).end()
+	res = db.table('person').column('*').offset(1).end()
 	// offset+limit
-	res = db.table('person').column('').offset(2).limit(2).end()
+	res = db.table('person').column('*').offset(2).limit(2).end()
 	// distinct
 	res = db.table('person').column('id,name,age').distinct().end()
 	res = db.select_('id,name,age').distinct().from('person').end()
