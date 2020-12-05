@@ -56,7 +56,8 @@ fn test_select() {
 	assert res == 'select age,count(age),avg(income) from person group by age'
 	// having
 	res = db.table('person').column('age,count(age),avg(income)').group_by('age').having('count(*)=2').to_sql()
-	assert res == 'select age,count(age),avg(income) from person group by age having count(*)=2'
+	assert res ==
+		'select age,count(age),avg(income) from person group by age having count(*)=2'
 	// where raw
 	res = db.table('person').where_raw('id=?', '1').to_sql()
 	assert res == 'select * from person where id=1'
@@ -83,7 +84,7 @@ fn test_select() {
 	assert res == 'select id,name,age from person where (id=1) or (id in (1,2,3))'
 	// and where in
 	res = db.table('person').column('id,name,age').where('id=1').and_where_in('id', ['1', '2',
-		'3'
+		'3',
 	]).to_sql()
 	assert res == 'select id,name,age from person where (id=1) and (id in (1,2,3))'
 	// where not in
@@ -153,6 +154,14 @@ fn test_select() {
 	res = db.table('person').column('id,name,age,income').where('id>1').or_where_not_exists('select income from person where income>1000').to_sql()
 	assert res ==
 		'select id,name,age,income from person where (id>1) or not exists (select income from person where income>1000)'
+	// different where order
+	res = db.table('person').column('id,name,age,income').where_between('income', ['100', '1000']).where('id>1').to_sql()
+	assert res=='select id,name,age,income from person where (income between 100 and 1000) and (id>1)'
+	res = db.table('person').column('id,name,age,income').where_exists('select income from person where income>1000').and_where('id>1').to_sql()
+	assert res=='select id,name,age,income from person where exists (select income from person where income>1000) and (id>1)'
+	res = db.table('person').column('id,name,age,income').where_in('id', ['1', '2', '3']).or_where('id>1').to_sql()
+	assert res=='select id,name,age,income from person where (id in (1,2,3)) or (id>1)'
+		
 	// aggregate function
 	res = db.table('person').count('*').to_sql()
 	assert res == 'select count(*) from person'
@@ -193,7 +202,8 @@ fn test_select() {
 	// join
 	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').join('person as p',
 		'c.owner_id=p.id').to_sql()
-	assert res == 'select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id'
+	assert res ==
+		'select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id'
 	// inner join
 	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').inner_join('person as p',
 		'c.owner_id=p.id').to_sql()
@@ -219,7 +229,8 @@ fn test_select() {
 	assert res == 'select c.id,c.name,p.name,p.age from cat as c cross join person as p'
 	// join raw
 	res = db.table('cat as c').column('c.id,c.name,p.name,p.age').join_raw('join person as p on c.owner_id=p.id').to_sql()
-	assert res == 'select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id'
+	assert res ==
+		'select c.id,c.name,p.name,p.age from cat as c join person as p on c.owner_id=p.id'
 	// multi join
 	res = db.table('cat as c').column('c.id,c.name,p.name,p.age,f.name').left_join('person as p',
 		'c.owner_id=p.id').left_join('food as f', 'c.id=f.cat_id').to_sql()
