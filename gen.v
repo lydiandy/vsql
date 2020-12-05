@@ -131,7 +131,7 @@ pub fn (mut db DB) gen_sql() string {
 			s.write(' values ')
 			s.write('(')
 			for len, val in vals {
-				s.write("\'$val\'")
+				s.write("'$val'")
 				if len < vals.len - 1 {
 					s.write(',')
 				}
@@ -151,7 +151,7 @@ pub fn (mut db DB) gen_sql() string {
 			s.write('$stmt.table_name ')
 			s.write('set ')
 			for key, val in stmt.data {
-				s.write("$key=\'$val\',")
+				s.write("$key='$val',")
 			}
 			s.go_back(1)
 			s.write(' ')
@@ -251,7 +251,7 @@ pub fn (t &Table) gen_table_sql() string {
 		s.write('$column.name ')
 		s.write('$column.typ ')
 		if column.default_value != '' {
-			s.write("default \'$column.default_value\' ")
+			s.write("default '$column.default_value' ")
 		}
 		if column.is_increment {
 			s.write('serial ')

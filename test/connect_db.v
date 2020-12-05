@@ -2,7 +2,7 @@ module test
 
 import vsql
 
-fn connect_and_init_db() &vsql.DB {
+fn connect_and_init_db() vsql.DB {
 	config := vsql.Config{
 		client: 'pg'
 		host: 'localhost'
@@ -16,7 +16,7 @@ fn connect_and_init_db() &vsql.DB {
 		panic('connect error:$err')
 	}
 	// create table person
-	// db.exec('drop table if exists person')
+	db.exec('drop table if exists person')
 	db.exec("create table person (id integer primary key, name text default '',age integer default 0,income integer default 0);")
 	// insert data
 	db.exec("insert into person (id,name,age,income) values (1,'tom',29,1000)")

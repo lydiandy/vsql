@@ -2,7 +2,7 @@ module vsql
 
 pub fn (db &DB) transaction() &DB {
 	db.exec('begin')
-	return &db
+	return db
 }
 
 pub fn (db &DB) tx() &DB {

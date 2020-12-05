@@ -39,7 +39,7 @@ pub fn (mut db DB) create_table_if_not_exist(table_name string, create_table_fn 
 // alter table
 // status: wip
 pub fn (mut db DB) alter_table() &DB {
-	return &db
+	return db
 }
 
 // rename table
@@ -75,7 +75,7 @@ pub fn (mut db DB) has_table(name string) bool {
 	mut s := ''
 	match db.config.client {
 		'pg' {
-			s = "select count(*) from information_schema.tables where table_schema=\'public\' and  table_name =\'$name\'"
+			s = "select count(*) from information_schema.tables where table_schema=\'public\' and  table_name ='$name'"
 		}
 		'mysql' {
 			// todo

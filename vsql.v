@@ -30,19 +30,21 @@ pub fn init_driver(c Config) pg.DB {
 }
 
 // connect to sql
-pub fn connect(c Config) ?&DB {
+pub fn connect(c Config) ?DB {
 	conn := init_driver(c)
 	db := DB{
 		config: c
 		stmt: Stmt{}
 		conn: conn
 	}
-	return &db
+	return db
 }
 
 // execute the sql statement
 pub fn (db DB) exec(sql string) []pg.Row {
-	res := db.conn.exec(sql)
+	res := db.conn.exec(sql) or {
+		panic(err)
+	}
 	return res
 }
 
@@ -50,9 +52,13 @@ pub fn (db DB) exec(sql string) []pg.Row {
 // do not use together with to_sql()
 pub fn (mut db DB) end() []pg.Row {
 	s := db.gen_sql()
-	// println(s)
+	println(s)
 	res := db.exec(s)
 	// after exec clear the db.stmt,that do not impact next sql
 	db.stmt = Stmt{}
 	return res
+}
+
+pub fn (db DB)str() string {
+	return 'vsql'
 }

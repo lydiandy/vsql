@@ -18,7 +18,7 @@ pub fn (mut db DB) where_raw(raw string, args ...string) &DB { // TODO: interfac
 		condition: condition
 	}
 	db.stmt.where << w
-	return &db
+	return db
 }
 
 // where
@@ -30,7 +30,7 @@ fn (mut db DB) where_type(typ string, operator string, condition string) &DB {
 		condition: condition
 	}
 	db.stmt.where << w
-	return &db
+	return db
 }
 
 // status:done
@@ -67,7 +67,7 @@ fn (mut db DB) where_in_type(typ string, operator string, column string, range [
 		range: range
 	}
 	db.stmt.where << w
-	return &db
+	return db
 }
 
 // status:done
@@ -103,7 +103,7 @@ fn (mut db DB) where_null_type(typ string, operator string, column string) &DB {
 		column_name: column
 	}
 	db.stmt.where << w
-	return &db
+	return db
 }
 
 // status:done
@@ -140,7 +140,7 @@ fn (mut db DB) where_between_type(typ string, operator string, column string, ra
 		range: range
 	}
 	db.stmt.where << w
-	return &db
+	return db
 }
 
 // status:done
@@ -177,7 +177,7 @@ fn (mut db DB) where_exists_type(typ string, operator string, stmt string) &DB {
 		exist_stmt: stmt
 	}
 	db.stmt.where << w
-	return &db
+	return db
 }
 
 // status:done

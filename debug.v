@@ -4,13 +4,13 @@ module vsql
 pub fn (mut db DB) print_sql() &DB {
 	s := db.gen_sql()
 	println(s)
-	return &db
+	return db
 }
 
 // print sql to object struct for debug
 pub fn (mut db DB) print_obj() &DB {
 	println(db.stmt)
-	return &db
+	return db
 }
 
 // generate sql string for debug

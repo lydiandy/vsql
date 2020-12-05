@@ -34,7 +34,7 @@ pub fn (mut db DB) cross_join(table string) &DB {
 // status:done
 pub fn (mut db DB) join_raw(raw string) &DB {
 	db.stmt.join_raw = raw
-	return &db
+	return db
 }
 
 // status:done
@@ -46,5 +46,5 @@ fn (mut db DB) join_type(typ string, table string, join_condition string) &DB {
 		table_alias: alias
 		join_condition: join_condition
 	}
-	return &db
+	return db
 }
