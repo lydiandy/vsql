@@ -7,14 +7,12 @@ fn main() {
 		client: 'pg'
 		host: 'localhost'
 		port: 5432
-		user: 'postgres' //change to your user
-		password: '' //chagne to your password
-		database: 'test_db' //change to your database
+		user: 'postgres' // change to your user
+		password: '' // chagne to your password
+		database: 'test_db' // change to your database
 	}
 	// connect to database with config
-	mut db := vsql.connect(config) or {
-		panic('connect error:$err')
-	}
+	mut db := vsql.connect(config) or { panic('connect error:$err') }
 	// create table person
 	db.exec('drop table if exists person')
 	db.exec("create table person (id integer primary key, name text default '',age integer default 0,income integer default 0);")

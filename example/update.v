@@ -1,4 +1,4 @@
-//before you run the example,run create_and_init_db.v first
+// before you run the example,run create_and_init_db.v first
 module main
 
 import vsql
@@ -14,23 +14,21 @@ fn main() {
 		database: 'test_db'
 	}
 	// connect to database with config
-	mut db := vsql.connect(config) or {
-		panic('connect error:$err')
-	}
+	mut db := vsql.connect(config) or { panic('connect error:$err') }
 	mut res := []pg.Row{}
 	// insert
 	res = db.table('person').insert({
-		'id': '255'
+		'id': '6'
 		'name': 'abc'
 		'age': '36'
 	}).end()
 	res = db.table('person').insert({
-		'id': '255'
+		'id': '7'
 		'name': 'abc'
 		'age': '36'
 	}).returning('id', 'name').end()
 	res = db.insert({
-		'id': '12'
+		'id': '8'
 		'name': 'tom'
 	}).into('person').returning('id').end()
 	// update
@@ -45,7 +43,7 @@ fn main() {
 	res = db.table('person').delete().where('id=3').end()
 	res = db.table('person').where('id=2').delete().end()
 	// -------------------
-	res = db.create_database('mydb')
+	// res = db.create_database('mydb')
 	// create table
 	// db.create_table('person2', fn (mut table vsql.Table) {
 	// table.increment('id').primary()

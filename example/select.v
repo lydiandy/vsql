@@ -17,6 +17,7 @@ fn main() {
 	mut db := vsql.connect(config) or {
 		panic('connect error:$err')
 	}
+	println(db)
 	mut res := []pg.Row{}
 	// select+from
 	res = db.select_('*').from('person').end()

@@ -14,9 +14,7 @@ fn main() {
 		database: 'test_db'
 	}
 	// connect to database with config
-	mut db := vsql.connect(config) or {
-		panic('connect error:$err')
-	}
+	mut db := vsql.connect(config) or { panic('connect error:$err') }
 	mut res := []pg.Row{}
 	// create database
 	res = db.create_database('mydb')
@@ -31,7 +29,7 @@ fn main() {
 		table.string_('form_id', 255).not_null()
 		table.integer('is_send').default_to('1')
 		table.decimal('amount', 10, 2).not_null().check('amount>0')
-		//table constraint
+		// table constraint
 		table.primary(['id'])
 		table.unique(['id'])
 		table.check('amount>30')

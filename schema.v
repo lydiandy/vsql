@@ -113,9 +113,7 @@ pub fn (mut db DB) has_column(table_name string, column_name string) bool {
 			panic('unknown database client')
 		}
 	}
-	// println(s)
 	res := db.exec(s)
-	// println(res)
 	if res[0].vals[0] == '1' {
 		return true
 	} else {

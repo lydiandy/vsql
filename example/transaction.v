@@ -1,4 +1,4 @@
-//before you run the example,run create_and_init_db.v first
+// before you run the example,run create_and_init_db.v first
 module main
 
 import vsql
@@ -13,9 +13,7 @@ fn main() {
 		database: 'test_db'
 	}
 	// connect to database with config
-	mut db := vsql.connect(config) or {
-		panic('connect error:$err')
-	}
+	mut db := vsql.connect(config) or { panic('connect error:$err') }
 	t := db.transaction()
 	// t := db.tx() //the shorter fn
 	t.exec("insert into person (id,name,age,income) values (33,'name33',33,0)")
@@ -24,4 +22,3 @@ fn main() {
 	// t.rollback()
 	t.commit()
 }
-

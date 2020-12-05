@@ -96,10 +96,9 @@ pub mut:
 // union statement
 // pub struct UnionStmt {
 // pub mut:
-// 	typ   string // union,union all,intersect,except
-// 	stmts []string
+// typ   string // union,union all,intersect,except
+// stmts []string
 // }
-
 // alter table statement
 pub struct AlterContent {
 	typ         string // create_column,rename_column,drop_column,has_column,drop_index,drop_foreign,drop_unique,drop_primary
