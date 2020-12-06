@@ -3,6 +3,7 @@ module vsql
 // import database.sql
 import dialect.pg
 
+// callback function for create_table
 pub type CreateTableFn = fn (mut table Table)
 
 // create database

@@ -153,12 +153,7 @@ pub fn (mut db DB) except(stmt string, other_stmts ...string) &DB {
 	return db.union_type('except', stmt, other_stmts)
 }
 
-// result to struct
-// status:wip
-pub fn (mut db DB) to() &DB {
-	return db
-}
-
+// join statement
 // status:done
 pub fn (mut db DB) join(table string, join_condition string) &DB {
 	return db.join_type('join', table, join_condition)
@@ -205,5 +200,11 @@ fn (mut db DB) join_type(typ string, table string, join_condition string) &DB {
 		table_alias: alias
 		join_condition: join_condition
 	}
+	return db
+}
+
+// result to struct
+// status:wip
+pub fn (mut db DB) to() &DB {
 	return db
 }
