@@ -20,13 +20,13 @@ fn test_select() {
 	res = db.from('person').column('*').to_sql()
 	assert res == 'select * from person'
 	// first
-	res = db.table('person').column('').first().to_sql()
+	res = db.table('person').column(' ').first().to_sql()
 	assert res == 'select * from person limit 1'
 	// limit
 	res = db.table('person').column('').limit(3).to_sql()
 	assert res == 'select * from person limit 3'
 	// offset
-	res = db.table('person').column('').offset(1).to_sql()
+	res = db.table('person').column('   ').offset(1).to_sql()
 	assert res == 'select * from person offset 1'
 	// offset+limit
 	res = db.table('person').column('').offset(2).limit(2).to_sql()

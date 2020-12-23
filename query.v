@@ -12,7 +12,7 @@ pub fn (mut db DB) table(name string) &DB {
 
 // status:done
 pub fn (mut db DB) column(columns string) &DB {
-	if columns in [' ', '*'] {
+	if columns.trim_space() in ['', '*'] {
 		db.stmt.columns = []Column{}
 	} else {
 		column_array := columns.split(',')
