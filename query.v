@@ -135,22 +135,22 @@ pub fn (mut db DB) union_type(typ string, stmt string, other_stmts ...string) &D
 
 // status:done
 pub fn (mut db DB) union_(stmt string, other_stmts ...string) &DB {
-	return db.union_type('union', stmt, other_stmts)
+	return db.union_type('union', stmt, ...other_stmts)
 }
 
 // status:done
 pub fn (mut db DB) union_all(stmt string, other_stmts ...string) &DB {
-	return db.union_type('union all', stmt, other_stmts)
+	return db.union_type('union all', stmt, ...other_stmts)
 }
 
 // status:done
 pub fn (mut db DB) intersect(stmt string, other_stmts ...string) &DB {
-	return db.union_type('intersect', stmt, other_stmts)
+	return db.union_type('intersect', stmt, ...other_stmts)
 }
 
 // status:done
 pub fn (mut db DB) except(stmt string, other_stmts ...string) &DB {
-	return db.union_type('except', stmt, other_stmts)
+	return db.union_type('except', stmt, ...other_stmts)
 }
 
 // join statement
