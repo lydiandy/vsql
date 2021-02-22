@@ -5,7 +5,7 @@ module vsql
 // todo:map[string]string => map[string]interface{}
 pub fn (mut db DB) insert(data map[string]string) &DB {
 	db.stmt.typ = .insert
-	db.stmt.data = data
+	db.stmt.data = data.clone()
 	return db
 }
 
@@ -29,7 +29,7 @@ pub fn (mut db DB) returning(column string, other_columns ...string) &DB {
 // staus:done
 pub fn (mut db DB) update(data map[string]string) &DB { // TODO:map[string]interface
 	db.stmt.typ = .update
-	db.stmt.data = data
+	db.stmt.data = data.clone()
 	return db
 }
 

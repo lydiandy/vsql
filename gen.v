@@ -8,115 +8,115 @@ pub fn (mut db DB) gen_sql() string {
 	stmt := db.stmt
 	match stmt.typ {
 		.select_ {
-			s.write('select ')
+			s.write_string('select ')
 			if stmt.is_distinct {
-				s.write('distinct ')
+				s.write_string('distinct ')
 			}
 			for i, f in stmt.aggregate_fn {
 				if f.is_distinct {
-					s.write('distinct ')
+					s.write_string('distinct ')
 				}
-				s.write('${f.name}(')
-				s.write('$f.column_name)')
-				s.write(' ')
+				s.write_string('${f.name}(')
+				s.write_string('$f.column_name)')
+				s.write_string(' ')
 				if f.column_alias != '' {
-					s.write('as ')
-					s.write('$f.column_alias,')
+					s.write_string('as ')
+					s.write_string('$f.column_alias,')
 					if i == stmt.aggregate_fn.len - 1 {
 						s.go_back(1)
-						s.write(' ')
+						s.write_string(' ')
 					}
 				}
 			}
 			if stmt.columns.len == 0 && stmt.aggregate_fn.len == 0 {
-				s.write('* ')
+				s.write_string('* ')
 			} else {
 				for i, column in stmt.columns {
-					s.write('$column.name')
+					s.write_string('$column.name')
 					if column.alias != '' {
-						s.write(' as ')
-						s.write('$column.alias,')
+						s.write_string(' as ')
+						s.write_string('$column.alias,')
 					} else {
-						s.write(',')
+						s.write_string(',')
 					}
 					if i == stmt.columns.len - 1 {
 						s.go_back(1)
-						s.write(' ')
+						s.write_string(' ')
 					}
 				}
 			}
-			s.write('from ')
-			s.write('$stmt.table_name ')
+			s.write_string('from ')
+			s.write_string('$stmt.table_name ')
 			if stmt.table_alias != '' {
-				s.write('as $stmt.table_alias ')
+				s.write_string('as $stmt.table_alias ')
 			}
 			// where statement
 			db.write_where(stmt.where, mut &s)
 			// join statement
 			if stmt.join_raw != '' {
-				s.write('$stmt.join_raw ')
+				s.write_string('$stmt.join_raw ')
 			} else {
 				if stmt.join.len > 0 {
 					for j in stmt.join {
-						s.write('$j.typ ')
-						s.write('$j.table_name ')
+						s.write_string('$j.typ ')
+						s.write_string('$j.table_name ')
 						if j.table_alias != '' {
-							s.write('as $j.table_alias ')
+							s.write_string('as $j.table_alias ')
 						}
 						if j.join_condition != '' { // cross join will be ''
-							s.write('on $j.join_condition ')
+							s.write_string('on $j.join_condition ')
 						}
 					}
 				}
 			}
 			// offset
 			if stmt.offset > 0 {
-				s.write('offset $stmt.offset ')
+				s.write_string('offset $stmt.offset ')
 			}
 			// limit
 			if stmt.limit > 0 {
-				s.write('limit $stmt.limit ')
+				s.write_string('limit $stmt.limit ')
 			}
 			// order by statement
 			if stmt.order_by_raw != '' {
-				s.write('order by ')
-				s.write('$stmt.order_by_raw ')
+				s.write_string('order by ')
+				s.write_string('$stmt.order_by_raw ')
 			} else if stmt.order_by.len > 0 {
-				s.write('order by ')
+				s.write_string('order by ')
 				for o in stmt.order_by {
-					s.write('$o.column $o.order,')
+					s.write_string('$o.column $o.order,')
 				}
 			}
 			// group by statement
 			if stmt.group_by_raw != '' {
-				s.write('group by ')
-				s.write('$stmt.group_by_raw ')
+				s.write_string('group by ')
+				s.write_string('$stmt.group_by_raw ')
 			} else if stmt.group_by.len > 0 {
-				s.write('group by ')
+				s.write_string('group by ')
 				for col in stmt.group_by {
-					s.write('$col,')
+					s.write_string('$col,')
 				}
 				s.go_back(1)
-				s.write(' ')
+				s.write_string(' ')
 			}
 			// having
 			if stmt.having != '' {
-				s.write('having $stmt.having ')
+				s.write_string('having $stmt.having ')
 			}
 			// union statement
 			if stmt.union_stmts.len > 0 {
 				for us in stmt.union_stmts {
-					s.write('$stmt.union_type ')
-					s.write('$us ')
+					s.write_string('$stmt.union_type ')
+					s.write_string('$us ')
 				}
 			}
 			s.go_back(1)
 		}
 		.insert {
-			s.write('insert into ')
-			s.write('$stmt.table_name ')
+			s.write_string('insert into ')
+			s.write_string('$stmt.table_name ')
 			// write data
-			s.write('(')
+			s.write_string('(')
 			mut keys := []string{}
 			mut vals := []string{}
 			for key, val in stmt.data {
@@ -124,67 +124,67 @@ pub fn (mut db DB) gen_sql() string {
 				vals << val
 			}
 			for key in keys {
-				s.write('$key,')
+				s.write_string('$key,')
 			}
 			s.go_back(1)
-			s.write(')')
-			s.write(' values ')
-			s.write('(')
+			s.write_string(')')
+			s.write_string(' values ')
+			s.write_string('(')
 			for len, val in vals {
-				s.write("'$val'")
+				s.write_string("'$val'")
 				if len < vals.len - 1 {
-					s.write(',')
+					s.write_string(',')
 				}
 			}
-			s.write(')')
+			s.write_string(')')
 			// write returning
 			if stmt.returning.len != 0 {
-				s.write(' returning ')
+				s.write_string(' returning ')
 				for r in stmt.returning {
-					s.write('$r,')
+					s.write_string('$r,')
 				}
 				s.go_back(1)
 			}
 		}
 		.update {
-			s.write('update ')
-			s.write('$stmt.table_name ')
-			s.write('set ')
+			s.write_string('update ')
+			s.write_string('$stmt.table_name ')
+			s.write_string('set ')
 			for key, val in stmt.data {
-				s.write("$key='$val',")
+				s.write_string("$key='$val',")
 			}
 			s.go_back(1)
-			s.write(' ')
+			s.write_string(' ')
 			// where statement
 			db.write_where(stmt.where, mut &s)
 			// write returning
 			if stmt.returning.len != 0 {
-				s.write('returning ')
+				s.write_string('returning ')
 				for r in stmt.returning {
-					s.write('$r,')
+					s.write_string('$r,')
 				}
 				s.go_back(1)
 			}
 		}
 		.delete {
-			s.write('delete from ')
-			s.write('$stmt.table_name ')
+			s.write_string('delete from ')
+			s.write_string('$stmt.table_name ')
 			// where statement
 			db.write_where(stmt.where, mut &s)
 		}
 		.create_database {
-			s.write('create database $stmt.db_name')
+			s.write_string('create database $stmt.db_name')
 		}
 		.create_table {}
 		.alter_table {}
 		.rename_table {
-			s.write('alter table $stmt.table_name rename to $stmt.new_table_name')
+			s.write_string('alter table $stmt.table_name rename to $stmt.new_table_name')
 		}
 		.drop_table {
-			s.write('drop table $stmt.table_name')
+			s.write_string('drop table $stmt.table_name')
 		}
 		.truncate_table {
-			s.write('truncate table $stmt.table_name')
+			s.write_string('truncate table $stmt.table_name')
 		}
 	}
 	return s.str()
@@ -194,7 +194,7 @@ pub fn (mut db DB) gen_sql() string {
 pub fn (mut db DB) write_where(where []Where, mut s strings.Builder) {
 	// where statement
 	if where.len > 0 {
-		s.write('where')
+		s.write_string('where')
 		mut operator := ''
 		for pos, w in where {
 			// if where is the second where clause,operator is and
@@ -205,7 +205,7 @@ pub fn (mut db DB) write_where(where []Where, mut s strings.Builder) {
 			}
 			match w.typ {
 				'where' {
-					s.write('$operator ($w.condition) ')
+					s.write_string('$operator ($w.condition) ')
 				}
 				'where_in' {
 					mut range_str := ''
@@ -216,19 +216,19 @@ pub fn (mut db DB) write_where(where []Where, mut s strings.Builder) {
 							range_str += '$r'
 						}
 					}
-					s.write('$operator ($w.column_name in ($range_str)) ')
+					s.write_string('$operator ($w.column_name in ($range_str)) ')
 				}
 				'where_null' {
-					s.write('$operator ($w.column_name is null) ')
+					s.write_string('$operator ($w.column_name is null) ')
 				}
 				'where_between' {
-					s.write('$operator ($w.column_name between ${w.range[0]} and ${w.range[1]}) ')
+					s.write_string('$operator ($w.column_name between ${w.range[0]} and ${w.range[1]}) ')
 				}
 				'where_exists' {
-					s.write('$operator exists ($w.exist_stmt) ')
+					s.write_string('$operator exists ($w.exist_stmt) ')
 				}
 				'where_raw' {
-					s.write(' $w.condition ')
+					s.write_string(' $w.condition ')
 				}
 				else {
 					panic('unknown where type')
@@ -241,35 +241,35 @@ pub fn (mut db DB) write_where(where []Where, mut s strings.Builder) {
 // generate create table stmt to sql string
 pub fn (t &Table) gen_table_sql() string {
 	mut s := strings.new_builder(200)
-	s.write('create table $t.name (')
+	s.write_string('create table $t.name (')
 	if t.columns.len == 0 {
-		s.write(');')
+		s.write_string(');')
 		return s.str()
 	}
 	s.writeln('')
 	for column in t.columns {
-		s.write('$column.name ')
-		s.write('$column.typ ')
+		s.write_string('$column.name ')
+		s.write_string('$column.typ ')
 		if column.default_value != '' {
-			s.write("default '$column.default_value' ")
+			s.write_string("default '$column.default_value' ")
 		}
 		if column.is_increment {
-			s.write('serial ')
+			s.write_string('serial ')
 		}
 		if column.is_not_null {
-			s.write('not null ')
+			s.write_string('not null ')
 		}
 		if column.is_primary {
-			s.write('primary key ')
+			s.write_string('primary key ')
 		}
 		if column.is_unique {
-			s.write('unique ')
+			s.write_string('unique ')
 		}
 		if column.index != '' {
-			s.write('index $column.index ')
+			s.write_string('index $column.index ')
 		}
 		// if column.reference != '' {
-		// s.write('references \'$column.reference\' ')
+		// s.write_string('references \'$column.reference\' ')
 		// }
 		if column.is_first {
 		}
@@ -278,7 +278,7 @@ pub fn (t &Table) gen_table_sql() string {
 		if column.collate != '' {
 		}
 		if column.check != '' {
-			s.write('check ($column.check) ')
+			s.write_string('check ($column.check) ')
 		}
 		s.go_back(1)
 		s.writeln(',')
@@ -293,18 +293,18 @@ pub fn (t &Table) gen_table_sql() string {
 	}
 	// primary key
 	if t.primarys.len > 0 {
-		s.write('primary key (')
+		s.write_string('primary key (')
 		for column in t.primarys {
-			s.write('$column,')
+			s.write_string('$column,')
 		}
 		s.go_back(1)
 		s.writeln('),')
 	}
 	// unique
 	if t.uniques.len > 0 {
-		s.write('unique (')
+		s.write_string('unique (')
 		for column in t.uniques {
-			s.write('$column,')
+			s.write_string('$column,')
 		}
 		s.go_back(1)
 		s.writeln('),')
@@ -320,6 +320,6 @@ pub fn (t &Table) gen_table_sql() string {
 		s.go_back(2)
 	}
 	s.writeln('')
-	s.write(');')
+	s.write_string(');')
 	return s.str()
 }

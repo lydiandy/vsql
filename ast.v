@@ -139,7 +139,8 @@ pub fn (mut t Table) uuid(name string) &NewColumn {
 		typ: 'serial'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) increment(name string) &NewColumn {
@@ -148,7 +149,8 @@ pub fn (mut t Table) increment(name string) &NewColumn {
 		typ: 'serial'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) integer(name string) &NewColumn {
@@ -157,7 +159,8 @@ pub fn (mut t Table) integer(name string) &NewColumn {
 		typ: 'integer'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) big_integer(name string) &NewColumn {
@@ -166,7 +169,8 @@ pub fn (mut t Table) big_integer(name string) &NewColumn {
 		typ: 'bigint'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) text(name string) &NewColumn {
@@ -175,7 +179,8 @@ pub fn (mut t Table) text(name string) &NewColumn {
 		typ: 'text'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) string_(name string, size int) &NewColumn {
@@ -188,7 +193,8 @@ pub fn (mut t Table) string_(name string, size int) &NewColumn {
 		size: size
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) decimal(name string, precision int, scale int) &NewColumn {
@@ -199,7 +205,8 @@ pub fn (mut t Table) decimal(name string, precision int, scale int) &NewColumn {
 		scale: scale
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) boolean(name string) &NewColumn {
@@ -208,7 +215,8 @@ pub fn (mut t Table) boolean(name string) &NewColumn {
 		typ: 'boolean'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) date(name string) &NewColumn {
@@ -217,7 +225,8 @@ pub fn (mut t Table) date(name string) &NewColumn {
 		typ: 'date'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) datetime(name string) &NewColumn {
@@ -226,7 +235,8 @@ pub fn (mut t Table) datetime(name string) &NewColumn {
 		typ: 'timestamp'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) time(name string, precision int) &NewColumn {
@@ -235,7 +245,8 @@ pub fn (mut t Table) time(name string, precision int) &NewColumn {
 		typ: 'time'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) binary(name string, size int) &NewColumn {
@@ -245,7 +256,8 @@ pub fn (mut t Table) binary(name string, size int) &NewColumn {
 		size: size
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) json(name string) &NewColumn {
@@ -254,7 +266,8 @@ pub fn (mut t Table) json(name string) &NewColumn {
 		typ: 'json'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 pub fn (mut t Table) jsonb(name string) &NewColumn {
@@ -263,7 +276,8 @@ pub fn (mut t Table) jsonb(name string) &NewColumn {
 		typ: 'jsonb'
 	}
 	t.columns << column
-	return &t.columns.last()
+	c:=t.columns.last()
+	return &c
 }
 
 // ---------
