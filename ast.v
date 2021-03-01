@@ -150,6 +150,8 @@ pub fn (mut t Table) increment(name string) &NewColumn {
 	}
 	t.columns << column
 	c:=t.columns.last()
+	println('increment:')
+	println(c)
 	return &c
 }
 
@@ -300,6 +302,9 @@ pub fn (mut c NewColumn) increment() &NewColumn {
 
 pub fn (mut c NewColumn) primary() &NewColumn {
 	c.is_primary = true
+	println('in primary')
+	println(c.is_primary)
+	// println(c)
 	return c
 }
 
