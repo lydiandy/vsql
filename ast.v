@@ -21,34 +21,34 @@ pub enum StmtType {
 pub struct Stmt {
 pub mut:
 	// public
-	typ            StmtType
-	table_name     string
-	table_alias    string
+	typ         StmtType
+	table_name  string
+	table_alias string
 	// select
-	is_distinct    bool
-	columns        []Column // [] is *
-	where          []Where
-	has_where      bool // handle where must be the first,and other(and/or/not/or not) where just can after it
-	join           []Join
-	join_raw       string
-	limit          int
-	offset         int
-	order_by       []OrderBy
-	order_by_raw   string
-	group_by       []string
-	group_by_raw   string
-	having         string
-	aggregate_fn   []AggregateFn
+	is_distinct  bool
+	columns      []Column // [] is *
+	where        []Where
+	has_where    bool // handle where must be the first,and other(and/or/not/or not) where just can after it
+	join         []Join
+	join_raw     string
+	limit        int
+	offset       int
+	order_by     []OrderBy
+	order_by_raw string
+	group_by     []string
+	group_by_raw string
+	having       string
+	aggregate_fn []AggregateFn
 	// union statement
-	union_type     string
-	union_stmts    []string
+	union_type  string
+	union_stmts []string
 	// insert,update
-	data           map[string]string // TODO:map[string]interface
-	returning      []string
+	data      map[string]string // TODO:map[string]interface
+	returning []string
 	// create_database
-	db_name        string
+	db_name string
 	// alter_table
-	alter_table    []AlterTable
+	alter_table []AlterTable
 	// rename_talbe
 	new_table_name string
 }
@@ -63,12 +63,12 @@ pub mut:
 // where statement
 pub struct Where {
 pub mut:
-	typ         string // where,where_in,where_null,where_exists,where_between,where_raw
-	operator    string // '',and,or,not,or not
-	condition   string //
-	column_name string // where null use
+	typ         string   // where,where_in,where_null,where_exists,where_between,where_raw
+	operator    string   // '',and,or,not,or not
+	condition   string   //
+	column_name string   // where null use
 	range       []string // where range and where in use.should interface type
-	exist_stmt  string // where exist use
+	exist_stmt  string   // where exist use
 }
 
 // join statement
@@ -98,8 +98,8 @@ pub mut:
 
 // create table statement
 pub struct Table {
-pub: 
-	db 		 DB
+pub:
+	db DB
 pub mut:
 	name     string
 	columns  []&NewColumn
@@ -111,9 +111,9 @@ pub mut:
 
 // alter table statement
 pub struct AlterTable {
-	typ         string // create_column,rename_column,drop_column,has_column,drop_index,drop_foreign,drop_unique,drop_primary
+	typ         string    // create_column,rename_column,drop_column,has_column,drop_index,drop_foreign,drop_unique,drop_primary
 	new_column  NewColumn // for create new column
-	drop_column Column // for drop column
+	drop_column Column    // for drop column
 }
 
 // new column when create table
@@ -132,7 +132,7 @@ pub mut:
 	index         string
 	reference     string // table(column)
 	check         string
-	is_first      bool // only mysql,todo
+	is_first      bool   // only mysql,todo
 	after         string // only mysql,todo
 	collate       string // only mysql,todo
 }

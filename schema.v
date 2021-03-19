@@ -15,7 +15,7 @@ pub fn (mut db DB) create_database(name string) []pg.Row {
 // status:done
 pub fn (mut db DB) create_table(table_name string) Table {
 	mut table := Table{
-		db:db
+		db: db
 		name: table_name
 	}
 	return table

@@ -8,7 +8,7 @@ fn test_schema() {
 	// create database
 	// res = db.create_database('mydb')
 	// create table
-	mut table:=db.create_table('person2')
+	mut table := db.create_table('person2')
 	table.increment('id').primary()
 	table.string_('open_id', 255).size(100).unique()
 	table.boolean('is_ok')
@@ -37,7 +37,7 @@ check (amount>30),
 check (amount<60)
 );"
 	assert result == expert
-	
+
 	// alter table
 	//
 	// rename table
