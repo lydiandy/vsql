@@ -102,7 +102,7 @@ pub:
 	db 		 DB
 pub mut:
 	name     string
-	columns  []NewColumn
+	columns  []&NewColumn
 	primarys []string // table primary constraint
 	uniques  []string // table unique constraint
 	indexs   []string // table index
@@ -153,8 +153,7 @@ pub fn (mut t Table) increment(name string) &NewColumn {
 		typ: 'serial'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) integer(name string) &NewColumn {

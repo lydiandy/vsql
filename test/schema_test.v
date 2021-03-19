@@ -9,10 +9,9 @@ fn test_schema() {
 	// res = db.create_database('mydb')
 	// create table
 	mut table:=db.create_table('person2')
-	table.increment('idd').primary().unique()
+	table.increment('id').primary()
 	table.string_('open_id', 255).size(100).unique()
-	// println(table.columns)
-	table.boolean('is_ok').primary().unique()
+	table.boolean('is_ok')
 	table.datetime('attend_time')
 	table.string_('form_id', 255).not_null()
 	table.integer('is_send').default_to('1')
@@ -26,8 +25,8 @@ fn test_schema() {
 	result := table.to_sql()
 	expert := "create table person2 (
 id serial primary key,
-is_ok boolean,
 open_id varchar(255) unique,
+is_ok boolean,
 attend_time timestamp,
 form_id varchar(255) not null,
 is_send integer default '1',
