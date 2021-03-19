@@ -3,9 +3,6 @@ module vsql
 // import database.sql
 import dialect.pg
 
-// callback function for create_table
-pub type CreateTableFn = fn (mut table Table)
-
 // create database
 // status:done
 pub fn (mut db DB) create_database(name string) []pg.Row {
@@ -16,23 +13,21 @@ pub fn (mut db DB) create_database(name string) []pg.Row {
 
 // create table
 // status:done
-pub fn (mut db DB) create_table(table_name string, create_table_fn CreateTableFn) []pg.Row {
+pub fn (mut db DB) create_table(table_name string) Table {
 	mut table := Table{
+		db:db
 		name: table_name
 	}
-	create_table_fn(mut table)
-	s := table.gen_table_sql()
-	res := db.exec(s)
-	return res
+	return table
 }
 
 // create table if not exists
 // status:done
-pub fn (mut db DB) create_table_if_not_exist(table_name string, create_table_fn CreateTableFn) []pg.Row {
+pub fn (mut db DB) create_table_if_not_exist(table_name string) []pg.Row {
 	if db.has_table(table_name) {
 		println('table $table_name is already exists')
 	} else {
-		return db.create_table(table_name, create_table_fn)
+		return db.create_table(table_name).exec()
 	}
 	return []pg.Row{}
 }

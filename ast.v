@@ -1,5 +1,8 @@
 module vsql
 
+// import database.sql
+import dialect.pg
+
 // type of stmt
 pub enum StmtType {
 	select_
@@ -95,6 +98,8 @@ pub mut:
 
 // create table statement
 pub struct Table {
+pub: 
+	db 		 DB
 pub mut:
 	name     string
 	columns  []NewColumn
@@ -134,152 +139,144 @@ pub mut:
 
 // create column
 pub fn (mut t Table) uuid(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'serial'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) increment(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'serial'
 	}
 	t.columns << column
 	c:=t.columns.last()
-	println('increment:')
-	println(c)
 	return &c
 }
 
 pub fn (mut t Table) integer(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'integer'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) big_integer(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'bigint'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) text(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'text'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) string_(name string, size int) &NewColumn {
 	if size <= 0 {
 		panic('size must be greater than zero')
 	}
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'varchar($size)'
 		size: size
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) decimal(name string, precision int, scale int) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'decimal($precision,$scale)'
 		precision: precision
 		scale: scale
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) boolean(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'boolean'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) date(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'date'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) datetime(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'timestamp'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) time(name string, precision int) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'time'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) binary(name string, size int) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'bytea'
 		size: size
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) json(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'json'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
 }
 
 pub fn (mut t Table) jsonb(name string) &NewColumn {
-	mut column := NewColumn{
+	mut column := &NewColumn{
 		name: name
 		typ: 'jsonb'
 	}
 	t.columns << column
-	c:=t.columns.last()
-	return &c
+	return column
+}
+
+// exec create table sql
+pub fn (t Table) exec() []pg.Row {
+	s := t.gen_table_sql()
+	res := t.db.exec(s)
+	return res
 }
 
 // ---------
@@ -302,9 +299,6 @@ pub fn (mut c NewColumn) increment() &NewColumn {
 
 pub fn (mut c NewColumn) primary() &NewColumn {
 	c.is_primary = true
-	println('in primary')
-	println(c.is_primary)
-	// println(c)
 	return c
 }
 
@@ -312,6 +306,7 @@ pub fn (mut c NewColumn) primary() &NewColumn {
 // c.reference = ref // such like this: 'table(column)'
 // return c
 // }
+
 pub fn (mut c NewColumn) unique() &NewColumn {
 	c.is_unique = true
 	return c

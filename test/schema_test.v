@@ -1,6 +1,5 @@
 module test
 
-import vsql
 import dialect.pg
 
 fn test_schema() {
@@ -8,23 +7,24 @@ fn test_schema() {
 	mut res := []pg.Row{}
 	// create database
 	// res = db.create_database('mydb')
-	println(res)
 	// create table
-	db.create_table('person2', fn (mut table vsql.Table) {
-		table.increment('id').primary()
-		table.boolean('is_ok')
-		table.string_('open_id', 255).size(100).unique()
-		table.datetime('attend_time')
-		table.string_('form_id', 255).not_null()
-		table.integer('is_send').default_to('1')
-		table.decimal('amount', 10, 2).not_null().check('amount>0')
-		// table constraint
-		// table.primary(['id'])
-		table.unique(['id'])
-		table.check('amount>30')
-		table.check('amount<60')
-		result := table.to_sql()
-		expert := "create table person2 (
+	mut table:=db.create_table('person2')
+	table.increment('idd').primary().unique()
+	table.string_('open_id', 255).size(100).unique()
+	// println(table.columns)
+	table.boolean('is_ok').primary().unique()
+	table.datetime('attend_time')
+	table.string_('form_id', 255).not_null()
+	table.integer('is_send').default_to('1')
+	table.decimal('amount', 10, 2).not_null().check('amount>0')
+	// table constraint
+	// table.primary(['id'])
+	table.unique(['id'])
+	table.check('amount>30')
+	table.check('amount<60')
+
+	result := table.to_sql()
+	expert := "create table person2 (
 id serial primary key,
 is_ok boolean,
 open_id varchar(255) unique,
@@ -37,8 +37,8 @@ unique (id),
 check (amount>30),
 check (amount<60)
 );"
-		assert result == expert
-	})
+	assert result == expert
+	
 	// alter table
 	//
 	// rename table

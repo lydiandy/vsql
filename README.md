@@ -421,24 +421,28 @@ delete from person where (id=2)
 
 #### create table
 
-```sql
+```v
 // create table
-db.create_table('person2', fn (mut table vsql.Table) {
-		//table.increment('id').primary()
-		table.increment('id')          
-		table.boolean('is_ok')
-		//string is a key word of v, so use string_
-		table.string_('open_id', 255).size(100).unique()
-		table.datetime('attend_time')
-		table.string_('form_id', 255).not_null() 
-		table.integer('is_send').default_to('1')
-		table.decimal('amount', 10, 2).not_null().check('amount>0')
-		//table constraint
-		table.primary(['id'])
-		table.unique(['id'])
-		table.check('amount>30')
-		table.check('amount<60')
-})
+mut table := db.create_table('person2') 
+
+//create column
+//table.increment('id').primary()
+table.increment('id')          
+table.boolean('is_ok')
+//string is a key word of v, so use string_
+table.string_('open_id', 255).size(100).unique()
+table.datetime('attend_time')
+table.string_('form_id', 255).not_null() 
+table.integer('is_send').default_to('1')
+table.decimal('amount', 10, 2).not_null().check('amount>0')
+//table constraint
+table.primary(['id'])
+table.unique(['id'])
+table.check('amount>30')
+table.check('amount<60')
+
+//exec create table sql
+table.exec()
 ```
 
 #### alter table
@@ -619,7 +623,7 @@ db.down()
 
 ### run vsql test
 
-all the test sql statement are in vsql/test,you can run the test by:
+all the test sql statement are in vsql/test, you can run the test by:
 
 ```shell
 v test vsql/test
@@ -629,7 +633,7 @@ v test vsql/test
 
 ## Acknowledgments
 
-Inspired by [knex](https://github.com/knex/knex),it was my favorite sql query builder before I meet V.
+Inspired by [knex](https://github.com/knex/knex) that  was my favorite sql query builder before I meet V.
 
 ## License
 
