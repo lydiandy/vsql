@@ -40,6 +40,7 @@ fn main() {
 		db.table('person')...
 		t.rollback()
 	})
+	
 	//model migration
 	db.up()
 	db.down()

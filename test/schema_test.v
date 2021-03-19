@@ -5,8 +5,10 @@ import dialect.pg
 fn test_schema() {
 	mut db := connect_and_init_db()
 	mut res := []pg.Row{}
+
 	// create database
 	// res = db.create_database('mydb')
+
 	// create table
 	mut table := db.create_table('person2')
 	table.increment('id').primary()
@@ -39,16 +41,19 @@ check (amount<60)
 	assert result == expert
 
 	// alter table
-	//
+
 	// rename table
 	res = db.rename_table('person', 'new_person')
 	println(res)
+
 	// truncate table
 	res = db.truncate('new_person')
 	println(res)
+
 	// drop table
 	res = db.drop_table('food')
 	println(res)
+
 	// drop table if exist
 	res = db.drop_table_if_exist('cat')
 	println(res)

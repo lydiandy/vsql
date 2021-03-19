@@ -12,8 +12,10 @@ fn main() {
 		password: ''
 		database: 'test_db'
 	}
+
 	// connect to database with config
 	mut db := vsql.connect(config) or { panic('connect error:$err') }
+
 	t := db.transaction()
 	// t := db.tx() //the shorter fn
 	t.exec("insert into person (id,name,age,income) values (33,'name33',33,0)")

@@ -13,36 +13,41 @@ fn main() {
 		password: ''
 		database: 'test_db'
 	}
+
 	// connect to database with config
 	mut db := vsql.connect(config) or { panic('connect error:$err') }
 	mut res := []pg.Row{}
+
 	// insert
-	res = db.table('person').insert({
-		'id': '6'
+	res = db.table('person').insert(map{
+		'id':   '6'
 		'name': 'abc'
-		'age': '36'
+		'age':  '36'
 	}).end()
-	res = db.table('person').insert({
-		'id': '7'
+	res = db.table('person').insert(map{
+		'id':   '7'
 		'name': 'abc'
-		'age': '36'
+		'age':  '36'
 	}).returning('id', 'name').end()
-	res = db.insert({
-		'id': '8'
+	res = db.insert(map{
+		'id':   '8'
 		'name': 'tom'
 	}).into('person').returning('id').end()
+
 	// update
-	res = db.table('person').update({
+	res = db.table('person').update(map{
 		'name': 'paris'
 	}).where('id=1').returning('id').end()
-	res = db.table('person').update({
+	res = db.table('person').update(map{
 		'name': 'paris'
-		'age': '32'
+		'age':  '32'
 	}).where('id=1').returning('id').end()
+
 	// delete
 	res = db.table('person').delete().where('id=3').end()
+
 	res = db.table('person').where('id=2').delete().end()
-	// -------------------
+
 	// res = db.create_database('mydb')
 	// create table
 	// db.create_table('person2', fn (mut table vsql.Table) {
@@ -62,12 +67,16 @@ fn main() {
 	// }) or {
 	// panic('create table failed:$err')
 	// }
+
 	// rename table
 	res = db.rename_table('person', 'new_person')
+
 	// truncate table
 	res = db.truncate('new_person')
+
 	// drop table
 	res = db.drop_table('food')
+
 	// drop table if exist
 	res = db.drop_table_if_exist('cat')
 }

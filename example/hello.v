@@ -13,8 +13,10 @@ fn main() {
 		password: ''
 		database: 'test_db'
 	}
+
 	// connect to database with config
 	mut db := vsql.connect(config) or { panic('connect error:$err') }
+	
 	// start to use db
 	res := db.table('person').column('*').end()
 	println(res)
