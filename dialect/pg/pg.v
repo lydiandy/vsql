@@ -41,9 +41,9 @@ fn C.PQntuples(&C.PGResult) int
 
 fn C.PQnfields(&C.PGResult) int
 
-fn C.PQexec(voidptr) &C.PGResult
+fn C.PQexec(voidptr,byteptr) &C.PGResult
 
-fn C.PQexecParams(voidptr) &C.PGResult
+fn C.PQexecParams(voidptr,charptr,int,voidptr,voidptr,voidptr,voidptr,int) &C.PGResult
 
 fn C.PQclear(&C.PGResult) voidptr
 
