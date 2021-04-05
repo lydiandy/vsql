@@ -59,7 +59,7 @@ fn C.PQexecParams(conn voidptr, command byteptr, nParams int, paramTypes int, pa
 
 fn C.PQputCopyData(conn voidptr, buffer byteptr, nbytes int) int
 
-fn C.PQputCopyEnd(voidptr, int) int
+fn C.PQputCopyEnd(voidptr, &byte) int
 
 fn C.PQgetCopyData(conn voidptr, buffer &byteptr, async int) int
 
