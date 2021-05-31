@@ -117,6 +117,7 @@ pub struct AlterTable {
 }
 
 // new column when create table
+[heap]
 pub struct NewColumn {
 pub mut:
 	name          string

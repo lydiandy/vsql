@@ -7,6 +7,7 @@ pub const (
 	version = '0.0.1'
 )
 
+[heap]
 pub struct DB {
 pub:
 	config Config
