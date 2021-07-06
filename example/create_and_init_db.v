@@ -8,7 +8,7 @@ fn main() {
 		host: 'localhost'
 		port: 5432
 		user: 'postgres' // change to your user
-		password: '' // chagne to your password
+		password: '' // change to your password
 		database: 'test_db' // change to your database
 	}
 
